@@ -1,0 +1,13 @@
+import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+const id='YzLBVOp',source=`vendor/codepen/${id}`,target=`public/codepen/${id}`;
+const meta=JSON.parse(readFileSync(`${source}/source.json`,'utf8'));
+for(const [file,hash] of Object.entries(meta.sha256))if(createHash('sha256').update(readFileSync(`${source}/${file}`)).digest('hex')!==hash)throw Error('Original source changed: '+file);
+mkdirSync(target,{recursive:true});
+for(const file of ['original.css','original.js','LICENSE','source.json'])copyFileSync(`${source}/${file}`,`${target}/${file}`);
+const css=readFileSync(`${source}/original.css`,'utf8'),js=readFileSync(`${source}/original.js`,'utf8');
+const body=readFileSync(`${source}/original.html`,'utf8');
+const links=meta.dependencies.links.filter(url=>url.startsWith('https://')).map(url=>`<link rel="stylesheet" href="${url.replaceAll('&','&amp;')}">`).join('\n');
+const html=`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Glassmorphism Dashboard — gestok</title><meta name="referrer" content="no-referrer"><style>${css}</style>${links}</head>${body.replace('</body>','<script>'+js+'</script></body>')}</html>`;
+writeFileSync(`${target}/index.html`,html);
+console.log('Original Glass Dashboard preview built; HTML body, CSS and JS preserved.');

@@ -93,3 +93,13 @@ L’interface ouvre directement l’espace Nyx sur toute la fenêtre. La barre c
 regroupe le thème, Personnaliser, Exporter et Enregistrer. Les réglages se replient
 sans démonter Documents ; sur petit écran ils passent au-dessus de l’espace.
 Les icônes du shell sont incluses depuis la dépendance locale lucide-react.
+
+## Première prévisualisation CodePen originale
+
+**Design original** ouvre Glassmorphism Dashboard de gestok dans l’application.
+Le HTML, le CSS et le JavaScript originaux sont conservés sous
+`vendor/codepen/YzLBVOp`, avec leur attribution MIT et leurs empreintes.
+`build-codepen-previews.mjs` génère la version prévisualisable sans réinterpréter
+la mise en page. Polices, icônes, vidéo et météo utilisent les URLs du Pen.
+Le contenu reste la démonstration originale ; ce n’est pas encore un adaptateur
+qui remplace l’interface Documents de Nyx. Le retour conserve l’espace Nyx ouvert.

@@ -1,0 +1,25 @@
+{
+  "id": "YzLBVOp",
+  "url": "https://codepen.io/gestok/pen/YzLBVOp",
+  "author": "gestok",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [
+      "styles.css",
+      "https://cdn.jsdelivr.net/gh/lucaburgio/iconoir@main/css/iconoir.css",
+      "https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+    ],
+    "scripts": [
+      "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js"
+    ]
+  },
+  "sha256": {
+    "original.html": "ed778fa2a69b84ecf83a2103f73b1a773844f61a069c58bb7aba8ce0dd6be1ae",
+    "original.css": "31e731203db50324fc2521984eb9087ceb37a60f9e199276676ba846d02b5063",
+    "original.js": "41c6aa0d73f6956dc1735469db4af969f9cbeeef6301ab8f14be78b63e6784e4"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}
