@@ -14,6 +14,7 @@ import {
   Monitor,
   PackageOpen,
   Palette,
+  PanelsTopLeft,
   RotateCcw,
   ShieldCheck,
   Sparkles,
@@ -112,6 +113,7 @@ function download(name, content, type = 'application/json') {
 export default function Home() {
   const [project, setProject] = useState(seedProject);
   const [target, setTarget] = useState('notemistress');
+  const [workspace, setWorkspace] = useState('skins');
   const [editor, setEditor] = useState('skin');
   const [preview, setPreview] = useState('app');
   const [output, setOutput] = useState('pack');
@@ -294,10 +296,16 @@ export default function Home() {
         <label><select value={target} onChange={(event) => chooseTarget(event.target.value)}>{Object.entries(targets).map(([id, item]) => <option key={id} value={id}>{item.label}</option>)}</select><ChevronDown /></label>
         <em>{targets[target].tech} · {targets[target].status}</em>
       </div>
-      <div className="top-actions"><span className={`contract-state ${validation.errors.length ? 'is-error' : ''}`}><i />{validation.errors.length ? `${validation.errors.length} erreur` : 'Pack valide'}</span><button className="ghost-button" onClick={save}>{saved ? <Check /> : <ShieldCheck />}{saved ? 'Enregistré' : 'Enregistrer'}</button></div>
+      <div className="top-actions"><span className={`contract-state ${validation.errors.length ? 'is-error' : ''}`}><i />{workspace === 'skins' ? (validation.errors.length ? `${validation.errors.length} erreur` : 'Pack valide') : '9 familles · 13 références'}</span>{workspace === 'skins' && <button className="ghost-button" onClick={save}>{saved ? <Check /> : <ShieldCheck />}{saved ? 'Enregistré' : 'Enregistrer'}</button>}</div>
     </header>
 
-    <div className="studio-layout">
+    <nav className="workflow-nav" aria-label="Workflow NeuroForge">
+      <button className={workspace === 'skins' ? 'active' : ''} onClick={() => setWorkspace('skins')}><Palette /><span><b>1 · Pack de skin</b><small>Thème, identité, langues, About</small></span></button>
+      <button className={workspace === 'interfaces' ? 'active' : ''} onClick={() => setWorkspace('interfaces')}><PanelsTopLeft /><span><b>2 · Interfaces & composition</b><small>Moteur UX existant · 9 familles</small></span></button>
+      <p>Choisir l’apparence, puis composer l’interface de {project.project.name}.</p>
+    </nav>
+
+    {workspace === 'skins' ? <div className="studio-layout">
       <aside className="studio-controls">
         <div className="panel-intro"><span>CRÉER LE PACK</span><h1>{project.project.name}</h1><p>Une seule source pour le thème, l’identité et les langues.</p></div>
         <nav className="editor-tabs" aria-label="Sections du pack">
@@ -366,6 +374,9 @@ export default function Home() {
         <div className={`validation-card ${validation.errors.length ? 'has-errors' : ''}`}><strong>{validation.errors.length ? `${validation.errors.length} erreur(s)` : 'Contrat valide'}</strong>{validation.errors.slice(0, 3).map((error) => <p key={error}>{error}</p>)}{!validation.errors.length && <p>Identité, version, tokens, capacités, ressources, validation, persistance et repli sont présents.</p>}{validation.warnings.length > 0 && <small>{validation.warnings.length} texte(s) utilisent encore un repli.</small>}</div>
         <output className="studio-status" aria-live="polite">{message}</output>
       </aside>
-    </div>
+    </div> : <section className="ux-workspace" aria-label="Moteur UX intégré">
+      <header><div><span>BIBLIOTHÈQUE EXISTANTE</span><h1>Moteur UX</h1><p>Catalogue, sélection de fonctions, interface unifiée et composeur conservés dans le même workflow.</p></div><div><b>9</b><small>familles</small><b>13</b><small>références</small></div></header>
+      <iframe src="./moteur-ux.html" title="Moteur UX — bibliothèque et composeur" />
+    </section>}
   </main>;
 }
