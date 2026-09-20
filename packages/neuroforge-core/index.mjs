@@ -1,3 +1,4 @@
+import {COMPOSITIONS,validSession} from './compositions.mjs';
 import {UX_BLOCKS,REFERENCES,validUXSelection} from './ux-blocks.mjs';
 import {validVisual,visualRules} from './visual-style.mjs';
 import catalogue from './catalogue.json' with { type: 'json' };
@@ -48,9 +49,11 @@ export function validate(p) {
   if(!keys(p,['schema','packVersion','project','modules','defaultLocale','locales','translations','theme','ui','identity','integration'])) return {errors:['Configuration absente ou champs inconnus.'],warnings};
   if(p.integration!==undefined){
     const i=p.integration,ids=new Set(catalogue.flatMap(s=>s.features.map(f=>f.id)));
+    if(i?.composition!==undefined&&!COMPOSITIONS.some(c=>c.id===i.composition))errors.push('Composition inconnue.');
+    if(i?.session!==undefined&&!validSession(i.session))errors.push('Session UX invalide.');
     if(i?.blocks!==undefined&&!validUXSelection(i.blocks,UX_BLOCKS))errors.push('Blocs UX invalides.');
     if(i?.references!==undefined&&!validUXSelection(i.references,REFERENCES))errors.push('Références invalides.');
-    if(!keys(i,['features','path','technology','notes','blocks','references'])||!Array.isArray(i.features)||i.features.length>200||i.features.some(id=>!ids.has(id))||new Set(i.features).size!==i.features.length||!text(i.path,1000)||!text(i.notes,8000)||!TECHNOLOGIES.includes(i.technology))errors.push('Intégration invalide : fonctions, chemin ou technologie.');
+    if(!keys(i,['features','path','technology','notes','blocks','references','composition','session'])||!Array.isArray(i.features)||i.features.length>200||i.features.some(id=>!ids.has(id))||new Set(i.features).size!==i.features.length||!text(i.path,1000)||!text(i.notes,8000)||!TECHNOLOGIES.includes(i.technology))errors.push('Intégration invalide : fonctions, chemin ou technologie.');
   }
   if(p.schema!==SCHEMA) errors.push('Version de contrat inconnue.');
   if(!semver(p.packVersion)) errors.push('Version de pack attendue : 1.0.0.');

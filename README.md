@@ -78,3 +78,16 @@ affiche la composition dans l’aperçu principal. Changer de skin la met à jou
 Le ZIP inclut la composition exécutable dans preview.html et blocs-ux.html,
 ainsi que references.json et le manifeste. Les références sont documentaires :
 aucun service tiers n’est connecté. La séquence organise des étapes sans rendu vidéo.
+
+## Thèmes complets sur le moteur commun
+
+Six compositions (cockpit, bibliothèque, bureau rétro, studio, terminal, lecture)
+réorganisent les mêmes huit blocs. Elles se sélectionnent dans Design & skin.
+Les 45 palettes restent indépendantes, et les 13 anciens documents restent des
+références consultables : leur logique métier n’est pas fusionnée avec ces blocs.
+L’aperçu principal et le ZIP utilisent le même rendu uxHTML. Le pack conserve la
+composition, les favoris, les notes, la comparaison, les filtres et la séquence.
+Les messages de session sont acceptés uniquement depuis l’iframe de composition
+et après validation du contrat. Ils ne rechargent pas l’aperçu.
+Enregistrer conserve le thème ; les actions de session actualisent le projet local
+déjà enregistré. Les services externes restent à raccorder.
