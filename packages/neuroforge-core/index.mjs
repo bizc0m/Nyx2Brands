@@ -1,6 +1,17 @@
 // Shared data contract. No application actions, imported CSS, or executable assets.
 export const SCHEMA = 'neuroforge/project/v1';
-export const MODULES = ['theme', 'identity', 'languages', 'about', 'publication'];
+export const MODULES = ['theme', 'layout', 'identity', 'languages', 'about', 'publication'];
+export const INTERFACE_FAMILIES = [
+  {id:'dashboard',name:'Dashboard Nyx',kind:'interface',description:'Cockpit, panneaux et navigation.',variants:[['nyx-blanc','Nyx blanc'],['original','Original'],['compact12','Compact 12'],['compact14','Compact 14']]},
+  {id:'documents-family',name:'Documents',kind:'interface',description:'Textes, onglets, propriétés et fenêtres.',variants:[['documents','Documents'],['documents-original','Original']]},
+  {id:'noteplan-family',name:'Style NotePlan',kind:'interface',description:'Note, tâches, calendrier et Markdown.',variants:[['noteplan-style-v2','Style NotePlan']]},
+  {id:'themes-family',name:'Nyx-Ux · thèmes',kind:'interface',description:'Couleurs, densité et export CSS.',variants:[['themes','Éditeur de thèmes']]},
+  {id:'green-family',name:'Green Terminal',kind:'interface',description:'Composants rétro et éditeur direct.',variants:[['green-terminal','Green Terminal']]},
+  {id:'registry-family',name:'Registry',kind:'interface',description:'Modules, Racks, Blades et composition.',variants:[['registry','Registry']]},
+  {id:'notemistress-family',name:'NoteMistress',kind:'interface',description:'Capture et routage en interface claire.',variants:[['notemistress','NoteMistress']]},
+  {id:'integrated-family',name:'Nyx intégré',kind:'interface',description:'Dashboard, Documents et Registry.',variants:[['integrated','Nyx intégré']]},
+  {id:'fx-family',name:'FX Composer',kind:'effects',description:'Catalogue FX, moteur non intégré.',variants:[['fx','FX Composer']]},
+];
 export const PRESETS = {
   'moteur-ux': {name:'Moteur UX', appearance:'light', background:'#F3F4EF', surface:'#FAFBF7', text:'#24302C', muted:'#697268', accent:'#244D3A'},
   'nyx-core': {name:'NYX Core', appearance:'dark', background:'#07070B', surface:'#16161E', text:'#F2F2F5', muted:'#8E8E93', accent:'#64D2FF'},
@@ -8,7 +19,7 @@ export const PRESETS = {
   'signal-light': {name:'Signal Light', appearance:'light', background:'#EEF1F5', surface:'#FFFFFF', text:'#111827', muted:'#596170', accent:'#1447E6'},
 };
 export function newProject(id = 'mon-application') {
-  return {schema:SCHEMA, packVersion:'0.1.0', project:{id, name:'Mon application', version:'0.1.0', repository:'', license:''}, modules:[...MODULES], defaultLocale:'fr', locales:['fr','en'], translations:{fr:{description:'',purpose:'',audience:'',limits:''},en:{description:'',purpose:'',audience:'',limits:''}}, theme:{...PRESETS['nyx-core'], typography:{family:'system',size:13}, density:'comfortable'}, identity:{logo:'',icon:'',signature:'FORGED FOR ATYPICAL THINKERS. THEN, GREAT RESULTS.'}};
+  return {schema:SCHEMA, packVersion:'0.1.0', project:{id, name:'Mon application', version:'0.1.0', repository:'', license:''}, modules:[...MODULES], defaultLocale:'fr', locales:['fr','en'], translations:{fr:{description:'',purpose:'',audience:'',limits:''},en:{description:'',purpose:'',audience:'',limits:''}}, theme:{...PRESETS['nyx-core'], typography:{family:'system',size:13}, density:'comfortable'}, ui:{family:'dashboard',variant:'nyx-blanc'}, identity:{logo:'',icon:'',signature:'FORGED FOR ATYPICAL THINKERS. THEN, GREAT RESULTS.'}};
 }
 const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 const hex = v => typeof v === 'string' && /^#[\da-f]{6}$/i.test(v);
@@ -29,7 +40,7 @@ function validImage(v) {
 }
 export function validate(p) {
   const errors=[],warnings=[];
-  if(!keys(p,['schema','packVersion','project','modules','defaultLocale','locales','translations','theme','identity'])) return {errors:['Configuration absente ou champs inconnus.'],warnings};
+  if(!keys(p,['schema','packVersion','project','modules','defaultLocale','locales','translations','theme','ui','identity'])) return {errors:['Configuration absente ou champs inconnus.'],warnings};
   if(p.schema!==SCHEMA) errors.push('Version de contrat inconnue.');
   if(!semver(p.packVersion)) errors.push('Version de pack attendue : 1.0.0.');
   if(!keys(p.project,['id','name','version','repository','license'])) errors.push('Identité projet invalide.');
@@ -51,6 +62,10 @@ export function validate(p) {
   const t=p.theme;
   if(!keys(t,['name','appearance','background','surface','text','muted','accent','typography','density'])||!text(t?.name,64)||!['light','dark'].includes(t?.appearance)||!['background','surface','text','muted','accent'].every(k=>hex(t?.[k]))||!['comfortable','compact'].includes(t?.density)||!keys(t?.typography,['family','size'])||!['system','monospace'].includes(t?.typography?.family)||typeof t?.typography?.size!=='number'||!(t.typography.size>=11&&t.typography.size<=18))errors.push('Thème invalide : palette, police, taille ou densité.');
   else if(p.modules?.includes('theme'))for(const fg of ['text','muted'])for(const bg of ['background','surface'])if(contrast(t[fg],t[bg])<4.5)errors.push(`Contraste ${fg}/${bg} : ${contrast(t[fg],t[bg]).toFixed(2)} (minimum 4,5).`);
+  if(p.modules?.includes('layout')){
+    const family=INTERFACE_FAMILIES.find(item=>item.id===p.ui?.family);
+    if(!keys(p.ui,['family','variant'])||!family||!family.variants.some(([id])=>id===p.ui?.variant))errors.push('Interface invalide : famille ou variante inconnue.');
+  }else if(p.ui!==undefined)warnings.push('Interface présente mais module layout désactivé.');
   if(!keys(p.identity,['logo','icon','signature'])||!validImage(p.identity?.logo)||!validImage(p.identity?.icon)||!text(p.identity?.signature,300))errors.push('Identité : PNG uniquement, maximum 4 Mio et 4096 × 4096 ; signature limitée à 300 caractères.');
   return {errors,warnings};
 }

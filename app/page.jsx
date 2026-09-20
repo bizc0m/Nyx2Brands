@@ -21,6 +21,7 @@ import {
   Upload,
 } from 'lucide-react';
 import {
+  INTERFACE_FAMILIES,
   aboutHTML,
   decodeImages,
   newProject,
@@ -83,6 +84,9 @@ function seedProject() {
   return project;
 }
 
+const defaultInterface = { family: INTERFACE_FAMILIES[0].id, variant: INTERFACE_FAMILIES[0].variants[0][0] };
+const interfaceFor = (project) => project.ui || defaultInterface;
+
 function loadStored() {
   const fallback = { project: seedProject(), target: 'notemistress', skinId: 'nyx-core', signal: skins['nyx-core'].signal, radius: skins['nyx-core'].radius };
   if (typeof window === 'undefined') return fallback;
@@ -139,11 +143,14 @@ export default function Home() {
   }, []);
 
   const validation = useMemo(() => validate(project), [project]);
+  const selectedInterface = interfaceFor(project);
+  const selectedFamily = INTERFACE_FAMILIES.find((item) => item.id === selectedInterface.family) || INTERFACE_FAMILIES[0];
+  const selectedVariant = selectedFamily.variants.find(([id]) => id === selectedInterface.variant) || selectedFamily.variants[0];
   const html = useMemo(() => {
     if (validation.errors.length || !project.modules.includes('about')) return '';
     try { return aboutHTML(project, locale); } catch { return ''; }
   }, [locale, project, validation.errors.length]);
-  const prompt = useMemo(() => `Crée l’adaptateur visuel de ${project.project.name} à partir du pack NeuroForge joint.\n\nCONTRAT\n- Conserver la logique métier, les données, la disposition et les couleurs d’état de l’application.\n- Appliquer uniquement les tokens de thème, l’identité, les ressources et les textes du pack.\n- Respecter le repli de langue ${project.defaultLocale}.\n- Valider le pack avant application et restaurer le thème natif si un token est invalide.\n\nCIBLE\n- Application : ${targets[target].label}\n- Technologie : ${targets[target].tech}\n- Pack : ${project.project.id} ${project.packVersion}\n- Thème : ${project.theme.name}\n- Modules : ${project.modules.join(', ')}\n\nPREUVE ATTENDUE\nImporter exactement le même fichier .neuroforge.json dans deux applications, afficher son identifiant et sa version, puis démontrer le repli vers leur thème natif.`, [project, target]);
+  const prompt = useMemo(() => `Crée l’adaptateur visuel de ${project.project.name} à partir du pack NeuroForge joint.\n\nCONTRAT\n- Conserver la logique métier, les données et les couleurs d’état de l’application.\n- Appliquer les tokens de thème séparément de la disposition d’interface.\n- Adapter la famille d’interface seulement si la cible déclare cette capacité ; sinon conserver sa disposition native.\n- Respecter le repli de langue ${project.defaultLocale}.\n- Valider le pack avant application et restaurer le thème natif si un token est invalide.\n\nCIBLE\n- Application : ${targets[target].label}\n- Technologie : ${targets[target].tech}\n- Pack : ${project.project.id} ${project.packVersion}\n- Thème : ${project.theme.name}\n- Interface : ${selectedFamily.name} / ${selectedVariant[1]}\n- Type : ${selectedFamily.kind}\n- Modules : ${project.modules.join(', ')}\n\nPREUVE ATTENDUE\nImporter exactement le même fichier .neuroforge.json dans deux applications, afficher son identifiant et sa version, puis démontrer le repli vers leur thème et disposition natifs.`, [project, selectedFamily, selectedVariant, target]);
 
   const previewStyle = {
     '--pv-bg': project.theme.background,
@@ -187,6 +194,23 @@ export default function Home() {
         muted: skin.muted,
         accent: skin.accent,
       };
+    });
+  }
+
+  function chooseInterfaceFamily(id) {
+    const family = INTERFACE_FAMILIES.find((item) => item.id === id);
+    if (!family) return;
+    update((draft) => {
+      draft.ui = { family: family.id, variant: family.variants[0][0] };
+      if (!draft.modules.includes('layout')) draft.modules.push('layout');
+    });
+  }
+
+  function chooseInterfaceVariant(id) {
+    if (!selectedFamily.variants.some(([variant]) => variant === id)) return;
+    update((draft) => {
+      draft.ui = { family: selectedFamily.id, variant: id };
+      if (!draft.modules.includes('layout')) draft.modules.push('layout');
     });
   }
 
@@ -301,16 +325,17 @@ export default function Home() {
     </header>
 
     <nav className="workflow-nav" aria-label="Workflow NeuroForge">
-      <button className={workspace === 'skins' ? 'active' : ''} onClick={() => setWorkspace('skins')}><Palette /><span><b>1 · Pack de skin</b><small>Thème, identité, langues, About</small></span></button>
+      <button className={workspace === 'skins' ? 'active' : ''} onClick={() => setWorkspace('skins')}><Palette /><span><b>1 · Pack visuel</b><small>Thème, interface, identité, langues, About</small></span></button>
       <button className={workspace === 'interfaces' ? 'active' : ''} onClick={() => setWorkspace('interfaces')}><PanelsTopLeft /><span><b>2 · Interfaces & composition</b><small>Moteur UX existant · 9 familles</small></span></button>
       <p>Choisir l’apparence, puis composer l’interface de {project.project.name}.</p>
     </nav>
 
     {workspace === 'skins' ? <div className="studio-layout">
       <aside className="studio-controls">
-        <div className="panel-intro"><span>CRÉER LE PACK</span><h1>{project.project.name}</h1><p>Une seule source pour le thème, l’identité et les langues.</p></div>
+        <div className="panel-intro"><span>CRÉER LE PACK</span><h1>{project.project.name}</h1><p>Une seule source pour le thème, l’interface, l’identité et les langues.</p></div>
         <nav className="editor-tabs" aria-label="Sections du pack">
           <button className={editor === 'skin' ? 'active' : ''} onClick={() => setEditor('skin')}><Palette />Skin</button>
+          <button className={editor === 'interface' ? 'active' : ''} onClick={() => setEditor('interface')}><PanelsTopLeft />Interface</button>
           <button className={editor === 'identity' ? 'active' : ''} onClick={() => setEditor('identity')}><ImagePlus />Identité</button>
           <button className={editor === 'languages' ? 'active' : ''} onClick={() => setEditor('languages')}><Languages />Langues</button>
         </nav>
@@ -323,6 +348,15 @@ export default function Home() {
             ['background', 'Fond'], ['surface', 'Surface'], ['text', 'Texte'], ['muted', 'Secondaire'], ['accent', 'Accent'],
           ].map(([key, label]) => <label key={key}><span>{label}</span><div><input type="color" value={project.theme[key]} onChange={(event) => update((draft) => { draft.theme[key] = event.target.value; })} /><input value={project.theme[key]} onChange={(event) => update((draft) => { draft.theme[key] = event.target.value; })} /></div></label>)}</div>
           <div className="compact-fields"><label>Densité<select value={project.theme.density} onChange={(event) => update((draft) => { draft.theme.density = event.target.value; })}><option value="comfortable">Confortable</option><option value="compact">Compacte</option></select></label><label>Police<select value={project.theme.typography.family} onChange={(event) => update((draft) => { draft.theme.typography.family = event.target.value; })}><option value="system">Système</option><option value="monospace">Monospace</option></select></label></div>
+        </section>}
+
+        {editor === 'interface' && <section className="editor-section">
+          <div className="section-label"><span>01</span><b>Familles Moteur UX</b></div>
+          <p className="interface-count">9 familles · 13 références · interface séparée du thème</p>
+          <div className="interface-list">{INTERFACE_FAMILIES.map((family) => <button key={family.id} className={selectedFamily.id === family.id ? 'active' : ''} onClick={() => chooseInterfaceFamily(family.id)}><span><strong>{family.name}</strong><small>{family.description}</small></span><em>{family.variants.length} {family.variants.length > 1 ? 'variantes' : 'référence'}</em>{selectedFamily.id === family.id && <Check />}</button>)}</div>
+          <label className="full-field">Variante<select value={selectedVariant[0]} onChange={(event) => chooseInterfaceVariant(event.target.value)}>{selectedFamily.variants.map(([id, name]) => <option key={id} value={id}>{name}</option>)}</select></label>
+          <button className="catalog-button" onClick={() => setWorkspace('interfaces')}><PanelsTopLeft />Voir les 13 aperçus et le composeur</button>
+          {selectedFamily.kind === 'effects' && <p className="interface-warning">FX Composer reste un prototype de catalogue : ses moteurs d’effets ne sont pas intégrés.</p>}
         </section>}
 
         {editor === 'identity' && <section className="editor-section">
@@ -363,7 +397,7 @@ export default function Home() {
 
         {output === 'pack' ? <>
           <div className="pack-card"><div className="pack-icon"><FileJson /></div><div><strong>{project.project.id}.neuroforge.json</strong><span>Contrat {project.schema} · v{project.packVersion}</span></div><span className={validation.errors.length ? 'bad' : ''}>{validation.errors.length ? 'À corriger' : 'Prêt'}</span></div>
-          <div className="pack-map"><span><b>THÈME</b><i>{project.theme.name}</i></span><span><b>IDENTITÉ</b><i>{project.identity.logo || project.identity.icon ? 'ressources jointes' : 'à compléter'}</i></span><span><b>LANGUES</b><i>FR + EN · repli {project.defaultLocale.toUpperCase()}</i></span><span><b>ABOUT</b><i>généré depuis le pack</i></span><span><b>CIBLE</b><i>{targets[target].label}</i></span></div>
+          <div className="pack-map"><span><b>THÈME</b><i>{project.theme.name}</i></span><span><b>INTERFACE</b><i>{selectedFamily.name} · {selectedVariant[1]}</i></span><span><b>IDENTITÉ</b><i>{project.identity.logo || project.identity.icon ? 'ressources jointes' : 'à compléter'}</i></span><span><b>LANGUES</b><i>FR + EN · repli {project.defaultLocale.toUpperCase()}</i></span><span><b>ABOUT</b><i>généré depuis le pack</i></span><span><b>CIBLE</b><i>{targets[target].label}</i></span></div>
           <button className="primary-export" disabled={validation.errors.length > 0} onClick={() => exportFile('pack')}><Download />Exporter le pack commun</button>
           <div className="export-grid"><button onClick={() => exportFile('css')}><FileCode2 />CSS</button><button onClick={() => exportFile('about')}><FileCode2 />About</button><button onClick={() => exportFile('readme')}><FileCode2 />README</button><button onClick={() => exportFile('native')}><Download />NoteMistress</button></div>
           <div className="import-row"><button onClick={() => importRef.current?.click()}><Upload />Importer un pack</button><button onClick={reset}><RotateCcw />Réinitialiser</button><input ref={importRef} hidden type="file" accept="application/json,.json" onChange={importPack} /></div>
@@ -372,7 +406,7 @@ export default function Home() {
           <button className="primary-export" onClick={async () => { await navigator.clipboard.writeText(prompt); setMessage('Prompt adaptateur copié.'); }}><Clipboard />Copier le prompt</button>
         </>}
 
-        <div className={`validation-card ${validation.errors.length ? 'has-errors' : ''}`}><strong>{validation.errors.length ? `${validation.errors.length} erreur(s)` : 'Contrat valide'}</strong>{validation.errors.slice(0, 3).map((error) => <p key={error}>{error}</p>)}{!validation.errors.length && <p>Identité, version, tokens, capacités, ressources, validation, persistance et repli sont présents.</p>}{validation.warnings.length > 0 && <small>{validation.warnings.length} texte(s) utilisent encore un repli.</small>}</div>
+        <div className={`validation-card ${validation.errors.length ? 'has-errors' : ''}`}><strong>{validation.errors.length ? `${validation.errors.length} erreur(s)` : 'Contrat valide'}</strong>{validation.errors.slice(0, 3).map((error) => <p key={error}>{error}</p>)}{!validation.errors.length && <p>Identité, version, thème, interface, ressources, validation, persistance et repli sont présents.</p>}{validation.warnings.length > 0 && <small>{validation.warnings.length} avertissement(s) de compatibilité ou de repli.</small>}</div>
         <output className="studio-status" aria-live="polite">{message}</output>
       </aside>
     </div> : <section className="ux-workspace" aria-label="Moteur UX intégré">
