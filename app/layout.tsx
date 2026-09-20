@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'NYX White Label Studio',
-  description: 'Générateur de Skins et de marques blanches pour le système NYX.',
+  title: 'NYX × NeuroForge Skin Studio',
+  description: 'Studio visuel pour créer, prévisualiser et exporter des packs de thèmes portables.',
 };
 
 export default function RootLayout({
