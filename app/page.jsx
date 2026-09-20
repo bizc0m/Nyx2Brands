@@ -408,6 +408,7 @@ export default function Home() {
       <div className="nyx-app-title"><span className="nyx-wordmark">{project.identity.icon?<NextImage src={project.identity.icon} width={26} height={26} unoptimized alt="Icône"/>:"Nyx"}</span><span className="app-divider"/><strong>{project.project.name}</strong><small>Intégré</small></div>
       <div className="nyx-app-actions">
         <select className="quick-theme" aria-label="Thème de l’interface" value={Object.keys(availableSkins).find(id=>availableSkins[id].name===project.theme.name)||''} onChange={e=>chooseSkin(e.target.value)}><option value="" disabled>Personnalisé</option>{Object.entries(availableSkins).map(([id,skin])=><option key={id} value={id}>{skin.name}</option>)}</select>
+        <button className="edit-app" aria-expanded={settingsOpen&&step==='identity'} onClick={()=>{setStep('identity');setSettingsOpen(true);setWorkspace('studio');setPreview('app');}}>Éditer l’app</button>
         <button aria-expanded={settingsOpen} aria-controls="theme-choices" onClick={()=>{setSettingsOpen(v=>!v);setWorkspace('studio');}}>Personnaliser</button>
         <button onClick={()=>{setStep('export');setSettingsOpen(true);setWorkspace('studio');}}>Exporter</button>
         <button className="save-project" onClick={save} aria-label="Enregistrer le projet"><Check size={15}/><span>{saved?'Enregistré':'Enregistrer'}</span></button>
@@ -417,7 +418,7 @@ export default function Home() {
     {workspace==='catalogue' && <button onClick={()=>setWorkspace('studio')}>Retour à Nyx intégré</button>}
     {workspace === 'catalogue' ? <section className="legacy-composer"><iframe ref={catalogueRef} onLoad={syncCatalogue} src="./moteur-ux.html" title="Composeur avancé Moteur UX" /></section> : <div className={'atelier-workbench '+(step === 'design' ? 'design-layout' : step === 'export' ? 'export-layout' : '')}>
       <section id="theme-choices" className="selection-panel" aria-label="Réglages du projet" hidden={!settingsOpen}>
-        <div className="settings-heading"><div><small>Votre espace</small><h2>Personnaliser Nyx</h2></div><button aria-label="Fermer les réglages" onClick={()=>{setSettingsOpen(false);setPreview('app');}}>×</button></div>
+        <div className="settings-heading"><div><small>Modifications visibles en direct</small><h2>{step==='identity'?'Éditer l’application':'Personnaliser Nyx'}</h2></div><button aria-label="Fermer les réglages" onClick={()=>{setSettingsOpen(false);setPreview('app');}}>×</button></div>
         <nav className="settings-tabs" aria-label="Réglages">{steps.map(([id,label])=><button key={id} aria-pressed={step===id} onClick={()=>setStep(id)}>{label}</button>)}</nav>
         {step==='identity' && <div className="identity-views"><button onClick={()=>setPreview('app')}>Application</button><button onClick={()=>setPreview('icon')}>Logo & icône</button><button onClick={()=>setPreview('about')}>About</button></div>}<div className="settings-utilities"><button onClick={()=>importRef.current?.click()}>Importer un pack</button><button onClick={()=>setWorkspace('catalogue')}>Sources & composeur ↗</button></div>
       {step === 'blocks' && <UXWorkshop embedded project={project} onSession={receiveSession} onApply={()=>{setStep('design');setMessage('Blocs appliqués dans la Blade Bibliothèque de Nyx intégré.');}} onChange={next=>update(draft=>{draft.integration=next;})}/>}

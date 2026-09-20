@@ -13,6 +13,7 @@ patch('  componentDidUpdate() { this.refreshIcons(); }','  componentDidUpdate() 
 patch('bladeItems: [','bladeItems: [{icon:"library",label:"Bibliothèque",color:"var(--ic-blue)",installed:true},');
 patch("tabs: [", "tabs: [{label:'Bibliothèque',kind:'ux',focusedPane:'ux-root',zoomedPane:null,columns:[]},");
 patch('activeTab: 0,','activeTab: 1,');
+patch('<div style="font-weight:600; font-size:13px;">Nyx</div>','<div data-nyx-product style="font-weight:600; font-size:13px;white-space:nowrap;">Nyx</div>');
 patch('sidebarCollapsed: false,','sidebarCollapsed: window.innerWidth < 700,');
 patch('width:100px; overflow-x:auto; padding:2px 0;','width:100px; overflow-x:auto; padding:2px 0; display:none;');
 patch('onClick: () => this.setState({ themeIndex: i })','onClick: () => window.NyxSelectThemeName(t.name)');
