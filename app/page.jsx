@@ -128,12 +128,15 @@ export default function Home() {
   const [target, setTarget] = useState('future');
   const [workspace, setWorkspace] = useState('studio');
   const [step, setStep] = useState('design');
+  const [settingsOpen,setSettingsOpen]=useState(false);
   const [catalogue, setCatalogue] = useState({sources: [], thumbnails: {}});
   const [, setCatalogueError] = useState('');
   const [, setPreviewMode] = useState('original');
   const [nativeRevision,setNativeRevision]=useState(0);
   const [projectLoaded,setProjectLoaded]=useState(false);
   const [preview, setPreview] = useState('app');
+  useEffect(()=>{if(!settingsOpen)return;const close=e=>{if(e.key==='Escape'){setSettingsOpen(false);setPreview('app');}};window.addEventListener('keydown',close);return()=>window.removeEventListener('keydown',close);},[settingsOpen]);
+
   const [output, setOutput] = useState('pack');
   const [locale, setLocale] = useState('fr');
   const [skinId, setSkinId] = useState('nyx-core');
@@ -399,21 +402,27 @@ export default function Home() {
   }
 
   const steps = [['design','Design & skin'],['blocks','Blocs & références'],['functions','Fonctions'],['identity','Identité'],['export','Intégration']];
-  const stepIndex = steps.findIndex(([id]) => id === step);
-  return <main className="atelier">
-    <header className="atelier-header">
-      <div className="atelier-brand"><span className="brand-monogram">N</span><div><strong>Nyx2Brands</strong><small>Moteur UX × NeuroForge</small></div></div>
-      <div className="project-heading"><span>Votre projet</span><strong>{project.project.name}</strong></div>
-      <div className="header-actions"><button onClick={() => importRef.current?.click()}><Upload size={15}/>Importer</button><button onClick={save}><Check size={15}/>{saved ? 'Enregistré' : 'Enregistrer'}</button><input ref={importRef} hidden type="file" accept="application/json,.json" onChange={importPack}/></div>
+  return <main className={'atelier nyx-app '+(settingsOpen?'settings-open':'')} style={{'--bg':project.theme.background,'--panel':project.theme.surface,'--text':project.theme.text,'--muted':project.theme.muted,'--accent':project.theme.accent,'--line':'color-mix(in srgb, '+project.theme.text+' 18%, '+project.theme.surface+')','--soft':'color-mix(in srgb, '+project.theme.accent+' 10%, '+project.theme.surface+')'}}>
+    <header className="nyx-appbar">
+      <div className="nyx-app-title"><span className="nyx-wordmark">{project.identity.icon?<NextImage src={project.identity.icon} width={26} height={26} unoptimized alt="Icône"/>:"Nyx"}</span><span className="app-divider"/><strong>{project.project.name}</strong><small>Intégré</small></div>
+      <div className="nyx-app-actions">
+        <select className="quick-theme" aria-label="Thème de l’interface" value={Object.keys(availableSkins).find(id=>availableSkins[id].name===project.theme.name)||''} onChange={e=>chooseSkin(e.target.value)}><option value="" disabled>Personnalisé</option>{Object.entries(availableSkins).map(([id,skin])=><option key={id} value={id}>{skin.name}</option>)}</select>
+        <button aria-expanded={settingsOpen} aria-controls="theme-choices" onClick={()=>{setSettingsOpen(v=>!v);setWorkspace('studio');}}>Personnaliser</button>
+        <button onClick={()=>{setStep('export');setSettingsOpen(true);setWorkspace('studio');}}>Exporter</button>
+        <button className="save-project" onClick={save} aria-label="Enregistrer le projet"><Check size={15}/><span>{saved?'Enregistré':'Enregistrer'}</span></button>
+        <input ref={importRef} hidden type="file" accept="application/json,.json" onChange={importPack}/>
+      </div>
     </header>
-    <nav className="atelier-steps" aria-label="Étapes de création">{steps.map(([id,label],index) => <button key={id} aria-current={step === id && workspace === 'studio' ? 'step' : undefined} onClick={() => {setStep(id);setWorkspace('studio');}}><span>{String(index+1).padStart(2,'0')}</span>{label}{id === 'functions' && <b>{integration.features.length}</b>}</button>)}</nav>
-    <nav className="preview-shortcuts" aria-label="Accès rapide"><a href="#theme-choices" onClick={()=>{setWorkspace('studio');setStep('design');}}>Thèmes & skins</a><a href="#live-preview" onClick={()=>setWorkspace('studio')}>Voir l’aperçu ↓</a></nav><section className="atelier-intro"><div><span>L’ATELIER</span><h1>{workspace === 'catalogue' ? 'Composer plusieurs panneaux' : ({design:'Nyx intégré. Une seule application.',blocks:'Composez les nouvelles idées UX.',functions:'Choisissez ce que votre app doit faire.',identity:'Donnez-lui votre identité.',export:'Tout réunir pour l’intégration.'})[step]}</h1><p>{workspace === 'catalogue' ? 'Le composeur existant reste accessible. Les fonctions sélectionnées sont partagées avec votre projet.' : ({design:'Une base Nyx intégré : onglets, documents, registry, blocs et identité.',blocks:'8 blocs interactifs et 27 références : combinez, essayez, exportez.',functions:'Piochez dans plusieurs références. Votre design reste indépendant.',identity:'Le nom, le logo, l’icône et les textes voyagent dans le même pack.',export:'Vos choix, les sources et les instructions dans un seul kit.'})[step]}</p></div>{workspace === 'catalogue' ? <button onClick={() => setWorkspace('studio')}>Retour à l’atelier</button> : <button className="text-link" onClick={() => setWorkspace('catalogue')}>Composeur avancé ↗</button>}</section>
+    {workspace==='catalogue' && <button onClick={()=>setWorkspace('studio')}>Retour à Nyx intégré</button>}
     {workspace === 'catalogue' ? <section className="legacy-composer"><iframe ref={catalogueRef} onLoad={syncCatalogue} src="./moteur-ux.html" title="Composeur avancé Moteur UX" /></section> : <div className={'atelier-workbench '+(step === 'design' ? 'design-layout' : step === 'export' ? 'export-layout' : '')}>
-      <section id="theme-choices" className="selection-panel" aria-label="Réglages du projet">
+      <section id="theme-choices" className="selection-panel" aria-label="Réglages du projet" hidden={!settingsOpen}>
+        <div className="settings-heading"><div><small>Votre espace</small><h2>Personnaliser Nyx</h2></div><button aria-label="Fermer les réglages" onClick={()=>{setSettingsOpen(false);setPreview('app');}}>×</button></div>
+        <nav className="settings-tabs" aria-label="Réglages">{steps.map(([id,label])=><button key={id} aria-pressed={step===id} onClick={()=>setStep(id)}>{label}</button>)}</nav>
+        {step==='identity' && <div className="identity-views"><button onClick={()=>setPreview('app')}>Application</button><button onClick={()=>setPreview('icon')}>Logo & icône</button><button onClick={()=>setPreview('about')}>About</button></div>}<div className="settings-utilities"><button onClick={()=>importRef.current?.click()}>Importer un pack</button><button onClick={()=>setWorkspace('catalogue')}>Sources & composeur ↗</button></div>
       {step === 'blocks' && <UXWorkshop embedded project={project} onSession={receiveSession} onApply={()=>{setStep('design');setMessage('Blocs appliqués dans la Blade Bibliothèque de Nyx intégré.');}} onChange={next=>update(draft=>{draft.integration=next;})}/>}
       {step === 'design' && <>
-        <div className="panel-title"><h2>Nyx intégré · base unique</h2><span>Thèmes appliqués en direct</span></div><p>Dashboard, Documents, Registry et Bibliothèque partagent cette application. Le thème change sans recharger les onglets.</p>
-        <details className="reference-designs"><summary>Sources historiques conservées</summary><p>Les 13 documents de référence restent consultables dans le composeur avancé. La base active est Nyx intégré.</p></details><div className="palette-heading"><h2>Skins · palettes de couleurs</h2><small>Indépendante du design</small></div>
+        
+        <div className="palette-heading"><h2>Skins · palettes de couleurs</h2><small>Indépendante du design</small></div>
         <label className="search-field"><span>Rechercher un skin</span><input type="search" value={skinSearch} onChange={event=>setSkinSearch(event.target.value)} placeholder="Graphite, Crimson, mes skins…"/></label>
         <div className="skin-library">{['NYX Studio','Nyx-Ux','Dashboard original','NeuroForge','CodePen · adaptations','Mes skins'].map(group=>{const entries=Object.entries(availableSkins).filter(([,skin])=>(skin.group||'NYX Studio')===group && `${skin.name} ${group}`.toLowerCase().includes(skinSearch.toLowerCase()));return entries.length ? <section key={group}><h3>{group} <small>{entries.length}</small></h3><div className="palette-gallery">{entries.map(([id,skin])=><button key={id} aria-pressed={project.theme.name===skin.name} onClick={()=>{chooseSkin(id);setPreviewMode('skin');}} className={project.theme.name===skin.name?'selected':''}><span className="color-samples">{['background','surface','text','accent'].map(key=><i key={key} style={{background:skin[key]}}/>)}</span><strong>{skin.name}</strong><small>{skin.appearance==='dark'?'Sombre':'Clair'}</small></button>)}</div></section>:null;})}</div>
         <div className="skin-source-info"><p>CodePen : 20 adaptations locales avec leurs sources. Les styles sont adaptés au moteur ; les applications originales ne sont pas importées.</p>{project.theme.source && <a href={project.theme.source.url} target="_blank" rel="noreferrer">Référence : {project.theme.source.author} ↗</a>}<details><summary>Les 20 références et leur statut</summary>{codepenReferences.map(r=><p key={r.id}><a href={r.url} target="_blank" rel="noreferrer">{r.name} · {r.author} ↗</a> — {r.status==='adapted'?'Adaptation disponible':'Source inaccessible · non intégré'}</p>)}</details></div>
@@ -477,6 +486,6 @@ export default function Home() {
         <section className="selection-summary"><div className="panel-title"><h2>Votre combinaison</h2><span>{integration.features.length} fonctions</span></div><div className="selection-design"><span><b>{preview==='blocks'?(COMPOSITIONS.find(c=>c.id===integration.composition)?.name||'Cockpit Glass'):activeSource?.title || selectedVariant[1]}</b><small>{preview==='blocks'?'Thème complet':'Référence'}</small></span><span className="summary-plus">+</span><span><b>{project.theme.name}</b><small>Skin</small></span><span className="summary-plus">+</span><span><b>{project.project.name}</b><small>Identité</small></span></div>{chosenFunctions.length ? <div className="selected-functions">{chosenFunctions.map(source=><div key={source.id}><strong>{source.title}</strong>{source.features.map(f=><button key={f.id} aria-label={'Retirer '+f.name} onClick={()=>toggleFunction(f.id,false)}>{f.name}<span>×</span></button>)}</div>)}</div> : <button className="selection-empty" onClick={()=>setStep('functions')}>+ Choisir les fonctions de mon app</button>}{activeSource?.limitations && <details className="advanced-settings"><summary>À savoir sur cette référence</summary><p>{activeSource.limitations}</p></details>}</section>
       </aside>
     </div>}
-    <footer className="atelier-footer"><div><strong>{saved ? 'Projet enregistré' : 'Projet local'}</strong><span>{integration.features.length} fonctions · {integration.blocks?.length||0} blocs · {project.theme.name}</span></div><output aria-live="polite">{message || (validation.errors.length ? validation.errors[0] : '')}</output>{workspace === 'studio' && <nav>{stepIndex > 0 && <button onClick={()=>setStep(steps[stepIndex-1][0])}>Retour</button>}{stepIndex < steps.length-1 && <button className="next-step" onClick={()=>setStep(steps[stepIndex+1][0])}>{steps[stepIndex+1][1]} →</button>}</nav>}</footer>
+    <footer className="nyx-statusbar"><span>{project.theme.name}</span><span>{integration.blocks?.length||0} blocs</span><output aria-live="polite">{message || (validation.errors.length ? validation.errors[0] : 'Local · données conservées dans ce navigateur')}</output></footer>
   </main>;
 }

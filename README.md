@@ -88,3 +88,8 @@ Limites : les références restent documentaires et les services externes ne son
 pas connectés. Les autres applications historiques restent des sources ; leur
 logique métier n’est pas automatiquement fusionnée. Les palettes adaptent les
 couleurs de la base, elles ne remplacent pas son architecture d’interface.
+
+L’interface ouvre directement l’espace Nyx sur toute la fenêtre. La barre commune
+regroupe le thème, Personnaliser, Exporter et Enregistrer. Les réglages se replient
+sans démonter Documents ; sur petit écran ils passent au-dessus de l’espace.
+Les icônes du shell sont incluses depuis la dépendance locale lucide-react.

@@ -1,3 +1,4 @@
+import {icons} from 'lucide-react';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {catalogueSources} from '../packages/neuroforge-core/integration.mjs';
 import {unifiedRuntime} from '../packages/neuroforge-core/nyx-unified.mjs';
@@ -32,7 +33,9 @@ let registry=JSON.parse(registryMatch[1]);
 registry=registry.replace('render();\n</script>',`window.applyNyxProject=(project,skins)=>{state.product.name=project.project.name;state.product.skin=project.theme.name;render();const n=document.getElementById('product-name');if(n){n.readOnly=true;n.title='Identité partagée avec le projet';}const s=document.getElementById('product-skin');if(s){s.replaceChildren(...skins.map(item=>{const o=document.createElement('option');o.value=item.name;o.textContent=item.name;return o;}));s.value=project.theme.name;s.oninput=()=>parent.NyxSelectThemeName(s.value);}save();};\nrender();\n</script>`);
 template=template.replace(registryPattern,()=> 'const registrySrcDoc='+JSON.stringify(registry).replace(/<\//g,'<\\/')+';');
 template=template.replace(/\blocalStorage\b/g,'window.NyxStore').replaceAll('autosave window.NyxStore','sauvegarde locale');
-const runtime='<script id="nyx-unified-runtime">const validSession='+validSession.toString()+';window.__NYX_MOUNT_BLOCKS='+mountUX.toString()+';('+unifiedRuntime.toString()+')();</script>';
+const iconNodes={};for(const [name,Icon] of Object.entries(icons)){const kebab=name.replace(/([a-z0-9])([A-Z])/g,'$1-$2').replace(/([a-z])([0-9])/g,'$1-$2').toLowerCase();if(template.includes(kebab))try{iconNodes[kebab]=Icon.render({},null).props.iconNode;}catch{}}
+iconNodes.filter=icons.Funnel.render({},null).props.iconNode;iconNodes['split-square-horizontal']=icons.SquareSplitHorizontal.render({},null).props.iconNode;
+const runtime='<script id="nyx-unified-runtime">window.__NYX_ICON_NODES='+JSON.stringify(iconNodes)+';const validSession='+validSession.toString()+';window.__NYX_MOUNT_BLOCKS='+mountUX.toString()+';('+unifiedRuntime.toString()+')();</script>';
 // Initialize storage and protocol before the bundled component executes.
 template=template.replace('<body>','<body>'+runtime);
 const output=original.replace(re,()=>'<script type="__bundler/template">'+JSON.stringify(template).replace(/<\//g,'<\\/')+'</script>');
