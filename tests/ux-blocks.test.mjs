@@ -1,0 +1,11 @@
+import {Script} from 'node:vm';
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {newProject,parseProject,validate} from '../packages/neuroforge-core/index.mjs';
+import {UX_BLOCKS,REFERENCES,uxHTML} from '../packages/neuroforge-core/ux-blocks.mjs';
+import {emptyIntegration,integrationFiles,integrationZip} from '../packages/neuroforge-core/integration.mjs';
+import {unzipSync,strFromU8} from 'fflate';
+const project=()=>{const p=newProject();p.modules=p.modules.filter(m=>m!=='layout');p.integration={...emptyIntegration(),path:'/test/app',blocks:UX_BLOCKS.map(b=>b.id),references:REFERENCES.map(r=>r.id)};return p;};
+test('all blocks and 27 references survive standalone ZIP and pack import without legacy functions',()=>{const p=project(),zip=unzipSync(integrationZip(integrationFiles(p,[])));assert.deepEqual(parseProject(strFromU8(zip['pack.neuroforge.json'])),p);assert.equal(JSON.parse(strFromU8(zip['references.json'])).length,27);assert.equal(JSON.parse(strFromU8(zip['manifest.json'])).blocks.length,8);assert.match(strFromU8(zip['blocs-ux.html']),/function mountUX/);assert.match(strFromU8(zip['INTEGRATION.md']),/Blocs UX exécutables/);});
+test('unknown or duplicate selections rejected; old packs remain accepted',()=>{assert.equal(validate(newProject()).errors.length,0);for(const field of ['blocks','references'])for(const value of [['unknown'],['ref-01','ref-01'],null]){const p=project();p.integration[field]=value;assert.ok(validate(p).errors.length);}});
+test('deselected blocks and references excluded; identity escaped; inline runtime parses',()=>{const p=project();p.integration.blocks=['sources'];p.integration.references=['ref-14'];p.project.name='<script>alert(1)</script>';const html=uxHTML(p);assert.doesNotMatch(html,/<h1><script>/);assert.doesNotMatch(html,/id="section-library"/);assert.match(html,/julyx10/);assert.doesNotMatch(html,/lfnovo/);const script=html.match(/<script>([\s\S]*)<\/script>/)[1];assert.doesNotThrow(()=>new Script(script));});

@@ -1,3 +1,4 @@
+import { connectCatalogue } from './catalogue-bridge.mjs';
 import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -31,5 +32,8 @@ if (/\/Users\/JOB|file:\/\/\/Users\/JOB/.test(sanitized)) {
 }
 
 mkdirSync(dirname(output), { recursive: true });
-writeFileSync(output, sanitized);
+writeFileSync(output, connectCatalogue(sanitized));
+const data = JSON.parse(sanitized.match(/const DATA=(\[.*?\]);\s*\n/s)[1]);
+const metadata = data.map(({html: _html, path: _path, source: _source, ...entry}) => entry);
+writeFileSync(resolve('packages/neuroforge-core/catalogue.json'), JSON.stringify(metadata, null, 2) + '\n');
 console.log(`${output} généré depuis ${sourceHash}`);

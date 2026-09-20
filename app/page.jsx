@@ -1,26 +1,13 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import UXWorkshop from './ux-workshop.jsx';
+import {uxHTML} from '../packages/neuroforge-core/ux-blocks.mjs';
 import NextImage from 'next/image';
+import { Check, Clipboard, Download, FileJson, RotateCcw, Sparkles, Upload, FileCode2 } from 'lucide-react';
 import {
-  Check,
-  ChevronDown,
-  Clipboard,
-  Download,
-  FileCode2,
-  FileJson,
-  ImagePlus,
-  Languages,
-  Monitor,
-  PackageOpen,
-  Palette,
-  PanelsTopLeft,
-  RotateCcw,
-  ShieldCheck,
-  Sparkles,
-  Upload,
-} from 'lucide-react';
-import {
+  FUNCTION_CATALOGUE,
+  TECHNOLOGIES,
   INTERFACE_FAMILIES,
   aboutHTML,
   decodeImages,
@@ -33,20 +20,29 @@ import {
   validate,
 } from '../packages/neuroforge-core/index.mjs';
 
+import { designPreview, catalogueThumbnails } from '../packages/neuroforge-core/design-preview.mjs';
+import { emptyIntegration, integrationPrompt, integrationFiles, integrationZip, catalogueSources, selectedFunctions } from '../packages/neuroforge-core/integration.mjs';
+
+import {recoveredSkins, generateSkin, validatePersonalSkins, SKIN_LIBRARY_STORAGE} from '../packages/neuroforge-core/skins.mjs';
+
+import {codepenSkins,codepenReferences} from '../packages/neuroforge-core/codepen-skins.mjs';
+
 const STORAGE = 'neuroforge-skin-studio-v2';
 const clone = (value) => JSON.parse(JSON.stringify(value));
-const skinIds = ['moteur-ux', 'nyx-core', 'neon-grid', 'obsidian-luxe', 'signal-light'];
+const skinIds = ['moteur-ux', 'nyx-core', 'neon-grid', 'obsidian-luxe', 'signal-light', ...Object.keys(recoveredSkins),...Object.keys(codepenSkins)];
 const skins = {
+  ...recoveredSkins,
+  ...codepenSkins,
   'moteur-ux': { name: 'Moteur UX', note: 'Sauge, crème et atelier éditorial', background: '#F3F4EF', surface: '#FAFBF7', text: '#24302C', muted: '#697268', accent: '#244D3A', signal: '#8AAD75', appearance: 'light', radius: 6 },
   'nyx-core': { name: 'NYX Core', note: 'Workbench sombre et précis', background: '#07070B', surface: '#16161E', text: '#F2F2F5', muted: '#8E8E93', accent: '#0A84FF', signal: '#64D2FF', appearance: 'dark', radius: 6 },
   'neon-grid': { name: 'Neon Grid', note: 'Signal nocturne et électrique', background: '#080B09', surface: '#141A17', text: '#F4FFE8', muted: '#90A08D', accent: '#B8FF32', signal: '#B65CFF', appearance: 'dark', radius: 2 },
   'obsidian-luxe': { name: 'Obsidian Luxe', note: 'Métal, contraste et calme', background: '#0B0A08', surface: '#191713', text: '#FFF9ED', muted: '#A69B87', accent: '#D8B46B', signal: '#FFF1C9', appearance: 'dark', radius: 12 },
-  'signal-light': { name: 'Signal Light', note: 'Clair, éditorial et direct', background: '#EEF1F5', surface: '#FFFFFF', text: '#111827', muted: '#667085', accent: '#1447E6', signal: '#F05223', appearance: 'light', radius: 8 },
+  'signal-light': { name: 'Signal Light', note: 'Clair, éditorial et direct', background: '#EEF1F5', surface: '#FFFFFF', text: '#111827', muted: '#596170', accent: '#1447E6', signal: '#F05223', appearance: 'light', radius: 8 },
 };
 const targets = {
   notemistress: { label: 'NoteMistress', tech: 'AppKit', status: 'adaptateur thème', id: 'notemistress' },
   'nyx-ux': { label: 'Nyx UX', tech: 'Web', status: 'adaptateur web', id: 'nyx-ux' },
-  future: { label: 'Future app', tech: 'Pack commun', status: 'prête à raccorder', id: 'future-app' },
+  future: { label: 'Mon application', tech: 'Pack commun', status: 'prête à raccorder', id: 'future-app' },
 };
 const labels = {
   fr: { description: 'Description', purpose: 'À quoi sert cette application ?', audience: 'Pour qui ?', limits: 'Limites connues' },
@@ -54,8 +50,8 @@ const labels = {
 };
 
 function seedProject() {
-  const project = newProject('notemistress');
-  project.project.name = 'NoteMistress';
+  const project = newProject('my-app');
+  project.project.name = 'Mon application';
   project.project.version = '0.1.0';
   project.packVersion = '0.1.0';
   project.theme = {
@@ -88,14 +84,22 @@ const defaultInterface = { family: INTERFACE_FAMILIES[0].id, variant: INTERFACE_
 const interfaceFor = (project) => project.ui || defaultInterface;
 
 function loadStored() {
-  const fallback = { project: seedProject(), target: 'notemistress', skinId: 'nyx-core', signal: skins['nyx-core'].signal, radius: skins['nyx-core'].radius };
+  const fallback = { project: seedProject(), target: 'future', skinId: 'nyx-core', signal: skins['nyx-core'].signal, radius: skins['nyx-core'].radius };
   if (typeof window === 'undefined') return fallback;
   try {
     const raw = window.localStorage.getItem(STORAGE);
-    if (!raw) return fallback;
+    let old = {};
+    try { old = JSON.parse(window.localStorage.getItem('nyx-moteur-ux-atelier-v1') || '{}') || {}; } catch { /* Keep the current pack when the old catalogue is unreadable. */ }
+    const valid = new Set(FUNCTION_CATALOGUE.flatMap(source => source.features.map(f => f.id)));
+    const legacy = {...emptyIntegration(), features: [...new Set((Array.isArray(old.selected) ? old.selected : []).filter(id => valid.has(id)))], path: typeof old.target === 'string' ? old.target.slice(0,1000) : '', notes: typeof old.notes === 'string' ? old.notes.slice(0,8000) : ''};
+    if (old.stack === 'React' || old.stack === 'SwiftUI / AppKit') legacy.technology = old.stack;
+    if (!raw) return {...fallback, project: {...fallback.project, integration: legacy}};
     const stored = JSON.parse(raw);
+    const restored = parseProject(JSON.stringify(stored.project));
+    if (!restored.integration) restored.integration = legacy;
     return {
-      project: parseProject(JSON.stringify(stored.project)),
+      project: restored,
+      preview: stored.preview === 'blocks' && restored.integration?.blocks?.length ? 'blocks' : 'app',
       target: targets[stored.target] ? stored.target : fallback.target,
       skinId: skinIds.includes(stored.skinId) ? stored.skinId : fallback.skinId,
       signal: /^#[0-9a-f]{6}$/i.test(stored.signal) ? stored.signal : fallback.signal,
@@ -117,9 +121,14 @@ function download(name, content, type = 'application/json') {
 
 export default function Home() {
   const [project, setProject] = useState(seedProject);
-  const [target, setTarget] = useState('notemistress');
-  const [workspace, setWorkspace] = useState('skins');
-  const [editor, setEditor] = useState('skin');
+  const [target, setTarget] = useState('future');
+  const [workspace, setWorkspace] = useState('studio');
+  const [step, setStep] = useState('design');
+  const [designSearch, setDesignSearch] = useState('');
+  const [catalogue, setCatalogue] = useState({sources: [], thumbnails: {}});
+  const [catalogueError, setCatalogueError] = useState('');
+  const [previewMode, setPreviewMode] = useState('original');
+  const [previewRevision, setPreviewRevision] = useState(0);
   const [preview, setPreview] = useState('app');
   const [output, setOutput] = useState('pack');
   const [locale, setLocale] = useState('fr');
@@ -129,11 +138,37 @@ export default function Home() {
   const [message, setMessage] = useState('');
   const [saved, setSaved] = useState(false);
   const importRef = useRef(null);
+  const catalogueRef = useRef(null);
+  const [featureSearch, setFeatureSearch] = useState('');
+  const [generating, setGenerating] = useState(false);
+  const [personalSkins,setPersonalSkins]=useState([]);
+  const [skinName,setSkinName]=useState('Mon skin');
+  const [skinHue,setSkinHue]=useState(210);
+  const [skinMode,setSkinMode]=useState('dark');
+  const [skinSearch,setSkinSearch]=useState('');
+  const [libraryError,setLibraryError]=useState('');
+  const availableSkins={...skins,...Object.fromEntries(personalSkins.map(item=>[item.id,{...item.theme,group:'Mes skins',signal:item.theme.accent,radius:6}]))};
+  function savePersonalSkin(){
+    try {
+      if(libraryError)throw Error(libraryError);
+      if(!skinName.trim()||skinName.trim().length>64)throw Error('Donnez un nom de 1 à 64 caractères.');
+      if(personalSkins.some(item=>item.theme.name.toLowerCase()===skinName.trim().toLowerCase()))throw Error('Ce nom existe déjà. Choisissez un autre nom pour conserver les deux skins.');
+      const theme={...clone(project.theme),name:skinName.trim()};
+      const next=validatePersonalSkins([...personalSkins,{id:'personal-'+crypto.randomUUID(),theme}]);
+      localStorage.setItem(SKIN_LIBRARY_STORAGE,JSON.stringify(next));setPersonalSkins(next);
+      update(draft=>{draft.theme=theme;});setSkinId(next.at(-1).id);
+      setMessage('Skin « '+theme.name+' » enregistré dans Mes skins.');
+    } catch(error){setMessage(error.message);}
+  }
+  function createSkin(){try{const theme=generateSkin(skinName,skinHue,skinMode);update(draft=>{draft.theme=theme;});setPreviewMode('skin');setPreview(current=>current==='blocks'?'blocks':'app');}catch(error){setMessage(error.message);}}
+
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
+      try{setPersonalSkins(validatePersonalSkins(JSON.parse(localStorage.getItem(SKIN_LIBRARY_STORAGE)||'[]')));}catch{setLibraryError('La bibliothèque locale ne peut pas être lue. Elle est conservée sans modification.');}
       const stored = loadStored();
       setProject(stored.project);
+      setPreview(stored.preview || 'app');
       setTarget(stored.target);
       setSkinId(stored.skinId);
       setSignal(stored.signal);
@@ -150,19 +185,45 @@ export default function Home() {
     if (validation.errors.length || !project.modules.includes('about')) return '';
     try { return aboutHTML(project, locale); } catch { return ''; }
   }, [locale, project, validation.errors.length]);
-  const prompt = useMemo(() => `Crée l’adaptateur visuel de ${project.project.name} à partir du pack NeuroForge joint.\n\nCONTRAT\n- Conserver la logique métier, les données et les couleurs d’état de l’application.\n- Appliquer les tokens de thème séparément de la disposition d’interface.\n- Adapter la famille d’interface seulement si la cible déclare cette capacité ; sinon conserver sa disposition native.\n- Respecter le repli de langue ${project.defaultLocale}.\n- Valider le pack avant application et restaurer le thème natif si un token est invalide.\n\nCIBLE\n- Application : ${targets[target].label}\n- Technologie : ${targets[target].tech}\n- Pack : ${project.project.id} ${project.packVersion}\n- Thème : ${project.theme.name}\n- Interface : ${selectedFamily.name} / ${selectedVariant[1]}\n- Type : ${selectedFamily.kind}\n- Modules : ${project.modules.join(', ')}\n\nPREUVE ATTENDUE\nImporter exactement le même fichier .neuroforge.json dans deux applications, afficher son identifiant et sa version, puis démontrer le repli vers leur thème et disposition natifs.`, [project, selectedFamily, selectedVariant, target]);
+  const integration = project.integration || emptyIntegration();
+  const chosenFunctions = selectedFunctions(project);
+  const prompt = useMemo(() => {
+    try { return integrationPrompt(project); } catch { return 'Corrigez les erreurs du pack pour générer les instructions.'; }
+  }, [project]);
+  useEffect(() => {
+    function receive(event) {
+      if (event.origin !== window.location.origin || event.source !== catalogueRef.current?.contentWindow || event.data?.type !== 'nyx-functions-changed') return;
+      const valid = new Set(FUNCTION_CATALOGUE.flatMap(s => s.features.map(f => f.id)));
+      if (!Array.isArray(event.data.features) || event.data.features.some(id => !valid.has(id))) return;
+      setProject(current => ({...current, integration: {...(current.integration || emptyIntegration()), features: [...new Set(event.data.features)]}}));
+      setSaved(false);
+    }
+    window.addEventListener('message', receive);
+    return () => window.removeEventListener('message', receive);
+  }, []);
+  function syncCatalogue() {
+    catalogueRef.current?.contentWindow?.postMessage({type: 'nyx-functions-set', features: integration.features}, window.location.origin);
+  }
+  function updateIntegration(key, value) {
+    update(draft => { draft.integration = {...(draft.integration || emptyIntegration()), [key]: value}; });
+  }
+  function toggleFunction(id, checked) {
+    updateIntegration('features', checked ? [...new Set([...integration.features, id])] : integration.features.filter(value => value !== id));
+  }
+  async function generateIntegration() {
+    setGenerating(true);
+    try {
+      await decodeImages(parseProject(JSON.stringify(project)));
+      const response = await fetch('./moteur-ux.html');
+      if (!response.ok) throw Error('Catalogue indisponible.');
+      const files = integrationFiles(project, catalogueSources(await response.text()));
+      download(`${project.project.id}-integration.zip`, integrationZip(files), 'application/zip');
+      setMessage(`Kit généré : ${integration.features.length} fonctions et ${integration.blocks?.length||0} blocs UX, skin ${project.theme.name}, identité et ${Object.keys(files).length} fichiers. Décompressez le ZIP puis suivez INTEGRATION.md.`);
+    } catch (error) { setMessage(`Génération refusée : ${error.message}`); }
+    finally { setGenerating(false); }
+  }
 
-  const previewStyle = {
-    '--pv-bg': project.theme.background,
-    '--pv-surface': project.theme.surface,
-    '--pv-text': project.theme.text,
-    '--pv-muted': project.theme.muted,
-    '--pv-accent': project.theme.accent,
-    '--pv-signal': signal,
-    '--pv-radius': `${radius}px`,
-    '--pv-space': project.theme.density === 'compact' ? '10px' : '16px',
-    '--pv-font': project.theme.typography.family === 'monospace' ? 'var(--font-geist-mono)' : 'var(--font-geist-sans)',
-  };
+
 
   function update(mutator) {
     setProject((current) => { const next = clone(current); mutator(next); return next; });
@@ -175,18 +236,27 @@ export default function Home() {
     update((draft) => {
       draft.project.id = targets[next].id;
       draft.project.name = targets[next].label;
+      draft.integration = {...(draft.integration || emptyIntegration()), technology: next === 'notemistress' ? 'SwiftUI / AppKit' : 'Web / HTML'};
     });
   }
 
   function chooseSkin(id) {
-    const skin = skins[id];
+    const skin = availableSkins[id];
+    if (!skin) return;
+    setSkinName(skin.name);
+    setPreview(current=>current==='blocks'?'blocks':'app');
     setSkinId(id);
     setSignal(skin.signal);
     setRadius(skin.radius);
     update((draft) => {
+      const baseTheme={...draft.theme};delete baseTheme.visual;delete baseTheme.source;
       draft.theme = {
-        ...draft.theme,
+        ...baseTheme,
+        ...(skin.visual?{visual:clone(skin.visual)}:{}),
+        ...(skin.source?{source:clone(skin.source)}:{}),
         name: skin.name,
+        typography: skin.typography || {family:'system',size:13},
+        density: skin.density || 'comfortable',
         appearance: skin.appearance,
         background: skin.background,
         surface: skin.surface,
@@ -197,22 +267,27 @@ export default function Home() {
     });
   }
 
-  function chooseInterfaceFamily(id) {
-    const family = INTERFACE_FAMILIES.find((item) => item.id === id);
+  function chooseDesign(id) {
+    const family = INTERFACE_FAMILIES.find(item => item.variants.some(([variant]) => variant === id));
     if (!family) return;
-    update((draft) => {
-      draft.ui = { family: family.id, variant: family.variants[0][0] };
-      if (!draft.modules.includes('layout')) draft.modules.push('layout');
-    });
+    update(draft => { draft.ui = {family: family.id, variant: id}; if (!draft.modules.includes('layout')) draft.modules.push('layout'); });
+    setPreview('app');
   }
-
-  function chooseInterfaceVariant(id) {
-    if (!selectedFamily.variants.some(([variant]) => variant === id)) return;
-    update((draft) => {
-      draft.ui = { family: selectedFamily.id, variant: id };
-      if (!draft.modules.includes('layout')) draft.modules.push('layout');
+  const activeSource = catalogue.sources.find(source => source.id === selectedVariant[0]);
+  const referencePreview = useMemo(() => {
+    if (!activeSource) return '';
+    return designPreview(activeSource.html, previewMode === 'skin' && !validation.errors.length ? project : null);
+  }, [activeSource, previewMode, project, validation.errors.length]);
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch('./moteur-ux.html', {signal: controller.signal}).then(response => {
+      if (!response.ok) throw Error('Catalogue indisponible.');
+      return response.text();
+    }).then(html => setCatalogue({sources: catalogueSources(html), thumbnails: catalogueThumbnails(html)})).catch(error => {
+      if (error.name !== 'AbortError') setCatalogueError('Les aperçus ne sont pas disponibles. Rechargez la page ; vos choix sont conservés.');
     });
-  }
+    return () => controller.abort();
+  }, []);
 
   async function image(event, kind) {
     const file = event.target.files?.[0];
@@ -280,7 +355,7 @@ export default function Home() {
       setMessage('Corrigez le pack avant de l’enregistrer.');
       return;
     }
-    window.localStorage.setItem(STORAGE, JSON.stringify({ project, target, skinId, signal, radius }));
+    window.localStorage.setItem(STORAGE, JSON.stringify({ project, target, skinId, signal, radius, preview }));
     setSaved(true);
     setMessage('Pack enregistré dans ce navigateur.');
   }
@@ -288,7 +363,7 @@ export default function Home() {
   function reset() {
     const next = seedProject();
     setProject(next);
-    setTarget('notemistress');
+    setTarget('future');
     setSkinId('nyx-core');
     setSignal(skins['nyx-core'].signal);
     setRadius(skins['nyx-core'].radius);
@@ -313,53 +388,41 @@ export default function Home() {
     }
   }
 
-  return <main className="studio-app">
-    <header className="studio-topbar">
-      <div className="studio-brand"><div className="studio-mark">N</div><div><strong>NYX × NEURO FORGE</strong><span>Skin Studio</span></div></div>
-      <div className="target-switcher">
-        <span>CIBLE</span>
-        <label><select value={target} onChange={(event) => chooseTarget(event.target.value)}>{Object.entries(targets).map(([id, item]) => <option key={id} value={id}>{item.label}</option>)}</select><ChevronDown /></label>
-        <em>{targets[target].tech} · {targets[target].status}</em>
-      </div>
-      <div className="top-actions"><span className={`contract-state ${validation.errors.length ? 'is-error' : ''}`}><i />{workspace === 'skins' ? (validation.errors.length ? `${validation.errors.length} erreur` : 'Pack valide') : '9 familles · 13 références'}</span>{workspace === 'skins' && <button className="ghost-button" onClick={save}>{saved ? <Check /> : <ShieldCheck />}{saved ? 'Enregistré' : 'Enregistrer'}</button>}</div>
+  const steps = [['design','Design & skin'],['blocks','Blocs & références'],['functions','Fonctions'],['identity','Identité'],['export','Intégration']];
+  const stepIndex = steps.findIndex(([id]) => id === step);
+  return <main className="atelier">
+    <header className="atelier-header">
+      <div className="atelier-brand"><span className="brand-monogram">N</span><div><strong>Nyx2Brands</strong><small>Moteur UX × NeuroForge</small></div></div>
+      <div className="project-heading"><span>Votre projet</span><strong>{project.project.name}</strong></div>
+      <div className="header-actions"><button onClick={() => importRef.current?.click()}><Upload size={15}/>Importer</button><button onClick={save}><Check size={15}/>{saved ? 'Enregistré' : 'Enregistrer'}</button><input ref={importRef} hidden type="file" accept="application/json,.json" onChange={importPack}/></div>
     </header>
-
-    <nav className="workflow-nav" aria-label="Workflow NeuroForge">
-      <button className={workspace === 'skins' ? 'active' : ''} onClick={() => setWorkspace('skins')}><Palette /><span><b>1 · Pack visuel</b><small>Thème, interface, identité, langues, About</small></span></button>
-      <button className={workspace === 'interfaces' ? 'active' : ''} onClick={() => setWorkspace('interfaces')}><PanelsTopLeft /><span><b>2 · Interfaces & composition</b><small>Moteur UX existant · 9 familles</small></span></button>
-      <p>Choisir l’apparence, puis composer l’interface de {project.project.name}.</p>
-    </nav>
-
-    {workspace === 'skins' ? <div className="studio-layout">
-      <aside className="studio-controls">
-        <div className="panel-intro"><span>CRÉER LE PACK</span><h1>{project.project.name}</h1><p>Une seule source pour le thème, l’interface, l’identité et les langues.</p></div>
-        <nav className="editor-tabs" aria-label="Sections du pack">
-          <button className={editor === 'skin' ? 'active' : ''} onClick={() => setEditor('skin')}><Palette />Skin</button>
-          <button className={editor === 'interface' ? 'active' : ''} onClick={() => setEditor('interface')}><PanelsTopLeft />Interface</button>
-          <button className={editor === 'identity' ? 'active' : ''} onClick={() => setEditor('identity')}><ImagePlus />Identité</button>
-          <button className={editor === 'languages' ? 'active' : ''} onClick={() => setEditor('languages')}><Languages />Langues</button>
-        </nav>
-
-        {editor === 'skin' && <section className="editor-section">
-          <div className="section-label"><span>01</span><b>Direction visuelle</b></div>
-          <div className="skin-list">{skinIds.map((id) => <button key={id} className={skinId === id ? 'active' : ''} onClick={() => chooseSkin(id)}><i style={{ background: `linear-gradient(135deg, ${skins[id].accent}, ${skins[id].signal})` }} /><span><strong>{skins[id].name}</strong><small>{skins[id].note}</small></span>{skinId === id && <Check />}</button>)}</div>
-          <div className="section-label"><span>02</span><b>Tokens partagés</b></div>
-          <div className="token-grid">{[
-            ['background', 'Fond'], ['surface', 'Surface'], ['text', 'Texte'], ['muted', 'Secondaire'], ['accent', 'Accent'],
-          ].map(([key, label]) => <label key={key}><span>{label}</span><div><input type="color" value={project.theme[key]} onChange={(event) => update((draft) => { draft.theme[key] = event.target.value; })} /><input value={project.theme[key]} onChange={(event) => update((draft) => { draft.theme[key] = event.target.value; })} /></div></label>)}</div>
-          <div className="compact-fields"><label>Densité<select value={project.theme.density} onChange={(event) => update((draft) => { draft.theme.density = event.target.value; })}><option value="comfortable">Confortable</option><option value="compact">Compacte</option></select></label><label>Police<select value={project.theme.typography.family} onChange={(event) => update((draft) => { draft.theme.typography.family = event.target.value; })}><option value="system">Système</option><option value="monospace">Monospace</option></select></label></div>
-        </section>}
-
-        {editor === 'interface' && <section className="editor-section">
-          <div className="section-label"><span>01</span><b>Familles Moteur UX</b></div>
-          <p className="interface-count">9 familles · 13 références · interface séparée du thème</p>
-          <div className="interface-list">{INTERFACE_FAMILIES.map((family) => <button key={family.id} className={selectedFamily.id === family.id ? 'active' : ''} onClick={() => chooseInterfaceFamily(family.id)}><span><strong>{family.name}</strong><small>{family.description}</small></span><em>{family.variants.length} {family.variants.length > 1 ? 'variantes' : 'référence'}</em>{selectedFamily.id === family.id && <Check />}</button>)}</div>
-          <label className="full-field">Variante<select value={selectedVariant[0]} onChange={(event) => chooseInterfaceVariant(event.target.value)}>{selectedFamily.variants.map(([id, name]) => <option key={id} value={id}>{name}</option>)}</select></label>
-          <button className="catalog-button" onClick={() => setWorkspace('interfaces')}><PanelsTopLeft />Voir les 13 aperçus et le composeur</button>
-          {selectedFamily.kind === 'effects' && <p className="interface-warning">FX Composer reste un prototype de catalogue : ses moteurs d’effets ne sont pas intégrés.</p>}
-        </section>}
-
-        {editor === 'identity' && <section className="editor-section">
+    <nav className="atelier-steps" aria-label="Étapes de création">{steps.map(([id,label],index) => <button key={id} aria-current={step === id && workspace === 'studio' ? 'step' : undefined} onClick={() => {setStep(id);setWorkspace('studio');}}><span>{String(index+1).padStart(2,'0')}</span>{label}{id === 'functions' && <b>{integration.features.length}</b>}</button>)}</nav>
+    <nav className="preview-shortcuts" aria-label="Accès rapide"><a href="#theme-choices" onClick={()=>{setWorkspace('studio');setStep('design');}}>Thèmes & skins</a><a href="#live-preview" onClick={()=>setWorkspace('studio')}>Voir l’aperçu ↓</a></nav><section className="atelier-intro"><div><span>L’ATELIER</span><h1>{workspace === 'catalogue' ? 'Composer plusieurs panneaux' : ({design:'Un design. Vos fonctions. Votre identité.',blocks:'Composez les nouvelles idées UX.',functions:'Choisissez ce que votre app doit faire.',identity:'Donnez-lui votre identité.',export:'Tout réunir pour l’intégration.'})[step]}</h1><p>{workspace === 'catalogue' ? 'Le composeur existant reste accessible. Les fonctions sélectionnées sont partagées avec votre projet.' : ({design:'13 designs réunis, 45 skins applicables et vos créations. Explorez, comparez, choisissez.',blocks:'8 blocs interactifs et 27 références : combinez, essayez, exportez.',functions:'Piochez dans plusieurs références. Votre design reste indépendant.',identity:'Le nom, le logo, l’icône et les textes voyagent dans le même pack.',export:'Vos choix, les sources et les instructions dans un seul kit.'})[step]}</p></div>{workspace === 'catalogue' ? <button onClick={() => setWorkspace('studio')}>Retour à l’atelier</button> : <button className="text-link" onClick={() => setWorkspace('catalogue')}>Composeur avancé ↗</button>}</section>
+    {workspace === 'catalogue' ? <section className="legacy-composer"><iframe ref={catalogueRef} onLoad={syncCatalogue} src="./moteur-ux.html" title="Composeur avancé Moteur UX" /></section> : step === 'blocks' ? <UXWorkshop project={project} onApply={()=>{if(validation.errors.length){setMessage(validation.errors[0]);return;} try{window.localStorage.setItem(STORAGE,JSON.stringify({project,target,skinId,signal,radius,preview:'blocks'}));setPreview('blocks');setStep('design');setSaved(true);setMessage('Composition appliquée et enregistrée avec votre skin et votre identité.');}catch{setMessage('Enregistrement impossible : stockage du navigateur indisponible.');}}} onChange={next=>update(draft=>{draft.integration=next;})}/> : <div className={'atelier-workbench '+(step === 'design' ? 'design-layout' : step === 'export' ? 'export-layout' : '')}>
+      <section id="theme-choices" className="selection-panel" aria-label="Réglages du projet">
+      {step === 'design' && <>
+        <div className="panel-title"><h2>Thèmes & designs</h2><span>13 références · 9 familles</span></div>
+        <label className="search-field"><span>Rechercher un design</span><input type="search" value={designSearch} onChange={event => setDesignSearch(event.target.value)} placeholder="Documents, terminal, dashboard…" /></label>
+        <div className="design-gallery">{FUNCTION_CATALOGUE.filter(source => `${source.title} ${source.desc}`.toLowerCase().includes(designSearch.toLowerCase())).map(source => <button key={source.id} className={'design-card '+(selectedVariant[0] === source.id ? 'selected' : '')} aria-pressed={selectedVariant[0] === source.id} onClick={() => chooseDesign(source.id)}>
+          <div className="design-thumbnail">{catalogue.thumbnails[source.id] ? <NextImage src={catalogue.thumbnails[source.id]} width={320} height={190} unoptimized alt={'Design '+source.title}/> : <span>{source.title}</span>}<span className="design-select-mark">{selectedVariant[0] === source.id ? <Check size={14}/> : '↗'}</span></div>
+          <strong>{source.title}</strong><small>{source.features.length} fonctions référencées</small>
+        </button>)}</div>
+        {!FUNCTION_CATALOGUE.some(source => `${source.title} ${source.desc}`.toLowerCase().includes(designSearch.toLowerCase())) && <p className="empty-message">Aucun design trouvé. Essayez un autre nom.</p>}
+        <div className="palette-heading"><h2>Skins · palettes de couleurs</h2><small>Indépendante du design</small></div>
+        <label className="search-field"><span>Rechercher un skin</span><input type="search" value={skinSearch} onChange={event=>setSkinSearch(event.target.value)} placeholder="Graphite, Crimson, mes skins…"/></label>
+        <div className="skin-library">{['NYX Studio','Nyx-Ux','Dashboard original','NeuroForge','CodePen · adaptations','Mes skins'].map(group=>{const entries=Object.entries(availableSkins).filter(([,skin])=>(skin.group||'NYX Studio')===group && `${skin.name} ${group}`.toLowerCase().includes(skinSearch.toLowerCase()));return entries.length ? <section key={group}><h3>{group} <small>{entries.length}</small></h3><div className="palette-gallery">{entries.map(([id,skin])=><button key={id} aria-pressed={project.theme.name===skin.name} onClick={()=>{chooseSkin(id);setPreviewMode('skin');}} className={project.theme.name===skin.name?'selected':''}><span className="color-samples">{['background','surface','text','accent'].map(key=><i key={key} style={{background:skin[key]}}/>)}</span><strong>{skin.name}</strong><small>{skin.appearance==='dark'?'Sombre':'Clair'}</small></button>)}</div></section>:null;})}</div>
+        <div className="skin-source-info"><p>CodePen : 20 adaptations locales avec leurs sources. Les styles sont adaptés au moteur ; les applications originales ne sont pas importées.</p>{project.theme.source && <a href={project.theme.source.url} target="_blank" rel="noreferrer">Référence : {project.theme.source.author} ↗</a>}<details><summary>Les 20 références et leur statut</summary>{codepenReferences.map(r=><p key={r.id}><a href={r.url} target="_blank" rel="noreferrer">{r.name} · {r.author} ↗</a> — {r.status==='adapted'?'Adaptation disponible':'Source inaccessible · non intégré'}</p>)}</details></div>
+        {libraryError && <p role="alert">{libraryError}</p>}
+        <section className="skin-generator" aria-label="Créer un skin"><h3>Créer mon skin</h3><p>Générez une palette ou enregistrez vos réglages actuels.</p><label className="full-field">Nom du skin<input value={skinName} maxLength={64} onChange={event=>setSkinName(event.target.value)}/></label><div className="form-grid"><label>Teinte · {skinHue}°<input aria-label="Teinte du skin" type="range" min="0" max="360" value={skinHue} onChange={event=>setSkinHue(Number(event.target.value))}/></label><label>Mode<select value={skinMode} onChange={event=>setSkinMode(event.target.value)}><option value="dark">Sombre</option><option value="light">Clair</option></select></label></div><div className="skin-actions"><button onClick={createSkin}>Générer et prévisualiser</button><button onClick={savePersonalSkin}>Enregistrer dans Mes skins</button><button onClick={()=>exportFile('pack')}>Exporter le pack du skin</button></div><p>Les couleurs secondaires sont ajustées si nécessaire pour rester lisibles. Importer un pack, puis l’enregistrer ici, ajoute aussi son skin à votre bibliothèque.</p></section>
+        <details className="advanced-settings"><summary>Personnaliser couleurs, police et densité</summary><div className="token-grid">{[['background','Fond'],['surface','Surface'],['text','Texte'],['muted','Secondaire'],['accent','Accent']].map(([key,label]) => <label key={key}>{label}<div><input aria-label={label+' couleur'} type="color" value={project.theme[key]} onChange={event => update(draft=>{draft.theme[key]=event.target.value;})}/><input aria-label={label+' code'} value={project.theme[key]} onChange={event => update(draft=>{draft.theme[key]=event.target.value;})}/></div></label>)}</div><div className="form-grid"><label>Police<select value={project.theme.typography.family} onChange={event=>update(draft=>{draft.theme.typography.family=event.target.value;})}><option value="system">Système</option><option value="monospace">Monospace</option></select></label><label>Densité<select value={project.theme.density} onChange={event=>update(draft=>{draft.theme.density=event.target.value;})}><option value="comfortable">Confortable</option><option value="compact">Compacte</option></select></label></div></details>
+      </>}
+      {step === 'functions' && <>
+        <div className="panel-title"><h2>Bibliothèque de fonctions</h2><span>{integration.features.length} sélectionnées</span></div>
+        <label className="search-field"><span>Rechercher une fonction</span><input type="search" value={featureSearch} onChange={event=>setFeatureSearch(event.target.value)} placeholder="Importer, onglets, recherche…" /></label>
+        <div className="function-library">{FUNCTION_CATALOGUE.map(source => {const visible = source.features.filter(f=>`${source.title} ${f.name}`.toLowerCase().includes(featureSearch.toLowerCase()));const count=source.features.filter(f=>integration.features.includes(f.id)).length;return visible.length ? <details key={source.id + (featureSearch ? '-search' : '')} open={featureSearch ? true : undefined} className={count ? 'has-selection' : ''}><summary><span>{source.title}</span><b>{count ? count+' / ' : ''}{source.features.length}</b></summary><div>{visible.map(f=><label className="function-choice" key={f.id}><input type="checkbox" checked={integration.features.includes(f.id)} onChange={event=>toggleFunction(f.id,event.target.checked)}/><span>{f.name}</span></label>)}<button className="source-link" onClick={()=>{chooseDesign(source.id);setStep('design');}}>Voir ce design ↗</button>{source.limitations && <p className="source-limit">{source.limitations}</p>}</div></details> : null;})}</div>
+        {!FUNCTION_CATALOGUE.some(source => source.features.some(f=>`${source.title} ${f.name}`.toLowerCase().includes(featureSearch.toLowerCase()))) && <p className="empty-message">Aucune fonction trouvée.</p>}
+      </>}
+        {step === 'identity' && <section className="editor-section"><label className="full-field">Application cible<select value={target} onChange={event => chooseTarget(event.target.value)}>{Object.entries(targets).map(([id,item])=><option key={id} value={id}>{item.label}</option>)}</select></label>
           <div className="section-label"><span>01</span><b>Application</b></div>
           <div className="form-grid"><label>Nom<input value={project.project.name} onChange={(event) => update((draft) => { draft.project.name = event.target.value; })} /></label><label>Identifiant<input value={project.project.id} onChange={(event) => update((draft) => { draft.project.id = event.target.value; })} /></label><label>Version<input value={project.project.version} onChange={(event) => update((draft) => { draft.project.version = event.target.value; })} /></label><label>Version pack<input value={project.packVersion} onChange={(event) => update((draft) => { draft.packVersion = event.target.value; })} /></label></div>
           <div className="section-label"><span>02</span><b>Ressources du pack</b></div>
@@ -369,30 +432,21 @@ export default function Home() {
           <div className="form-grid"><label>Dépôt GitHub<input placeholder="https://github.com/..." value={project.project.repository} onChange={(event) => update((draft) => { draft.project.repository = event.target.value; })} /></label><label>Licence<input placeholder="MIT" value={project.project.license} onChange={(event) => update((draft) => { draft.project.license = event.target.value; })} /></label></div>
         </section>}
 
-        {editor === 'languages' && <section className="editor-section">
+        {step === 'identity' && <section className="editor-section">
           <div className="language-head"><div className="section-label"><span>01</span><b>Textes du About</b></div><div className="language-toggle"><button className={locale === 'fr' ? 'active' : ''} onClick={() => setLocale('fr')}>FR</button><button className={locale === 'en' ? 'active' : ''} onClick={() => setLocale('en')}>EN</button></div></div>
           <label className="full-field">Langue de repli<select value={project.defaultLocale} onChange={(event) => update((draft) => { draft.defaultLocale = event.target.value; })}><option value="fr">Français</option><option value="en">English</option></select></label>
           {Object.entries(labels[locale]).map(([key, label]) => <label className="full-field" key={key}>{label}<textarea rows={key === 'description' ? 2 : 3} value={project.translations[locale][key]} onChange={(event) => update((draft) => { draft.translations[locale][key] = event.target.value; })} /></label>)}
         </section>}
-      </aside>
 
-      <section className="studio-preview" aria-label="Aperçu du pack">
-        <div className="preview-heading"><div><span>APERÇU VIVANT</span><h2>{project.project.name}</h2></div><nav><button className={preview === 'app' ? 'active' : ''} onClick={() => setPreview('app')}><Monitor />App</button><button className={preview === 'icon' ? 'active' : ''} onClick={() => setPreview('icon')}><ImagePlus />Icône</button><button className={preview === 'about' ? 'active' : ''} onClick={() => setPreview('about')}><FileCode2 />About</button></nav></div>
-
-        {preview === 'app' && <div className="app-preview" style={previewStyle}>
-          <div className="app-chrome"><div><i /><i /><i /></div><span>{project.identity.logo ? <NextImage src={project.identity.logo} width={24} height={24} unoptimized alt="" /> : <b>{project.project.name.slice(0, 1)}</b>}{project.project.name}</span><em><i /> pack {project.packVersion}</em></div>
-          <div className="app-shell"><nav><small>WORKSPACE</small>{['Cockpit', 'Projets', 'Bibliothèque', 'Réglages'].map((item, index) => <span className={index === 0 ? 'active' : ''} key={item}><i />{item}</span>)}<div className="capacity"><small>CAPACITÉ</small><i><b /></i><span>68% utilisé</span></div></nav><div className="app-content"><header><div><small>{targets[target].label} · {targets[target].tech}</small><h3>{project.translations[locale].purpose || project.project.name}</h3></div><button>Nouvelle action</button></header><div className="metrics"><article><small>PROJETS</small><strong>12</strong><span>+3 cette semaine</span></article><article><small>ACTIFS</small><strong>08</strong><span>Flux nominal</span></article><article><small>SIGNAL</small><strong>96%</strong><span>Qualité élevée</span></article></div><article className="activity"><header><div><small>ACTIVITÉ</small><strong>Dernières opérations</strong></div><span>Tout afficher</span></header>{['Pack chargé', 'Tokens appliqués', 'Repli vérifié'].map((item, index) => <div key={item}><i /><span><strong>{item}</strong><small>{index + 2} min · moteur commun</small></span><b>{['PRÊT', 'SYNC', 'OK'][index]}</b></div>)}</article></div></div>
-        </div>}
-
-        {preview === 'icon' && <div className="icon-preview" style={previewStyle}><div className="icon-stage">{project.identity.icon ? <NextImage src={project.identity.icon} width={112} height={112} unoptimized alt="Icône de l’application" /> : <span>{project.project.name.slice(0, 1)}</span>}<i className="icon-glow" /></div><h3>{project.project.name}</h3><p>L’icône voyage dans le pack. L’adaptateur de chaque app décide comment l’installer.</p><div><span><i style={{ background: project.theme.accent }} />Accent</span><span><i style={{ background: signal }} />Signal</span><span><i style={{ background: project.theme.surface }} />Surface</span></div></div>}
-
-        {preview === 'about' && <div className="about-preview">{html ? <iframe title="Aperçu About" sandbox="" srcDoc={html} /> : <div><FileCode2 /><strong>About indisponible</strong><span>Corrigez les erreurs du pack.</span></div>}</div>}
-
-        <div className="engine-strip"><span><i>1</i><b>Pack commun</b><small>{project.project.id}</small></span><em>→</em><span><i>2</i><b>Adaptateur</b><small>{targets[target].tech}</small></span><em>→</em><span><i>3</i><b>Application</b><small>métier préservé</small></span></div>
-      </section>
-
-      <aside className="studio-output">
-        <div className="output-heading"><div><span>LIVRER</span><h2>Un pack, plusieurs apps</h2></div><PackageOpen /></div>
+      {step === 'export' && <div className="export-panel">        <section className="integration-generator" aria-label="Générateur final">
+          <h3>Générateur final</h3>
+          <p>{integration.features.length} fonctions + {integration.blocks?.length||0} blocs UX + {project.theme.name} + identité</p>
+          <label className="full-field">Chemin du projet cible<input value={integration.path} placeholder="/chemin/vers/mon-app" onChange={event => updateIntegration('path',event.target.value)} /></label>
+          <label className="full-field">Technologie d’intégration<select value={integration.technology} onChange={event => updateIntegration('technology',event.target.value)}>{TECHNOLOGIES.map(t => <option key={t}>{t}</option>)}</select></label>
+          <label className="full-field">Consignes d’intégration<textarea value={integration.notes} onChange={event => updateIntegration('notes',event.target.value)} placeholder="Fonctions à préserver, contraintes…" /></label>
+          <button className="primary-export" disabled={generating || validation.errors.length > 0 || (!integration.features.length && !integration.blocks?.length) || !integration.path.trim()} onClick={generateIntegration}><Download />{generating ? 'Génération…' : 'Générer le kit d’intégration ZIP'}</button>
+          <p className="integration-help">{!integration.features.length && !integration.blocks?.length ? 'Choisissez au moins une fonction ou un bloc. ' : ''}{!integration.path.trim() ? 'Renseignez le chemin cible. ' : ''}Le ZIP contient le pack réimportable, les sources, le skin, les images, un adaptateur web et INTEGRATION.md. L’intégration des fonctions à l’app cible reste à exécuter.</p>
+        </section>
         <nav className="output-tabs"><button className={output === 'pack' ? 'active' : ''} onClick={() => setOutput('pack')}>Pack</button><button className={output === 'prompt' ? 'active' : ''} onClick={() => setOutput('prompt')}>Prompt adaptateur</button></nav>
 
         {output === 'pack' ? <>
@@ -400,18 +454,25 @@ export default function Home() {
           <div className="pack-map"><span><b>THÈME</b><i>{project.theme.name}</i></span><span><b>INTERFACE</b><i>{selectedFamily.name} · {selectedVariant[1]}</i></span><span><b>IDENTITÉ</b><i>{project.identity.logo || project.identity.icon ? 'ressources jointes' : 'à compléter'}</i></span><span><b>LANGUES</b><i>FR + EN · repli {project.defaultLocale.toUpperCase()}</i></span><span><b>ABOUT</b><i>généré depuis le pack</i></span><span><b>CIBLE</b><i>{targets[target].label}</i></span></div>
           <button className="primary-export" disabled={validation.errors.length > 0} onClick={() => exportFile('pack')}><Download />Exporter le pack commun</button>
           <div className="export-grid"><button onClick={() => exportFile('css')}><FileCode2 />CSS</button><button onClick={() => exportFile('about')}><FileCode2 />About</button><button onClick={() => exportFile('readme')}><FileCode2 />README</button><button onClick={() => exportFile('native')}><Download />NoteMistress</button></div>
-          <div className="import-row"><button onClick={() => importRef.current?.click()}><Upload />Importer un pack</button><button onClick={reset}><RotateCcw />Réinitialiser</button><input ref={importRef} hidden type="file" accept="application/json,.json" onChange={importPack} /></div>
+          <div className="import-row"><button onClick={() => importRef.current?.click()}><Upload />Importer un pack</button><button onClick={reset}><RotateCcw />Réinitialiser</button></div>
         </> : <>
-          <textarea className="prompt-output" readOnly value={prompt} />
+          <textarea aria-label="Instructions finales d’intégration" className="prompt-output" readOnly value={prompt} />
           <button className="primary-export" onClick={async () => { await navigator.clipboard.writeText(prompt); setMessage('Prompt adaptateur copié.'); }}><Clipboard />Copier le prompt</button>
         </>}
 
         <div className={`validation-card ${validation.errors.length ? 'has-errors' : ''}`}><strong>{validation.errors.length ? `${validation.errors.length} erreur(s)` : 'Contrat valide'}</strong>{validation.errors.slice(0, 3).map((error) => <p key={error}>{error}</p>)}{!validation.errors.length && <p>Identité, version, thème, interface, ressources, validation, persistance et repli sont présents.</p>}{validation.warnings.length > 0 && <small>{validation.warnings.length} avertissement(s) de compatibilité ou de repli.</small>}</div>
-        <output className="studio-status" aria-live="polite">{message}</output>
+
+</div>}
+      </section>
+      <aside id="live-preview" className="result-panel" aria-label="Aperçu et sélection">
+        <div className="preview-toolbar"><div><span>DESIGN SÉLECTIONNÉ</span><h2>{preview==='blocks'?'Ma composition UX':activeSource?.title || selectedVariant[1]}</h2></div><nav aria-label="Aperçu">{Boolean(integration.blocks?.length)&&<button aria-pressed={preview==='blocks'} onClick={()=>setPreview('blocks')}>Ma composition</button>}<button aria-pressed={preview==='app'} onClick={()=>setPreview('app')}>Design</button><button aria-pressed={preview==='icon'} onClick={()=>setPreview('icon')}>Identité</button><button aria-pressed={preview==='about'} onClick={()=>setPreview('about')}>About</button></nav></div>
+        {preview === 'app' && <><div className="preview-options"><div><button aria-pressed={previewMode==='original'} onClick={()=>setPreviewMode('original')}>Original</button><button aria-pressed={previewMode==='skin'} onClick={()=>setPreviewMode('skin')}>Avec ma palette</button></div><button aria-label="Recommencer l’aperçu" onClick={()=>setPreviewRevision(v=>v+1)}><RotateCcw size={14}/></button></div>{catalogueError ? <p className="error-message">{catalogueError}</p> : referencePreview ? <iframe key={selectedVariant[0]+'-'+previewRevision+'-'+previewMode+(previewMode==='skin'?JSON.stringify(project.theme):'')} className="design-preview" title="Aperçu interactif du design sélectionné" sandbox="allow-scripts allow-downloads" srcDoc={referencePreview}/> : <div className="preview-loading">Chargement du design…</div>}<p className="preview-caption">{previewMode==='skin' ? 'Palette appliquée aux tokens compatibles ; certains styles de la référence restent propres au design.' : 'Référence interactive originale, avec ses fonctions de démonstration.'} Les fonctions choisies ci-dessous seront adaptées dans le projet cible.</p></>}
+        {preview === 'blocks' && <><iframe className="design-preview" title="Composition UX appliquée" sandbox="allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox" srcDoc={uxHTML(project)}/><p className="preview-caption">Vos blocs actifs, avec votre skin et votre identité. Composition web locale ; les services externes restent à raccorder.</p><button onClick={()=>setStep('blocks')}>Modifier mes blocs</button></>}
+        {preview === 'icon' && <div className="identity-preview" style={{background:project.theme.background,color:project.theme.text}}><div>{['logo','icon'].map(kind=><figure key={kind}>{project.identity[kind] ? <NextImage src={project.identity[kind]} width={112} height={112} unoptimized alt={kind === 'logo' ? 'Logo' : 'Icône'}/> : <span>{project.project.name.slice(0,1)}</span>}<figcaption>{kind==='logo'?'Logo':'Icône app'}</figcaption></figure>)}</div><h2>{project.project.name}</h2><p>{project.identity.signature}</p></div>}
+        {preview === 'about' && (html ? <iframe className="design-preview" title="Aperçu About" sandbox="" srcDoc={html}/> : <p className="empty-message">Complétez les réglages du pack pour afficher le About.</p>)}
+        <section className="selection-summary"><div className="panel-title"><h2>Votre combinaison</h2><span>{integration.features.length} fonctions</span></div><div className="selection-design"><span><b>{activeSource?.title || selectedVariant[1]}</b><small>Design</small></span><span className="summary-plus">+</span><span><b>{project.theme.name}</b><small>Skin</small></span><span className="summary-plus">+</span><span><b>{project.project.name}</b><small>Identité</small></span></div>{chosenFunctions.length ? <div className="selected-functions">{chosenFunctions.map(source=><div key={source.id}><strong>{source.title}</strong>{source.features.map(f=><button key={f.id} aria-label={'Retirer '+f.name} onClick={()=>toggleFunction(f.id,false)}>{f.name}<span>×</span></button>)}</div>)}</div> : <button className="selection-empty" onClick={()=>setStep('functions')}>+ Choisir les fonctions de mon app</button>}{activeSource?.limitations && <details className="advanced-settings"><summary>À savoir sur cette référence</summary><p>{activeSource.limitations}</p></details>}</section>
       </aside>
-    </div> : <section className="ux-workspace" aria-label="Moteur UX intégré">
-      <header><div><span>BIBLIOTHÈQUE EXISTANTE</span><h1>Moteur UX</h1><p>Catalogue, sélection de fonctions, interface unifiée et composeur conservés dans le même workflow.</p></div><div><b>9</b><small>familles</small><b>13</b><small>références</small></div></header>
-      <iframe src="./moteur-ux.html" title="Moteur UX — bibliothèque et composeur" />
-    </section>}
+    </div>}
+    <footer className="atelier-footer"><div><strong>{saved ? 'Projet enregistré' : 'Projet local'}</strong><span>{integration.features.length} fonctions · {integration.blocks?.length||0} blocs · {project.theme.name}</span></div><output aria-live="polite">{message || (validation.errors.length ? validation.errors[0] : '')}</output>{workspace === 'studio' && <nav>{stepIndex > 0 && <button onClick={()=>setStep(steps[stepIndex-1][0])}>Retour</button>}{stepIndex < steps.length-1 && <button className="next-step" onClick={()=>setStep(steps[stepIndex+1][0])}>{steps[stepIndex+1][1]} →</button>}</nav>}</footer>
   </main>;
 }

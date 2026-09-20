@@ -1,0 +1,272 @@
+[
+  {
+    "id": "ref-01",
+    "name": "Open Notebook",
+    "category": "IA / connaissance",
+    "url": "https://github.com/lfnovo/open-notebook",
+    "idea": "À examiner pour organiser un corpus documentaire et préparer des fiches sourcées.",
+    "provenance": "Calendar/20260919.md:15",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-02",
+    "name": "LightOnOCR-2-1B",
+    "category": "Capture / OCR",
+    "url": "https://huggingface.co/lightonai/LightOnOCR-2-1B",
+    "idea": "Piste OCR pour documents et captures ; résultats, formats et exécution locale à vérifier.",
+    "provenance": "Calendar/20260919.md:14",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-03",
+    "name": "OpenReel",
+    "category": "Création / vidéo",
+    "url": "https://github.com/Augani/openreel-video",
+    "idea": "Référence relevée pour MsGlitch ; étudier les fonctions réutilisables et la licence.",
+    "provenance": "Calendar/20260915.md:128",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-04",
+    "name": "FilesPane",
+    "category": "macOS / fichiers",
+    "url": "https://filespane.com",
+    "idea": "Comparer navigation et gestion de fichiers avec NoteMistress et Commander.",
+    "provenance": "Calendar/20260915.md:52",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-05",
+    "name": "Captain’s Deck",
+    "category": "macOS / fichiers",
+    "url": "https://captains-deck.com",
+    "idea": "Référence de gestionnaire à deux panneaux à confronter aux besoins Commander.",
+    "provenance": "Calendar/20260915.md:53",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-06",
+    "name": "TiddlyWiki",
+    "category": "KM / notes",
+    "url": "https://tiddlywiki.com",
+    "idea": "Référence explicitement marquée Nyx ; comparer liens, structure et autonomie.",
+    "provenance": "Calendar/20260912.md:24",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-07",
+    "name": "Trilium Notes",
+    "category": "KM / notes",
+    "url": "https://triliumnotes.org",
+    "idea": "Capture marquée prioritaire pour Nyx ; documenter organisation et navigation.",
+    "provenance": "Calendar/20260912.md:26 ; Calendar/20260912.md:27",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-08",
+    "name": "UpNote",
+    "category": "KM / notes",
+    "url": "https://getupnote.com",
+    "idea": "Référence de prise de notes et organisation à comparer.",
+    "provenance": "Calendar/20260912.md:25",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-09",
+    "name": "NotePlan Spaces",
+    "category": "KM / collaboration",
+    "url": "https://noteplan.co/teams",
+    "idea": "Capture liée aux notes partagées ; préciser usage envisagé et limites.",
+    "provenance": "Calendar/20260914.md:16",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-10",
+    "name": "Viaduct",
+    "category": "IA / workflow",
+    "url": "https://magicelklabs.com/viaduct",
+    "idea": "Lien associé à LLM Roxor ; préciser la fonction avant de rédiger la fiche.",
+    "provenance": "Calendar/20260902.md:37",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-11",
+    "name": "OpenCode Go",
+    "category": "IA / développement",
+    "url": "https://opencode.ai/fr/go",
+    "idea": "Note portant la mention « tester » ; évaluation à faire, aucun test réalisé ici.",
+    "provenance": "Calendar/20260903.md:5",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-12",
+    "name": "VDO.Ninja",
+    "category": "Création / capture",
+    "url": "https://vdo.ninja",
+    "idea": "Lien répété avec un problème signalé ; fiche à relier à un essai reproductible.",
+    "provenance": "Calendar/20260915.md:133 ; Calendar/20260915.md:135",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-13",
+    "name": "ToS;DR",
+    "category": "Sources / conditions d’utilisation",
+    "url": "https://tosdr.org",
+    "idea": "Piste pour documenter les conditions des services utilisés.",
+    "provenance": "Calendar/20260915.md:70",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-14",
+    "name": "LAP",
+    "category": "UX / référence",
+    "url": "https://github.com/julyx10/lap",
+    "idea": "La capture pointe sur une image de bibliothèque : ne pas déduire les fonctions du projet sans lire le dépôt.",
+    "provenance": "Calendar/20260914.md:1",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-15",
+    "name": "UX-Library",
+    "category": "UX / catalogue",
+    "url": "https://github.com/bizc0m/UX-Library",
+    "idea": "Rattacher le catalogue existant au moteur UX ; ne pas confondre documentation et composants exécutables.",
+    "provenance": "Calendar/20260917.md:47",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-16",
+    "name": "OpenSanctions",
+    "category": "OSINT / données",
+    "url": "https://opensanctions.org",
+    "idea": "Source signalée pour VANIT ; licence, couverture et utilisation de l’API à vérifier.",
+    "provenance": "Calendar/20260907.md:39",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-17",
+    "name": "Poligraph",
+    "category": "OSINT / données",
+    "url": "https://poligraph.fr",
+    "idea": "Regrouper les différentes captures dans une seule fiche source, liée à VANIT.",
+    "provenance": "Calendar/20260904.md:29 ; Calendar/20260904.md:31 ; Calendar/20260904.md:33 ; Calendar/20260904.md:36",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-18",
+    "name": "Qui possède quoi",
+    "category": "OSINT / sources",
+    "url": "https://quipossede.fr",
+    "idea": "Source à examiner pour la veille sur les liens de propriété.",
+    "provenance": "Calendar/20260903.md:1",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-19",
+    "name": "Osaurus",
+    "category": "IA / local",
+    "url": "https://osaurus.ai",
+    "idea": "Rattacher la capture à la fiche existante.",
+    "provenance": "Calendar/20260831.md:1",
+    "km": "watch/osaurus-local-ai-agents-mac.md",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-20",
+    "name": "Pake",
+    "category": "macOS / packaging",
+    "url": "https://github.com/tw93/Pake",
+    "idea": "Rattacher la capture à la fiche existante ; aucun nouveau packaging demandé.",
+    "provenance": "Calendar/20260902.md:12",
+    "km": "watch/vous-cherchez-une-facon-simple-et-rapide-de-transformer-n-importe-quel.md",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-21",
+    "name": "last30days",
+    "category": "Veille / skills",
+    "url": "https://github.com/mvanhorn/last30days-skill",
+    "idea": "Capture signalant un pipeline ; enrichir la fiche existante si besoin.",
+    "provenance": "Calendar/20260904.md:23",
+    "km": "watch/mvanhorn-last30days-skill.md",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-22",
+    "name": "Agent Skills Library",
+    "category": "Veille / skills",
+    "url": "https://skills.rest",
+    "idea": "Bibliothèque déjà fichée ; conserver la provenance NotePlan.",
+    "provenance": "Calendar/20260904.md:41",
+    "km": "watch/agent-skills-library.md",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-23",
+    "name": "Devin Desktop",
+    "category": "IA / agents",
+    "url": "https://devin.ai/desktop",
+    "idea": "Référence déjà fichée ; actualisation éventuelle, pas de doublon.",
+    "provenance": "Calendar/20260905.md:1",
+    "km": "watch/devin-desktop-agent-app.md",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-24",
+    "name": "Osiris",
+    "category": "OSINT / outils",
+    "url": "https://github.com/simplifaisoul/osiris",
+    "idea": "Référence déjà fichée ; vérifier ce que la nouvelle capture apporte.",
+    "provenance": "Calendar/20260913.md:1",
+    "km": "watch/osiris-ai-osint-platform.md",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-25",
+    "name": "Mammouth",
+    "category": "IA / workspace",
+    "url": "https://mammouth.ai",
+    "idea": "Mention associée à Prompt Master ; besoin à préciser avant fiche complète.",
+    "provenance": "Calendar/20260920.md:8",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-26",
+    "name": "Menu avec sous-menus",
+    "category": "UX / exemple",
+    "url": "https://codepen.io/chipChocolate/pen/QwNGMW",
+    "idea": "Exemple visuel à rattacher aux menus du moteur UX, après vérification du code et de la licence.",
+    "provenance": "Calendar/20260914.md:2",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  },
+  {
+    "id": "ref-27",
+    "name": "Menu alternatif",
+    "category": "UX / exemple",
+    "url": "https://codepen.io/ImArvind/pen/RgXvJm",
+    "idea": "Seconde référence de menu ; conserver comme variante, pas comme moteur complet.",
+    "provenance": "Calendar/20260914.md:3",
+    "km": "",
+    "status": "Référence · service non raccordé"
+  }
+]

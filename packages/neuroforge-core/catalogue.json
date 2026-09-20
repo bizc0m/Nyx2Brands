@@ -1,0 +1,515 @@
+[
+  {
+    "id": "documents",
+    "title": "Documents",
+    "desc": "Interface claire · textes, onglets et panneaux",
+    "sha256": "a9a4b990aa8868c22e928ca58612cd3ab5c8248bc85a9ce4cbe58f9c8137eaff",
+    "features": [
+      {
+        "id": "documents-0",
+        "name": "Importer Markdown / TXT",
+        "ref": "filesIn(), picker()"
+      },
+      {
+        "id": "documents-1",
+        "name": "Onglets par panneau",
+        "ref": "renderPane()"
+      },
+      {
+        "id": "documents-2",
+        "name": "Diviser et redimensionner",
+        "ref": "split(), renderNode()"
+      },
+      {
+        "id": "documents-3",
+        "name": "Verrouiller et réduire",
+        "ref": "togglePaneLock(), togglePaneCollapse()"
+      },
+      {
+        "id": "documents-4",
+        "name": "Fenêtres détachées",
+        "ref": "detach()"
+      },
+      {
+        "id": "documents-5",
+        "name": "Propriétés et chapitres",
+        "ref": "properties(), chapters()"
+      },
+      {
+        "id": "documents-6",
+        "name": "Annotations UX",
+        "ref": "installAnnotations()"
+      },
+      {
+        "id": "documents-7",
+        "name": "Exporter / restaurer l’espace",
+        "ref": "nd-export, nd-import"
+      }
+    ],
+    "refs": {
+      "fileUrl": "",
+      "sourceUrl": "",
+      "githubStatus": "Fichier local identique au commit GitHub référencé.",
+      "checked": "2026-09-14",
+      "repository": "https://github.com/bizc0m/Nyx",
+      "github": "https://github.com/bizc0m/Nyx/blob/b6075226ee1472db445886dfe3bbd3fdbd42e915/examples/dashboard/original-integration/documents-base.html",
+      "revision": "b6075226ee1472db445886dfe3bbd3fdbd42e915",
+      "githubSource": "https://github.com/bizc0m/Nyx/blob/b6075226ee1472db445886dfe3bbd3fdbd42e915/examples/dashboard/original-integration/documents-base.html"
+    }
+  },
+  {
+    "id": "themes",
+    "title": "Nyx-Ux",
+    "desc": "Thèmes · densité et composition du cockpit",
+    "sha256": "25f723fdb654af5a9c4d9968023c9befac590f88bca5ad6e412c9f1c77ae88b7",
+    "features": [
+      {
+        "id": "themes-0",
+        "name": "Thèmes et couleurs",
+        "ref": "applyTheme(), applyPreset()"
+      },
+      {
+        "id": "themes-1",
+        "name": "Exporter le CSS",
+        "ref": "themeCss(), downloadCss()"
+      },
+      {
+        "id": "themes-2",
+        "name": "Navigation et Blades",
+        "ref": "renderBlades(), renderNotes()"
+      },
+      {
+        "id": "themes-3",
+        "name": "Onglets du shell",
+        "ref": "renderTabs()"
+      },
+      {
+        "id": "themes-4",
+        "name": "Panneaux du cockpit",
+        "ref": "renderPanes(), swapPane()"
+      }
+    ],
+    "refs": {
+      "fileUrl": "",
+      "sourceUrl": "",
+      "githubStatus": "Fichier local identique au commit GitHub référencé. Le dépôt main a évolué depuis cette version 0.1.0 ; le lien conserve la version utilisée.",
+      "checked": "2026-09-14",
+      "repository": "https://github.com/bizc0m/Nyx-Ux",
+      "github": "https://github.com/bizc0m/Nyx-Ux/blob/47a66945c3cb5848ff8aff7f6987e7b43e518b6d/index.html",
+      "revision": "47a66945c3cb5848ff8aff7f6987e7b43e518b6d",
+      "githubSource": "https://github.com/bizc0m/Nyx-Ux/blob/47a66945c3cb5848ff8aff7f6987e7b43e518b6d/app.js"
+    }
+  },
+  {
+    "id": "integrated",
+    "title": "Nyx intégré",
+    "desc": "Dashboard, Documents et Registry assemblés",
+    "sha256": "4c54d63df15321215b6e687aad09cb9484bbdad43b85207a0dcb1f1b9f2c52a1",
+    "features": [
+      {
+        "id": "integrated-0",
+        "name": "Shell et navigation",
+        "ref": "mockup-original.html"
+      },
+      {
+        "id": "integrated-1",
+        "name": "Blade Documents intégrée",
+        "ref": "NyxDocumentsHost, documents-base.html"
+      },
+      {
+        "id": "integrated-2",
+        "name": "Console Registry intégrée",
+        "ref": "mountRegistry(), registry-console-source.html"
+      },
+      {
+        "id": "integrated-3",
+        "name": "Assemblage HTML autonome",
+        "ref": "build.py"
+      }
+    ],
+    "refs": {
+      "fileUrl": "",
+      "sourceUrl": "",
+      "githubStatus": "Fichier local identique au commit GitHub référencé.",
+      "checked": "2026-09-14",
+      "repository": "https://github.com/bizc0m/Nyx",
+      "github": "https://github.com/bizc0m/Nyx/blob/b6075226ee1472db445886dfe3bbd3fdbd42e915/examples/dashboard/original-integration/Nyx-Original-Integre.html",
+      "revision": "b6075226ee1472db445886dfe3bbd3fdbd42e915",
+      "githubSource": "https://github.com/bizc0m/Nyx/blob/b6075226ee1472db445886dfe3bbd3fdbd42e915/examples/dashboard/original-integration/build.py"
+    }
+  },
+  {
+    "id": "registry",
+    "title": "Registry",
+    "desc": "Modules, Racks, Blades et export de composition",
+    "sha256": "3658c49fc6333704c0bed26fdaa62d9039989cf4c32826ac1da99e381d84c3f5",
+    "features": [
+      {
+        "id": "registry-0",
+        "name": "Configurer le produit",
+        "ref": "state.product"
+      },
+      {
+        "id": "registry-1",
+        "name": "Choisir la composition",
+        "ref": "renderSide() et formulaires"
+      },
+      {
+        "id": "registry-2",
+        "name": "Sauvegarde navigateur",
+        "ref": "save()"
+      },
+      {
+        "id": "registry-3",
+        "name": "Plan de composition JSON",
+        "ref": "interface d’export"
+      }
+    ],
+    "refs": {
+      "fileUrl": "",
+      "sourceUrl": "",
+      "githubStatus": "Fichier local identique au commit GitHub référencé.",
+      "checked": "2026-09-14",
+      "repository": "https://github.com/bizc0m/Nyx",
+      "github": "https://github.com/bizc0m/Nyx/blob/b6075226ee1472db445886dfe3bbd3fdbd42e915/examples/dashboard/original-integration/registry-console-source.html",
+      "revision": "b6075226ee1472db445886dfe3bbd3fdbd42e915",
+      "githubSource": "https://github.com/bizc0m/Nyx/blob/b6075226ee1472db445886dfe3bbd3fdbd42e915/examples/dashboard/original-integration/registry-console-source.html"
+    }
+  },
+  {
+    "id": "original",
+    "title": "Dashboard original",
+    "desc": "Cockpit de référence · onglets et panneaux",
+    "sha256": "72e4abd43de65852cb4303f4c552660bf4bb1e70fd294cc7b1f508a37e618e51",
+    "features": [
+      {
+        "id": "original-0",
+        "name": "Onglets et espaces",
+        "ref": "tabs, activeTab"
+      },
+      {
+        "id": "original-1",
+        "name": "Division des panneaux",
+        "ref": "splitFocusedV, splitFocusedH"
+      },
+      {
+        "id": "original-2",
+        "name": "Navigation du cockpit",
+        "ref": "sidebar, bladeItems"
+      },
+      {
+        "id": "original-3",
+        "name": "Thèmes du dashboard",
+        "ref": "THEMES, themeIndex"
+      }
+    ],
+    "refs": {
+      "fileUrl": "",
+      "sourceUrl": "",
+      "githubStatus": "Fichier local identique au commit GitHub référencé.",
+      "checked": "2026-09-14",
+      "repository": "https://github.com/bizc0m/Nyx",
+      "github": "https://github.com/bizc0m/Nyx/blob/b6075226ee1472db445886dfe3bbd3fdbd42e915/examples/dashboard/original-integration/mockup-original.html",
+      "revision": "b6075226ee1472db445886dfe3bbd3fdbd42e915",
+      "githubSource": "https://github.com/bizc0m/Nyx/blob/b6075226ee1472db445886dfe3bbd3fdbd42e915/examples/dashboard/original-integration/mockup-original.html"
+    }
+  },
+  {
+    "id": "documents-original",
+    "title": "Documents original",
+    "desc": "Version blanche historique · dashboard et Documents",
+    "sha256": "ca47950705596a4ca7050bd28f66fb6204ac7cd9133caac3df7ed3e22d185f47",
+    "features": [
+      {
+        "id": "documents-original-0",
+        "name": "Explorer la version originale",
+        "ref": "Nyx-Documents.html"
+      },
+      {
+        "id": "documents-original-1",
+        "name": "Interface Documents historique",
+        "ref": "module Documents embarqué"
+      }
+    ],
+    "refs": {
+      "fileUrl": "",
+      "sourceUrl": "",
+      "githubStatus": "Dépôt source GitHub non identifié pour ce fichier.",
+      "checked": "2026-09-14"
+    }
+  },
+  {
+    "id": "fx",
+    "title": "FX Composer",
+    "desc": "Prototype de catalogue FX — moteurs d’effets non intégrés",
+    "sha256": "356fe1ad580c1181798feaced0448dac8069f470d2dfb3807c96f663222b1944",
+    "features": [
+      {
+        "id": "fx-0",
+        "name": "Filtrer les effets",
+        "ref": "renderFilters(), filtered()"
+      },
+      {
+        "id": "fx-1",
+        "name": "Voir les effets et composants",
+        "ref": "renderPreview(), renderComponentPreview()"
+      },
+      {
+        "id": "fx-2",
+        "name": "Composer une pile",
+        "ref": "addToPan(), renderStack()"
+      },
+      {
+        "id": "fx-3",
+        "name": "Ajuster la timeline",
+        "ref": "renderTimeline()"
+      },
+      {
+        "id": "fx-4",
+        "name": "Générer HTML et Markdown",
+        "ref": "htmlSnippet(), mdSnippet(), outputText()"
+      }
+    ],
+    "refs": {
+      "fileUrl": "",
+      "sourceUrl": "",
+      "githubStatus": "Le fichier local contient des modifications absentes de ce lien GitHub.",
+      "checked": "2026-09-14",
+      "repository": "https://github.com/bizc0m/Nyx",
+      "github": "https://github.com/bizc0m/Nyx/blob/b6075226ee1472db445886dfe3bbd3fdbd42e915/examples/dashboard/original-integration/effects-showcase.html",
+      "revision": "b6075226ee1472db445886dfe3bbd3fdbd42e915",
+      "githubSource": "https://github.com/bizc0m/Nyx/blob/b6075226ee1472db445886dfe3bbd3fdbd42e915/examples/dashboard/original-integration/effects-showcase.html"
+    },
+    "limitations": "Audit : les effets partagent un visuel CSS générique. Aucun moteur des 64 effets n’est exécuté. Recherche, sélection et ajout de cartes testés ; timeline illustrative, export HTML sans moteur ni styles autonomes."
+  },
+  {
+    "id": "noteplan-style-v2",
+    "title": "NotePlan Style Simulator",
+    "desc": "Version 2 · note, tâches, calendrier et Markdown",
+    "sha256": "3a3e75f3c88876c35ad1d8842bc9e0fcdfcca398177f7781828453035b2b9fde",
+    "limitations": "Prototype visuel : Markdown et rendu non synchronisés, tâches non persistées, calendrier et navigation statiques. Aucun accès au coffre NotePlan.",
+    "features": [
+      {
+        "id": "noteplan-style-v2-0",
+        "name": "Interface NotePlan à trois colonnes",
+        "ref": "CSS .workspace, .sidebar, .editorpane, .rightbar"
+      },
+      {
+        "id": "noteplan-style-v2-1",
+        "name": "Basculer rendu / Markdown brut",
+        "ref": "rawBtn.onclick, visualBtn.onclick"
+      },
+      {
+        "id": "noteplan-style-v2-2",
+        "name": "Cocher les tâches visuelles",
+        "ref": ".check onclick : bascule de la classe .done"
+      },
+      {
+        "id": "noteplan-style-v2-3",
+        "name": "Éditer le texte Markdown brut",
+        "ref": "textarea#rawEditor ; sans synchronisation du rendu"
+      },
+      {
+        "id": "noteplan-style-v2-4",
+        "name": "Calendrier et timeline — présentation statique",
+        "ref": ".calendar, .timeline ; données de démonstration"
+      }
+    ],
+    "refs": {
+      "fileUrl": "",
+      "sourceUrl": "",
+      "githubStatus": "Dépôt source GitHub non identifié pour ce fichier.",
+      "checked": "2026-09-14"
+    }
+  },
+  {
+    "id": "nyx-blanc",
+    "title": "Nyx Blanc",
+    "desc": "Cockpit clair · panneaux et cartes prioritaires",
+    "sha256": "5ddc7add263ff80ba622db8335a71e9da7326927e8bd189adc494611230d1c22",
+    "limitations": "Prototype avec données de démonstration. Le support.js temporaire absent est remplacé, dans cet aperçu et cet export, par le moteur embarqué du Dashboard original. Les Blades sans vue dédiée restent des panneaux vides.",
+    "features": [
+      {
+        "id": "nyx-blanc-0",
+        "name": "Cockpit blanc et cartes prioritaires",
+        "ref": ".priority-card, .priority-products"
+      },
+      {
+        "id": "nyx-blanc-1",
+        "name": "Ajouter, fermer et réordonner les onglets",
+        "ref": "addTab(), closeTab(), reorderTabs()"
+      },
+      {
+        "id": "nyx-blanc-2",
+        "name": "Diviser et redimensionner les panneaux",
+        "ref": "splitColumn(), splitRow(), onMouseMove()"
+      },
+      {
+        "id": "nyx-blanc-3",
+        "name": "Agrandir, réduire et verrouiller",
+        "ref": "toggleZoom(), toggleCollapse(), toggleEditable()"
+      },
+      {
+        "id": "nyx-blanc-4",
+        "name": "Déplacer panneaux et Blades",
+        "ref": "swapPanes(), reorderBlades()"
+      },
+      {
+        "id": "nyx-blanc-5",
+        "name": "Replier navigation et dossiers",
+        "ref": "toggleSidebar(), toggleSection(), toggleFolder()"
+      },
+      {
+        "id": "nyx-blanc-6",
+        "name": "Annuler une modification du layout",
+        "ref": "pushHistory(), undo()"
+      }
+    ],
+    "refs": {
+      "fileUrl": "",
+      "sourceUrl": "",
+      "githubStatus": "Dépôt source GitHub non identifié pour ce fichier.",
+      "checked": "2026-09-14"
+    }
+  },
+  {
+    "id": "notemistress",
+    "title": "Nyx Blanc · NoteMistress",
+    "desc": "Interface blanche · variante NoteMistress",
+    "sha256": "e6eaae02870f3d7901b587f5e8f0f114ac95d4f9c1d71294eb0d3760526a6c19",
+    "limitations": "Référence visuelle : la plupart des contrôles ne possèdent pas de logique métier.",
+    "features": [
+      {
+        "id": "notemistress-0",
+        "name": "Apparence et disposition",
+        "ref": "Nyx_Blanc_NoteMistress.html"
+      },
+      {
+        "id": "notemistress-1",
+        "name": "Structure NoteMistress",
+        "ref": "HTML et CSS embarqués"
+      }
+    ],
+    "refs": {
+      "fileUrl": "",
+      "sourceUrl": "",
+      "githubStatus": "Dépôt source GitHub non identifié pour ce fichier.",
+      "checked": "2026-09-14"
+    }
+  },
+  {
+    "id": "compact12",
+    "title": "Dashboard · compact v1.2",
+    "desc": "Densité compacte · sidebar 210 px",
+    "sha256": "a44640805f73b4aa14764e315cd2391c86ad7f6cdef38b0ca6cc48df2d1eeb19",
+    "limitations": "Prototype de densité. Moteur support.js réembarqué depuis le Dashboard original ; données de démonstration.",
+    "features": [
+      {
+        "id": "compact12-0",
+        "name": "Apparence et disposition",
+        "ref": "Nyx Dashboard Mockup_v1.2.dc.html"
+      },
+      {
+        "id": "compact12-1",
+        "name": "Panneaux et onglets",
+        "ref": "splitColumn(), splitRow(), addTab()"
+      },
+      {
+        "id": "compact12-2",
+        "name": "Repli de navigation",
+        "ref": "toggleSidebar()"
+      }
+    ],
+    "refs": {
+      "fileUrl": "",
+      "sourceUrl": "",
+      "githubStatus": "Dépôt source GitHub non identifié pour ce fichier.",
+      "checked": "2026-09-14"
+    }
+  },
+  {
+    "id": "compact14",
+    "title": "Dashboard · compact v1.4",
+    "desc": "Densité renforcée · sidebar 170 px",
+    "sha256": "e05575418f2a36250828fa5d970cfe982457cd7a6dd7a2f251ae8e713b5783c8",
+    "limitations": "Prototype de densité. Moteur support.js réembarqué depuis le Dashboard original ; données de démonstration.",
+    "features": [
+      {
+        "id": "compact14-0",
+        "name": "Apparence et disposition",
+        "ref": "Nyx Dashboard Mockup_v1.4.dc.html"
+      },
+      {
+        "id": "compact14-1",
+        "name": "Panneaux et onglets",
+        "ref": "splitColumn(), splitRow(), addTab()"
+      },
+      {
+        "id": "compact14-2",
+        "name": "Repli de navigation",
+        "ref": "toggleSidebar()"
+      }
+    ],
+    "refs": {
+      "fileUrl": "",
+      "sourceUrl": "",
+      "githubStatus": "Dépôt source GitHub non identifié pour ce fichier.",
+      "checked": "2026-09-14"
+    }
+  },
+  {
+    "id": "green-terminal",
+    "title": "Green Terminal",
+    "desc": "Thème React rétro · playground et éditeur direct",
+    "sha256": "66ebdae3c086a987ddcd1a54cc1c554360684c6385cae04b4a65b34df1691052",
+    "limitations": "Playground local de Green Terminal. L’éditeur direct adapte État vide en HTML/CSS ; son bouton reste une action de démonstration à brancher au projet cible. Licence MIT conservée.",
+    "refs": {
+      "fileUrl": "",
+      "sourceUrl": "",
+      "repository": "https://github.com/fzed51/green-terminal",
+      "github": "https://github.com/fzed51/green-terminal/blob/05e2b3c70875caaa850ea777c42138dd78be92e1/src/EmptyState/EmptyState.tsx",
+      "githubSource": "https://github.com/fzed51/green-terminal/tree/05e2b3c70875caaa850ea777c42138dd78be92e1/playground",
+      "githubStatus": "Références source GitHub vérifiées par API. La copie locale regroupe les assets du site publié ; elle n’est pas un fichier identique du dépôt.",
+      "website": "https://fzed51.github.io/green-terminal/#vide",
+      "websiteStatus": "Site source téléchargé avec ses assets et sa licence.",
+      "checked": "2026-09-14"
+    },
+    "features": [
+      {
+        "id": "green-terminal-0",
+        "name": "État vide",
+        "ref": "EmptyState : icon, title, description, action"
+      },
+      {
+        "id": "green-terminal-1",
+        "name": "Terminal et lignes",
+        "ref": "Terminal, TerminalLine"
+      },
+      {
+        "id": "green-terminal-2",
+        "name": "Alertes",
+        "ref": "Alert : success, warning, error, info"
+      },
+      {
+        "id": "green-terminal-3",
+        "name": "Progression et spinners",
+        "ref": "ProgressBar, Spinner"
+      },
+      {
+        "id": "green-terminal-4",
+        "name": "Boutons et en-tête",
+        "ref": "ButtonGroup, PageHeader"
+      },
+      {
+        "id": "green-terminal-5",
+        "name": "Thème terminal et tokens",
+        "ref": "BaseStyle, CSS variables"
+      },
+      {
+        "id": "green-terminal-6",
+        "name": "Éditeur direct État vide",
+        "ref": "Adaptation locale : propriétés, HTML/CSS, export"
+      }
+    ]
+  }
+]

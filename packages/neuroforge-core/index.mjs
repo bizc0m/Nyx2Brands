@@ -1,3 +1,8 @@
+import {UX_BLOCKS,REFERENCES,validUXSelection} from './ux-blocks.mjs';
+import {validVisual,visualRules} from './visual-style.mjs';
+import catalogue from './catalogue.json' with { type: 'json' };
+export const FUNCTION_CATALOGUE = catalogue;
+export const TECHNOLOGIES = ['Web / HTML', 'React', 'SwiftUI / AppKit'];
 // Shared data contract. No application actions, imported CSS, or executable assets.
 export const SCHEMA = 'neuroforge/project/v1';
 export const MODULES = ['theme', 'layout', 'identity', 'languages', 'about', 'publication'];
@@ -40,7 +45,13 @@ function validImage(v) {
 }
 export function validate(p) {
   const errors=[],warnings=[];
-  if(!keys(p,['schema','packVersion','project','modules','defaultLocale','locales','translations','theme','ui','identity'])) return {errors:['Configuration absente ou champs inconnus.'],warnings};
+  if(!keys(p,['schema','packVersion','project','modules','defaultLocale','locales','translations','theme','ui','identity','integration'])) return {errors:['Configuration absente ou champs inconnus.'],warnings};
+  if(p.integration!==undefined){
+    const i=p.integration,ids=new Set(catalogue.flatMap(s=>s.features.map(f=>f.id)));
+    if(i?.blocks!==undefined&&!validUXSelection(i.blocks,UX_BLOCKS))errors.push('Blocs UX invalides.');
+    if(i?.references!==undefined&&!validUXSelection(i.references,REFERENCES))errors.push('Références invalides.');
+    if(!keys(i,['features','path','technology','notes','blocks','references'])||!Array.isArray(i.features)||i.features.length>200||i.features.some(id=>!ids.has(id))||new Set(i.features).size!==i.features.length||!text(i.path,1000)||!text(i.notes,8000)||!TECHNOLOGIES.includes(i.technology))errors.push('Intégration invalide : fonctions, chemin ou technologie.');
+  }
   if(p.schema!==SCHEMA) errors.push('Version de contrat inconnue.');
   if(!semver(p.packVersion)) errors.push('Version de pack attendue : 1.0.0.');
   if(!keys(p.project,['id','name','version','repository','license'])) errors.push('Identité projet invalide.');
@@ -60,8 +71,10 @@ export function validate(p) {
     else for(const k of ['description','purpose','audience','limits'])if(!t[k].trim())warnings.push(`${l} : ${k} manquant${l!==p.defaultLocale?' — repli '+p.defaultLocale:''}.`);
   }
   const t=p.theme;
-  if(!keys(t,['name','appearance','background','surface','text','muted','accent','typography','density'])||!text(t?.name,64)||!['light','dark'].includes(t?.appearance)||!['background','surface','text','muted','accent'].every(k=>hex(t?.[k]))||!['comfortable','compact'].includes(t?.density)||!keys(t?.typography,['family','size'])||!['system','monospace'].includes(t?.typography?.family)||typeof t?.typography?.size!=='number'||!(t.typography.size>=11&&t.typography.size<=18))errors.push('Thème invalide : palette, police, taille ou densité.');
+  if(!keys(t,['name','appearance','background','surface','text','muted','accent','typography','density','visual','source'])||!text(t?.name,64)||!['light','dark'].includes(t?.appearance)||!['background','surface','text','muted','accent'].every(k=>hex(t?.[k]))||!['comfortable','compact'].includes(t?.density)||!keys(t?.typography,['family','size'])||!['system','monospace'].includes(t?.typography?.family)||typeof t?.typography?.size!=='number'||!(t.typography.size>=11&&t.typography.size<=18))errors.push('Thème invalide : palette, police, taille ou densité.');
   else if(p.modules?.includes('theme'))for(const fg of ['text','muted'])for(const bg of ['background','surface'])if(contrast(t[fg],t[bg])<4.5)errors.push(`Contraste ${fg}/${bg} : ${contrast(t[fg],t[bg]).toFixed(2)} (minimum 4,5).`);
+  if(t?.visual!==undefined&&!validVisual(t.visual))errors.push('Style visuel invalide.');
+  if(t?.source!==undefined&&(!keys(t.source,['url','author','kind'])||!/^https:\/\/codepen\.io\/[A-Za-z0-9_-]+\/pen\/[A-Za-z0-9]+$/.test(t.source.url)||!text(t.source.author,100)||t.source.kind!=='inspired-adaptation'))errors.push('Source du skin invalide.');
   if(p.modules?.includes('layout')){
     const family=INTERFACE_FAMILIES.find(item=>item.id===p.ui?.family);
     if(!keys(p.ui,['family','variant'])||!family||!family.variants.some(([id])=>id===p.ui?.variant))errors.push('Interface invalide : famille ou variante inconnue.');
@@ -83,7 +96,7 @@ export function publicationReady(p) {
   for(const k of ['description','purpose','audience','limits'])if(!p.translations[p.defaultLocale][k].trim())missing.push(k);
   if(missing.length)throw Error('Compléter avant export public : '+missing.join(', '));
 }
-export function themeCSS(p) {assertProject(p);if(!p.modules.includes('theme'))return '';const t=p.theme;return `:root {\n${['background','surface','text','muted','accent'].map(k=>`  --nf-${k}: ${t[k]};`).join('\n')}\n  --nf-font: ${t.typography.family==='system'?'system-ui, sans-serif':'ui-monospace, monospace'};\n  --nf-size: ${t.typography.size}px;\n  --nf-space: ${t.density==='compact'?'8':'16'}px;\n}`;}
+export function themeCSS(p) {assertProject(p);if(!p.modules.includes('theme'))return '';const t=p.theme;return `:root {\n${['background','surface','text','muted','accent'].map(k=>`  --nf-${k}: ${t[k]};`).join('\n')}\n  --nf-font: ${t.typography.family==='system'?'system-ui, sans-serif':'ui-monospace, monospace'};\n  --nf-size: ${t.typography.size}px;\n  --nf-space: ${t.density==='compact'?'8':'16'}px;\n}`+visualRules(t);}
 export function aboutHTML(p,locale=p.defaultLocale) {
   assertProject(p);locale=p.modules.includes('languages')&&p.locales.includes(locale)?locale:p.defaultLocale;if(!p.modules.includes('about'))throw Error('Module About désactivé.');
   const tr=localized(p,locale),en=locale.startsWith('en'),id=p.modules.includes('identity'),t=p.modules.includes('theme')?p.theme:PRESETS['signal-light'];
