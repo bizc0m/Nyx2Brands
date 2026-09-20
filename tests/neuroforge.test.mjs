@@ -1,10 +1,10 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {newProject,parseProject,validate,localized,aboutHTML,readme,noteMistressPack,applyNyx,siteHTML} from '../packages/neuroforge-core/index.mjs';
+import {PRESETS,newProject,parseProject,validate,localized,aboutHTML,readme,noteMistressPack,applyNyx,siteHTML} from '../packages/neuroforge-core/index.mjs';
 const full=()=>{const p=newProject();p.project.repository='https://github.com/bizc0m/example';p.project.license='MIT';p.translations.fr={description:'Description',purpose:'But',audience:'Public',limits:'Limites'};return p;};
 test('roundtrip and unknown schema/fields rejected',()=>{const p=full();assert.deepEqual(parseProject(JSON.stringify(p)),p);for(const mutate of [x=>x.schema='other',x=>x.script='bad',x=>x.project.id='../x',x=>x.modules.push('code'),x=>x.theme.typography.size=99,x=>x.project.repository='javascript:alert(1)',x=>x.identity.logo='https://host/logo.png']){const bad=full();mutate(bad);assert.throws(()=>parseProject(JSON.stringify(bad)));}});
-test('new projects use the Moteur UX preset',()=>{const p=newProject();assert.equal(p.theme.name,'Moteur UX');assert.equal(p.theme.background,'#F3F4EF');assert.equal(p.theme.accent,'#244D3A');});
+test('Moteur UX is available as an optional preset',()=>{assert.equal(PRESETS['moteur-ux'].name,'Moteur UX');assert.equal(PRESETS['moteur-ux'].background,'#F3F4EF');assert.equal(PRESETS['moteur-ux'].accent,'#244D3A');});
 test('contrast failure blocks skin export',()=>{const p=full();p.theme.muted=p.theme.background;assert.ok(validate(p).errors.some(s=>s.includes('Contraste')));assert.throws(()=>noteMistressPack(p));});
 test('translation fallback does not overwrite source',()=>{const p=full(),before=JSON.stringify(p);assert.equal(localized(p,'en').description,'Description');assert.equal(JSON.stringify(p),before);});
 test('HTML escaped and contains no executable content from user',()=>{const p=full();p.translations.fr.description='<script>alert(1)</script>';assert.ok(aboutHTML(p).includes('&lt;script&gt;'));assert.ok(!aboutHTML(p).includes('<script>'));assert.ok(siteHTML(p).includes('Content-Security-Policy'));});

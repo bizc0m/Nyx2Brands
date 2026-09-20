@@ -8,7 +8,7 @@ export const PRESETS = {
   'signal-light': {name:'Signal Light', appearance:'light', background:'#EEF1F5', surface:'#FFFFFF', text:'#111827', muted:'#596170', accent:'#1447E6'},
 };
 export function newProject(id = 'mon-application') {
-  return {schema:SCHEMA, packVersion:'0.1.0', project:{id, name:'Mon application', version:'0.1.0', repository:'', license:''}, modules:[...MODULES], defaultLocale:'fr', locales:['fr','en'], translations:{fr:{description:'',purpose:'',audience:'',limits:''},en:{description:'',purpose:'',audience:'',limits:''}}, theme:{...PRESETS['moteur-ux'], typography:{family:'system',size:13}, density:'comfortable'}, identity:{logo:'',icon:'',signature:'FORGED FOR ATYPICAL THINKERS. THEN, GREAT RESULTS.'}};
+  return {schema:SCHEMA, packVersion:'0.1.0', project:{id, name:'Mon application', version:'0.1.0', repository:'', license:''}, modules:[...MODULES], defaultLocale:'fr', locales:['fr','en'], translations:{fr:{description:'',purpose:'',audience:'',limits:''},en:{description:'',purpose:'',audience:'',limits:''}}, theme:{...PRESETS['nyx-core'], typography:{family:'system',size:13}, density:'comfortable'}, identity:{logo:'',icon:'',signature:'FORGED FOR ATYPICAL THINKERS. THEN, GREAT RESULTS.'}};
 }
 const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 const hex = v => typeof v === 'string' && /^#[\da-f]{6}$/i.test(v);

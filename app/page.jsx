@@ -58,13 +58,13 @@ function seedProject() {
   project.project.version = '0.1.0';
   project.packVersion = '0.1.0';
   project.theme = {
-    name: skins['moteur-ux'].name,
-    appearance: skins['moteur-ux'].appearance,
-    background: skins['moteur-ux'].background,
-    surface: skins['moteur-ux'].surface,
-    text: skins['moteur-ux'].text,
-    muted: skins['moteur-ux'].muted,
-    accent: skins['moteur-ux'].accent,
+    name: skins['nyx-core'].name,
+    appearance: skins['nyx-core'].appearance,
+    background: skins['nyx-core'].background,
+    surface: skins['nyx-core'].surface,
+    text: skins['nyx-core'].text,
+    muted: skins['nyx-core'].muted,
+    accent: skins['nyx-core'].accent,
     typography: { family: 'system', size: 13 },
     density: 'comfortable',
   };
@@ -84,7 +84,7 @@ function seedProject() {
 }
 
 function loadStored() {
-  const fallback = { project: seedProject(), target: 'notemistress', skinId: 'moteur-ux', signal: skins['moteur-ux'].signal, radius: skins['moteur-ux'].radius };
+  const fallback = { project: seedProject(), target: 'notemistress', skinId: 'nyx-core', signal: skins['nyx-core'].signal, radius: skins['nyx-core'].radius };
   if (typeof window === 'undefined') return fallback;
   try {
     const raw = window.localStorage.getItem(STORAGE);
@@ -119,9 +119,9 @@ export default function Home() {
   const [preview, setPreview] = useState('app');
   const [output, setOutput] = useState('pack');
   const [locale, setLocale] = useState('fr');
-  const [skinId, setSkinId] = useState('moteur-ux');
-  const [signal, setSignal] = useState(skins['moteur-ux'].signal);
-  const [radius, setRadius] = useState(skins['moteur-ux'].radius);
+  const [skinId, setSkinId] = useState('nyx-core');
+  const [signal, setSignal] = useState(skins['nyx-core'].signal);
+  const [radius, setRadius] = useState(skins['nyx-core'].radius);
   const [message, setMessage] = useState('');
   const [saved, setSaved] = useState(false);
   const importRef = useRef(null);
@@ -265,9 +265,9 @@ export default function Home() {
     const next = seedProject();
     setProject(next);
     setTarget('notemistress');
-    setSkinId('moteur-ux');
-    setSignal(skins['moteur-ux'].signal);
-    setRadius(skins['moteur-ux'].radius);
+    setSkinId('nyx-core');
+    setSignal(skins['nyx-core'].signal);
+    setRadius(skins['nyx-core'].radius);
     setLocale('fr');
     window.localStorage.removeItem(STORAGE);
     setMessage('Pack de départ restauré.');
