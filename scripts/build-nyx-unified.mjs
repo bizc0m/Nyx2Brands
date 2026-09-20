@@ -1,0 +1,40 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+import {catalogueSources} from '../packages/neuroforge-core/integration.mjs';
+import {unifiedRuntime} from '../packages/neuroforge-core/nyx-unified.mjs';
+import {mountUX} from '../packages/neuroforge-core/ux-blocks.mjs';
+import {validSession} from '../packages/neuroforge-core/compositions.mjs';
+const original=catalogueSources(readFileSync('public/moteur-ux.html','utf8')).find(s=>s.id==='integrated').html;
+const re=/<script type="__bundler\/template">([\s\S]*?)<\/script>/;
+let template=JSON.parse(original.match(re)[1]);
+function patch(from,to){if(!template.includes(from))throw Error('Nyx source drift: '+from.slice(0,60));template=template.replace(from,to);}
+patch('  componentDidMount() {','  componentDidMount() {\n    window.NyxShell=this;\n    try{const s=JSON.parse(window.NyxStore.getItem("shell")||"null");if(s?.tabs?.length)this.setState(s);}catch{}');
+patch('  componentDidUpdate() { this.refreshIcons(); }','  componentDidUpdate() { this.refreshIcons(); window.NyxStore.setItem("shell",JSON.stringify(this.state)); }');
+patch('bladeItems: [','bladeItems: [{icon:"library",label:"Bibliothèque",color:"var(--ic-blue)",installed:true},');
+patch("tabs: [", "tabs: [{label:'Bibliothèque',kind:'ux',focusedPane:'ux-root',zoomedPane:null,columns:[]},");
+patch('activeTab: 0,','activeTab: 1,');
+patch('sidebarCollapsed: false,','sidebarCollapsed: window.innerWidth < 700,');
+patch('width:100px; overflow-x:auto; padding:2px 0;','width:100px; overflow-x:auto; padding:2px 0; display:none;');
+patch('onClick: () => this.setState({ themeIndex: i })','onClick: () => window.NyxSelectThemeName(t.name)');
+patch('showOriginalWorkspace: !["documents","registry"].includes(tab.kind),','showUXWorkspace: tab.kind === "ux", showOriginalWorkspace: !["documents","registry","ux"].includes(tab.kind),');
+patch('<sc-if value="{{ showRegistryWorkspace }}"','<sc-if value="{{ showUXWorkspace }}" hint-placeholder-val="{{ false }}"><div id="nyx-blocks-slot" style="flex:1;min-width:0;min-height:0;overflow:auto"></div></sc-if><sc-if value="{{ showRegistryWorkspace }}"');
+patch('function mountRegistry(){','let registryFrame=null;function mountRegistry(){');
+// Preserve one Registry document across tab switches, just like Documents.
+patch('  if(!slot)return;\n  let frame=slot.querySelector', '  if(!slot){const existing=registryFrame;if(existing){existing.hidden=true;if(existing.parentNode!==document.body)document.body.append(existing);}return;}\n  let frame=document.querySelector');
+patch("let frame=document.querySelector('iframe[data-nyx-registry]');","let frame=registryFrame;");
+patch("frame=document.createElement('iframe');","frame=document.createElement('iframe');registryFrame=frame;");
+patch('    slot.replaceChildren(frame);','    slot.replaceChildren(frame);');
+patch('    frame.srcdoc=registrySrcDoc;', '    frame.srcdoc=registrySrcDoc.replace("<head>","<head><script>window.NyxStore=parent.NyxStore;<\\/script>");');
+patch('  }\n}\nconst obs=new MutationObserver(mountRegistry);','  }\n  frame.hidden=false;if(frame.parentNode!==slot)slot.append(frame);\n}\nconst obs=new MutationObserver(mountRegistry);');
+const registryPattern=/const registrySrcDoc=("[^\n]*");/;
+const registryMatch=template.match(registryPattern);
+if(!registryMatch)throw Error('Registry source missing');
+let registry=JSON.parse(registryMatch[1]);
+registry=registry.replace('render();\n</script>',`window.applyNyxProject=(project,skins)=>{state.product.name=project.project.name;state.product.skin=project.theme.name;render();const n=document.getElementById('product-name');if(n){n.readOnly=true;n.title='Identité partagée avec le projet';}const s=document.getElementById('product-skin');if(s){s.replaceChildren(...skins.map(item=>{const o=document.createElement('option');o.value=item.name;o.textContent=item.name;return o;}));s.value=project.theme.name;s.oninput=()=>parent.NyxSelectThemeName(s.value);}save();};\nrender();\n</script>`);
+template=template.replace(registryPattern,()=> 'const registrySrcDoc='+JSON.stringify(registry).replace(/<\//g,'<\\/')+';');
+template=template.replace(/\blocalStorage\b/g,'window.NyxStore').replaceAll('autosave window.NyxStore','sauvegarde locale');
+const runtime='<script id="nyx-unified-runtime">const validSession='+validSession.toString()+';window.__NYX_MOUNT_BLOCKS='+mountUX.toString()+';('+unifiedRuntime.toString()+')();</script>';
+// Initialize storage and protocol before the bundled component executes.
+template=template.replace('<body>','<body>'+runtime);
+const output=original.replace(re,()=>'<script type="__bundler/template">'+JSON.stringify(template).replace(/<\//g,'<\\/')+'</script>');
+writeFileSync('public/nyx-unified.html',output);
+console.log('Nyx intégré preserved and extended:',output.length,'bytes');

@@ -12,7 +12,8 @@
     "lint": "oxlint",
     "format": "oxfmt",
     "test": "node --test tests/*.test.mjs",
-    "import:moteur-ux": "node scripts/import-moteur-ux.mjs"
+    "import:moteur-ux": "node scripts/import-moteur-ux.mjs",
+    "prebuild": "node scripts/build-nyx-unified.mjs"
   },
   "dependencies": {
     "react": "19.2.6",

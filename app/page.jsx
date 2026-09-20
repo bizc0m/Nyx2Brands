@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import UXWorkshop from './ux-workshop.jsx';
 import {UX_BLOCKS,REFERENCES} from '../packages/neuroforge-core/ux-blocks.mjs';
 import {COMPOSITIONS} from '../packages/neuroforge-core/compositions.mjs';
-import UXPreview from './ux-preview.jsx';
+import NyxPreview from './nyx-preview.jsx';
 import NextImage from 'next/image';
 import { Check, Clipboard, Download, FileJson, RotateCcw, Sparkles, Upload, FileCode2 } from 'lucide-react';
 import {
@@ -22,7 +22,7 @@ import {
   validate,
 } from '../packages/neuroforge-core/index.mjs';
 
-import { designPreview, catalogueThumbnails } from '../packages/neuroforge-core/design-preview.mjs';
+import { catalogueThumbnails } from '../packages/neuroforge-core/design-preview.mjs';
 import { emptyIntegration, integrationPrompt, integrationFiles, integrationZip, catalogueSources, selectedFunctions } from '../packages/neuroforge-core/integration.mjs';
 
 import {recoveredSkins, generateSkin, validatePersonalSkins, SKIN_LIBRARY_STORAGE} from '../packages/neuroforge-core/skins.mjs';
@@ -128,11 +128,11 @@ export default function Home() {
   const [target, setTarget] = useState('future');
   const [workspace, setWorkspace] = useState('studio');
   const [step, setStep] = useState('design');
-  const [designSearch, setDesignSearch] = useState('');
   const [catalogue, setCatalogue] = useState({sources: [], thumbnails: {}});
-  const [catalogueError, setCatalogueError] = useState('');
-  const [previewMode, setPreviewMode] = useState('original');
-  const [previewRevision, setPreviewRevision] = useState(0);
+  const [, setCatalogueError] = useState('');
+  const [, setPreviewMode] = useState('original');
+  const [nativeRevision,setNativeRevision]=useState(0);
+  const [projectLoaded,setProjectLoaded]=useState(false);
   const [preview, setPreview] = useState('app');
   const [output, setOutput] = useState('pack');
   const [locale, setLocale] = useState('fr');
@@ -164,19 +164,20 @@ export default function Home() {
       setMessage('Skin « '+theme.name+' » enregistré dans Mes skins.');
     } catch(error){setMessage(error.message);}
   }
-  function createSkin(){try{const theme=generateSkin(skinName,skinHue,skinMode);update(draft=>{draft.theme=theme;});setPreviewMode('skin');setPreview(current=>current==='blocks'?'blocks':'app');}catch(error){setMessage(error.message);}}
+  function createSkin(){try{const theme=generateSkin(skinName,skinHue,skinMode);update(draft=>{draft.theme=theme;});setPreviewMode('skin');setPreview('app');}catch(error){setMessage(error.message);}}
 
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
       try{setPersonalSkins(validatePersonalSkins(JSON.parse(localStorage.getItem(SKIN_LIBRARY_STORAGE)||'[]')));}catch{setLibraryError('La bibliothèque locale ne peut pas être lue. Elle est conservée sans modification.');}
       const stored = loadStored();
-      setProject(stored.project);
-      setPreview(stored.preview || 'app');
+      setProject({...stored.project,ui:{family:'integrated-family',variant:'integrated'},integration:{...(stored.project.integration||emptyIntegration()),blocks:stored.project.integration?.blocks||UX_BLOCKS.map(b=>b.id),references:stored.project.integration?.references||REFERENCES.map(r=>r.id)}});
+      setPreview('app');
       setTarget(stored.target);
       setSkinId(stored.skinId);
       setSignal(stored.signal);
       setRadius(stored.radius);
+      setProjectLoaded(true);
     }, 0);
     return () => window.clearTimeout(timer);
   }, []);
@@ -220,7 +221,8 @@ export default function Home() {
       await decodeImages(parseProject(JSON.stringify(project)));
       const response = await fetch('./moteur-ux.html');
       if (!response.ok) throw Error('Catalogue indisponible.');
-      const files = integrationFiles(project, catalogueSources(await response.text()));
+      const baseResponse=await fetch('./nyx-unified.html');if(!baseResponse.ok)throw Error('Base Nyx intégré indisponible.');
+      const files = integrationFiles(project, catalogueSources(await response.text()),await baseResponse.text());
       download(`${project.project.id}-integration.zip`, integrationZip(files), 'application/zip');
       setMessage(`Kit généré : ${integration.features.length} fonctions et ${integration.blocks?.length||0} blocs UX, skin ${project.theme.name}, identité et ${Object.keys(files).length} fichiers. Décompressez le ZIP puis suivez INTEGRATION.md.`);
     } catch (error) { setMessage(`Génération refusée : ${error.message}`); }
@@ -248,7 +250,7 @@ export default function Home() {
     const skin = availableSkins[id];
     if (!skin) return;
     setSkinName(skin.name);
-    setPreview(current=>current==='blocks'?'blocks':'app');
+    setPreview('app');
     setSkinId(id);
     setSignal(skin.signal);
     setRadius(skin.radius);
@@ -279,22 +281,10 @@ export default function Home() {
       return next;
     });
   }
-  function applyComposition(composition){
-    chooseSkin(composition.skin);
-    update(draft=>{const i=draft.integration||emptyIntegration();draft.integration={...i,composition:composition.id,blocks:i.blocks?.length?i.blocks:UX_BLOCKS.map(b=>b.id),references:i.references?.length?i.references:REFERENCES.map(r=>r.id)};});
-    setPreview('blocks');setMessage('Thème complet appliqué : '+composition.name+'. Vos données sont conservées.');
-  }
-  function chooseDesign(id) {
-    const family = INTERFACE_FAMILIES.find(item => item.variants.some(([variant]) => variant === id));
-    if (!family) return;
-    update(draft => { draft.ui = {family: family.id, variant: id}; if (!draft.modules.includes('layout')) draft.modules.push('layout'); });
-    setPreview('app');
+  function receiveNativeState(nativeState){
+    setProject(current=>{if(JSON.stringify(current.integration?.nativeState)===JSON.stringify(nativeState))return current;try{const saved=JSON.parse(localStorage.getItem(STORAGE)||'null');if(saved?.project?.project?.id===current.project.id){saved.project.integration={...(saved.project.integration||emptyIntegration()),nativeState};localStorage.setItem(STORAGE,JSON.stringify(saved));}}catch{}return {...current,integration:{...(current.integration||emptyIntegration()),nativeState}};});
   }
   const activeSource = catalogue.sources.find(source => source.id === selectedVariant[0]);
-  const referencePreview = useMemo(() => {
-    if (!activeSource) return '';
-    return designPreview(activeSource.html, previewMode === 'skin' && !validation.errors.length ? project : null);
-  }, [activeSource, previewMode, project, validation.errors.length]);
   useEffect(() => {
     const controller = new AbortController();
     fetch('./moteur-ux.html', {signal: controller.signal}).then(response => {
@@ -358,8 +348,9 @@ export default function Home() {
     try {
       if (file.size > 12000000) throw Error('12 Mo maximum.');
       const incoming = await decodeImages(parseProject(await file.text()));
-      setProject(incoming);
-      setPreview(incoming.integration?.blocks?.length?'blocks':'app');
+      setProject({...incoming,ui:{family:'integrated-family',variant:'integrated'}});
+      setNativeRevision(v=>v+1);
+      setPreview('app');
       setSaved(false);
       setLocale(incoming.defaultLocale);
       setMessage('Pack importé et validé.');
@@ -416,20 +407,13 @@ export default function Home() {
       <div className="header-actions"><button onClick={() => importRef.current?.click()}><Upload size={15}/>Importer</button><button onClick={save}><Check size={15}/>{saved ? 'Enregistré' : 'Enregistrer'}</button><input ref={importRef} hidden type="file" accept="application/json,.json" onChange={importPack}/></div>
     </header>
     <nav className="atelier-steps" aria-label="Étapes de création">{steps.map(([id,label],index) => <button key={id} aria-current={step === id && workspace === 'studio' ? 'step' : undefined} onClick={() => {setStep(id);setWorkspace('studio');}}><span>{String(index+1).padStart(2,'0')}</span>{label}{id === 'functions' && <b>{integration.features.length}</b>}</button>)}</nav>
-    <nav className="preview-shortcuts" aria-label="Accès rapide"><a href="#theme-choices" onClick={()=>{setWorkspace('studio');setStep('design');}}>Thèmes & skins</a><a href="#live-preview" onClick={()=>setWorkspace('studio')}>Voir l’aperçu ↓</a></nav><section className="atelier-intro"><div><span>L’ATELIER</span><h1>{workspace === 'catalogue' ? 'Composer plusieurs panneaux' : ({design:'Un design. Vos fonctions. Votre identité.',blocks:'Composez les nouvelles idées UX.',functions:'Choisissez ce que votre app doit faire.',identity:'Donnez-lui votre identité.',export:'Tout réunir pour l’intégration.'})[step]}</h1><p>{workspace === 'catalogue' ? 'Le composeur existant reste accessible. Les fonctions sélectionnées sont partagées avec votre projet.' : ({design:'6 thèmes complets fonctionnels, 45 palettes et vos références conservées.',blocks:'8 blocs interactifs et 27 références : combinez, essayez, exportez.',functions:'Piochez dans plusieurs références. Votre design reste indépendant.',identity:'Le nom, le logo, l’icône et les textes voyagent dans le même pack.',export:'Vos choix, les sources et les instructions dans un seul kit.'})[step]}</p></div>{workspace === 'catalogue' ? <button onClick={() => setWorkspace('studio')}>Retour à l’atelier</button> : <button className="text-link" onClick={() => setWorkspace('catalogue')}>Composeur avancé ↗</button>}</section>
-    {workspace === 'catalogue' ? <section className="legacy-composer"><iframe ref={catalogueRef} onLoad={syncCatalogue} src="./moteur-ux.html" title="Composeur avancé Moteur UX" /></section> : step === 'blocks' ? <UXWorkshop project={project} onSession={receiveSession} onApply={()=>{if(validation.errors.length){setMessage(validation.errors[0]);return;} try{window.localStorage.setItem(STORAGE,JSON.stringify({project,target,skinId,signal,radius,preview:'blocks'}));setPreview('blocks');setStep('design');setSaved(true);setMessage('Composition appliquée et enregistrée avec votre skin et votre identité.');}catch{setMessage('Enregistrement impossible : stockage du navigateur indisponible.');}}} onChange={next=>update(draft=>{draft.integration=next;})}/> : <div className={'atelier-workbench '+(step === 'design' ? 'design-layout' : step === 'export' ? 'export-layout' : '')}>
+    <nav className="preview-shortcuts" aria-label="Accès rapide"><a href="#theme-choices" onClick={()=>{setWorkspace('studio');setStep('design');}}>Thèmes & skins</a><a href="#live-preview" onClick={()=>setWorkspace('studio')}>Voir l’aperçu ↓</a></nav><section className="atelier-intro"><div><span>L’ATELIER</span><h1>{workspace === 'catalogue' ? 'Composer plusieurs panneaux' : ({design:'Nyx intégré. Une seule application.',blocks:'Composez les nouvelles idées UX.',functions:'Choisissez ce que votre app doit faire.',identity:'Donnez-lui votre identité.',export:'Tout réunir pour l’intégration.'})[step]}</h1><p>{workspace === 'catalogue' ? 'Le composeur existant reste accessible. Les fonctions sélectionnées sont partagées avec votre projet.' : ({design:'Une base Nyx intégré : onglets, documents, registry, blocs et identité.',blocks:'8 blocs interactifs et 27 références : combinez, essayez, exportez.',functions:'Piochez dans plusieurs références. Votre design reste indépendant.',identity:'Le nom, le logo, l’icône et les textes voyagent dans le même pack.',export:'Vos choix, les sources et les instructions dans un seul kit.'})[step]}</p></div>{workspace === 'catalogue' ? <button onClick={() => setWorkspace('studio')}>Retour à l’atelier</button> : <button className="text-link" onClick={() => setWorkspace('catalogue')}>Composeur avancé ↗</button>}</section>
+    {workspace === 'catalogue' ? <section className="legacy-composer"><iframe ref={catalogueRef} onLoad={syncCatalogue} src="./moteur-ux.html" title="Composeur avancé Moteur UX" /></section> : <div className={'atelier-workbench '+(step === 'design' ? 'design-layout' : step === 'export' ? 'export-layout' : '')}>
       <section id="theme-choices" className="selection-panel" aria-label="Réglages du projet">
+      {step === 'blocks' && <UXWorkshop embedded project={project} onSession={receiveSession} onApply={()=>{setStep('design');setMessage('Blocs appliqués dans la Blade Bibliothèque de Nyx intégré.');}} onChange={next=>update(draft=>{draft.integration=next;})}/>}
       {step === 'design' && <>
-        <div className="panel-title"><h2>Thèmes complets · fonctionnels</h2><span>6 compositions</span></div><p>Chaque thème réorganise les mêmes blocs. Recherche, favoris, notes et séquence sont conservés.</p><div className="complete-themes">{COMPOSITIONS.map(c=><button key={c.id} aria-pressed={preview==='blocks'&&integration.composition===c.id} onClick={()=>applyComposition(c)}><span className={'theme-mini '+c.id} aria-hidden="true"><i/><i/><i/><i/></span><strong>{c.name}</strong><small>{c.description}</small><b>{preview==='blocks'&&integration.composition===c.id?'Appliqué':'Appliquer ce thème'}</b></button>)}</div>
-        <details className="reference-designs"><summary>13 designs historiques · aperçus de référence</summary>
-        <div className="panel-title"><h2>Thèmes & designs</h2><span>13 références · 9 familles</span></div>
-        <label className="search-field"><span>Rechercher un design</span><input type="search" value={designSearch} onChange={event => setDesignSearch(event.target.value)} placeholder="Documents, terminal, dashboard…" /></label>
-        <div className="design-gallery">{FUNCTION_CATALOGUE.filter(source => `${source.title} ${source.desc}`.toLowerCase().includes(designSearch.toLowerCase())).map(source => <button key={source.id} className={'design-card '+(selectedVariant[0] === source.id ? 'selected' : '')} aria-pressed={selectedVariant[0] === source.id} onClick={() => chooseDesign(source.id)}>
-          <div className="design-thumbnail">{catalogue.thumbnails[source.id] ? <NextImage src={catalogue.thumbnails[source.id]} width={320} height={190} unoptimized alt={'Design '+source.title}/> : <span>{source.title}</span>}<span className="design-select-mark">{selectedVariant[0] === source.id ? <Check size={14}/> : '↗'}</span></div>
-          <strong>{source.title}</strong><small>{source.features.length} fonctions référencées</small>
-        </button>)}</div>
-        {!FUNCTION_CATALOGUE.some(source => `${source.title} ${source.desc}`.toLowerCase().includes(designSearch.toLowerCase())) && <p className="empty-message">Aucun design trouvé. Essayez un autre nom.</p>}
-        </details><div className="palette-heading"><h2>Skins · palettes de couleurs</h2><small>Indépendante du design</small></div>
+        <div className="panel-title"><h2>Nyx intégré · base unique</h2><span>Thèmes appliqués en direct</span></div><p>Dashboard, Documents, Registry et Bibliothèque partagent cette application. Le thème change sans recharger les onglets.</p>
+        <details className="reference-designs"><summary>Sources historiques conservées</summary><p>Les 13 documents de référence restent consultables dans le composeur avancé. La base active est Nyx intégré.</p></details><div className="palette-heading"><h2>Skins · palettes de couleurs</h2><small>Indépendante du design</small></div>
         <label className="search-field"><span>Rechercher un skin</span><input type="search" value={skinSearch} onChange={event=>setSkinSearch(event.target.value)} placeholder="Graphite, Crimson, mes skins…"/></label>
         <div className="skin-library">{['NYX Studio','Nyx-Ux','Dashboard original','NeuroForge','CodePen · adaptations','Mes skins'].map(group=>{const entries=Object.entries(availableSkins).filter(([,skin])=>(skin.group||'NYX Studio')===group && `${skin.name} ${group}`.toLowerCase().includes(skinSearch.toLowerCase()));return entries.length ? <section key={group}><h3>{group} <small>{entries.length}</small></h3><div className="palette-gallery">{entries.map(([id,skin])=><button key={id} aria-pressed={project.theme.name===skin.name} onClick={()=>{chooseSkin(id);setPreviewMode('skin');}} className={project.theme.name===skin.name?'selected':''}><span className="color-samples">{['background','surface','text','accent'].map(key=><i key={key} style={{background:skin[key]}}/>)}</span><strong>{skin.name}</strong><small>{skin.appearance==='dark'?'Sombre':'Clair'}</small></button>)}</div></section>:null;})}</div>
         <div className="skin-source-info"><p>CodePen : 20 adaptations locales avec leurs sources. Les styles sont adaptés au moteur ; les applications originales ne sont pas importées.</p>{project.theme.source && <a href={project.theme.source.url} target="_blank" rel="noreferrer">Référence : {project.theme.source.author} ↗</a>}<details><summary>Les 20 références et leur statut</summary>{codepenReferences.map(r=><p key={r.id}><a href={r.url} target="_blank" rel="noreferrer">{r.name} · {r.author} ↗</a> — {r.status==='adapted'?'Adaptation disponible':'Source inaccessible · non intégré'}</p>)}</details></div>
@@ -440,7 +424,7 @@ export default function Home() {
       {step === 'functions' && <>
         <div className="panel-title"><h2>Bibliothèque de fonctions</h2><span>{integration.features.length} sélectionnées</span></div>
         <label className="search-field"><span>Rechercher une fonction</span><input type="search" value={featureSearch} onChange={event=>setFeatureSearch(event.target.value)} placeholder="Importer, onglets, recherche…" /></label>
-        <div className="function-library">{FUNCTION_CATALOGUE.map(source => {const visible = source.features.filter(f=>`${source.title} ${f.name}`.toLowerCase().includes(featureSearch.toLowerCase()));const count=source.features.filter(f=>integration.features.includes(f.id)).length;return visible.length ? <details key={source.id + (featureSearch ? '-search' : '')} open={featureSearch ? true : undefined} className={count ? 'has-selection' : ''}><summary><span>{source.title}</span><b>{count ? count+' / ' : ''}{source.features.length}</b></summary><div>{visible.map(f=><label className="function-choice" key={f.id}><input type="checkbox" checked={integration.features.includes(f.id)} onChange={event=>toggleFunction(f.id,event.target.checked)}/><span>{f.name}</span></label>)}<button className="source-link" onClick={()=>{chooseDesign(source.id);setStep('design');}}>Voir ce design ↗</button>{source.limitations && <p className="source-limit">{source.limitations}</p>}</div></details> : null;})}</div>
+        <div className="function-library">{FUNCTION_CATALOGUE.map(source => {const visible = source.features.filter(f=>`${source.title} ${f.name}`.toLowerCase().includes(featureSearch.toLowerCase()));const count=source.features.filter(f=>integration.features.includes(f.id)).length;return visible.length ? <details key={source.id + (featureSearch ? '-search' : '')} open={featureSearch ? true : undefined} className={count ? 'has-selection' : ''}><summary><span>{source.title}</span><b>{count ? count+' / ' : ''}{source.features.length}</b></summary><div>{visible.map(f=><label className="function-choice" key={f.id}><input type="checkbox" checked={integration.features.includes(f.id)} onChange={event=>toggleFunction(f.id,event.target.checked)}/><span>{f.name}</span></label>)}<button className="source-link" onClick={()=>{setWorkspace('catalogue');}}>Voir ce design ↗</button>{source.limitations && <p className="source-limit">{source.limitations}</p>}</div></details> : null;})}</div>
         {!FUNCTION_CATALOGUE.some(source => source.features.some(f=>`${source.title} ${f.name}`.toLowerCase().includes(featureSearch.toLowerCase()))) && <p className="empty-message">Aucune fonction trouvée.</p>}
       </>}
         {step === 'identity' && <section className="editor-section"><label className="full-field">Application cible<select value={target} onChange={event => chooseTarget(event.target.value)}>{Object.entries(targets).map(([id,item])=><option key={id} value={id}>{item.label}</option>)}</select></label>
@@ -486,9 +470,8 @@ export default function Home() {
 </div>}
       </section>
       <aside id="live-preview" className="result-panel" aria-label="Aperçu et sélection">
-        <div className="preview-toolbar"><div><span>DESIGN SÉLECTIONNÉ</span><h2>{preview==='blocks'?(COMPOSITIONS.find(c=>c.id===integration.composition)?.name||'Cockpit Glass'):activeSource?.title || selectedVariant[1]}</h2></div><nav aria-label="Aperçu">{Boolean(integration.blocks?.length)&&<button aria-pressed={preview==='blocks'} onClick={()=>setPreview('blocks')}>Ma composition</button>}<button aria-pressed={preview==='app'} onClick={()=>setPreview('app')}>Design</button><button aria-pressed={preview==='icon'} onClick={()=>setPreview('icon')}>Identité</button><button aria-pressed={preview==='about'} onClick={()=>setPreview('about')}>About</button></nav></div>
-        {preview === 'app' && <><div className="preview-options"><div><button aria-pressed={previewMode==='original'} onClick={()=>setPreviewMode('original')}>Original</button><button aria-pressed={previewMode==='skin'} onClick={()=>setPreviewMode('skin')}>Avec ma palette</button></div><button aria-label="Recommencer l’aperçu" onClick={()=>setPreviewRevision(v=>v+1)}><RotateCcw size={14}/></button></div>{catalogueError ? <p className="error-message">{catalogueError}</p> : referencePreview ? <iframe key={selectedVariant[0]+'-'+previewRevision+'-'+previewMode+(previewMode==='skin'?JSON.stringify(project.theme):'')} className="design-preview" title="Aperçu interactif du design sélectionné" sandbox="allow-scripts allow-downloads" srcDoc={referencePreview}/> : <div className="preview-loading">Chargement du design…</div>}<p className="preview-caption">{previewMode==='skin' ? 'Palette appliquée aux tokens compatibles ; certains styles de la référence restent propres au design.' : 'Référence interactive originale, avec ses fonctions de démonstration.'} Les fonctions choisies ci-dessous seront adaptées dans le projet cible.</p></>}
-        {preview === 'blocks' && <><UXPreview className="design-preview" title="Composition UX appliquée" project={project} onSession={receiveSession}/><p className="preview-caption">Vos blocs actifs, avec votre skin et votre identité. Composition web locale ; les services externes restent à raccorder.</p><button onClick={()=>setStep('blocks')}>Modifier mes blocs</button></>}
+        <div className="preview-toolbar"><div><span>APPLICATION ACTIVE</span><h2>Nyx intégré</h2></div><nav aria-label="Aperçu"><button aria-pressed={preview==='app'} onClick={()=>setPreview('app')}>Application</button><button aria-pressed={preview==='icon'} onClick={()=>setPreview('icon')}>Identité</button><button aria-pressed={preview==='about'} onClick={()=>setPreview('about')}>About</button></nav></div>
+        <div hidden={preview!=='app'}>{projectLoaded && <NyxPreview key={nativeRevision} project={project} skins={availableSkins} onTheme={chooseSkin} onSession={receiveSession} onNativeState={receiveNativeState}/>}<p className="preview-caption">Base existante Nyx intégré. Les thèmes s’appliquent au shell, à Documents et à Registry. Les nouveaux blocs sont dans la Blade Bibliothèque.</p></div>
         {preview === 'icon' && <div className="identity-preview" style={{background:project.theme.background,color:project.theme.text}}><div>{['logo','icon'].map(kind=><figure key={kind}>{project.identity[kind] ? <NextImage src={project.identity[kind]} width={112} height={112} unoptimized alt={kind === 'logo' ? 'Logo' : 'Icône'}/> : <span>{project.project.name.slice(0,1)}</span>}<figcaption>{kind==='logo'?'Logo':'Icône app'}</figcaption></figure>)}</div><h2>{project.project.name}</h2><p>{project.identity.signature}</p></div>}
         {preview === 'about' && (html ? <iframe className="design-preview" title="Aperçu About" sandbox="" srcDoc={html}/> : <p className="empty-message">Complétez les réglages du pack pour afficher le About.</p>)}
         <section className="selection-summary"><div className="panel-title"><h2>Votre combinaison</h2><span>{integration.features.length} fonctions</span></div><div className="selection-design"><span><b>{preview==='blocks'?(COMPOSITIONS.find(c=>c.id===integration.composition)?.name||'Cockpit Glass'):activeSource?.title || selectedVariant[1]}</b><small>{preview==='blocks'?'Thème complet':'Référence'}</small></span><span className="summary-plus">+</span><span><b>{project.theme.name}</b><small>Skin</small></span><span className="summary-plus">+</span><span><b>{project.project.name}</b><small>Identité</small></span></div>{chosenFunctions.length ? <div className="selected-functions">{chosenFunctions.map(source=><div key={source.id}><strong>{source.title}</strong>{source.features.map(f=><button key={f.id} aria-label={'Retirer '+f.name} onClick={()=>toggleFunction(f.id,false)}>{f.name}<span>×</span></button>)}</div>)}</div> : <button className="selection-empty" onClick={()=>setStep('functions')}>+ Choisir les fonctions de mon app</button>}{activeSource?.limitations && <details className="advanced-settings"><summary>À savoir sur cette référence</summary><p>{activeSource.limitations}</p></details>}</section>

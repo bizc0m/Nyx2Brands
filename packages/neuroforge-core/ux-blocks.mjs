@@ -17,7 +17,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 // The same dependency-free runtime is used by the live preview and exported HTML.
 export function mountUX(config){
  const $=s=>document.querySelector(s),all=s=>[...document.querySelectorAll(s)];
- const refs=config.references,clips=[];let selected=refs[0]?.id,compare=[],favorites=[],notes={},query='',category='',favOnly=false;
+ let refs=config.references;const clips=[];let selected=refs[0]?.id,compare=[],favorites=[],notes={},query='',category='',favOnly=false;
  const stateKey='nyx-ux-demo:'+config.id;
  let initial=config.state;
  try{if(!initial){const stored=JSON.parse(localStorage.getItem(stateKey)||'null');if(validSession(stored))initial=stored;}}catch{}
@@ -30,9 +30,11 @@ export function mountUX(config){
  const notify=()=>{const state=session();if(window.parent!==window)window.parent.postMessage({type:'nyx-ux-session',state},'*');try{localStorage.setItem(stateKey,JSON.stringify(state));}catch{}};
  const persist=()=>{try{localStorage.setItem(stateKey,JSON.stringify(session()));say('Favoris et notes enregistrés dans ce navigateur.');}catch{say(window.parent!==window?'Session partagée avec le projet. Enregistrez le projet pour conserver le thème.':'Stockage indisponible : exportez la session pour la conserver.');}};
  const download=()=>{const a=document.createElement('a'),url=URL.createObjectURL(new Blob([JSON.stringify(session(),null,2)],{type:'application/json'}));a.href=url;a.download='session-ux.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);say('Session exportée.');};
- const categories=[...new Set(refs.map(r=>r.category))];
+ function renderCategories(){const categories=[...new Set(refs.map(r=>r.category))];
  if($('#categories'))$('#categories').innerHTML='<option value="">Toutes les catégories</option>'+categories.map(c=>'<option>'+escape(c)+'</option>').join('');
  if($('#tree'))$('#tree').innerHTML='<button data-category="">Toutes les références</button>'+[...new Set(categories.map(c=>c.split(' / ')[0]))].map(group=>'<details><summary>'+escape(group)+'</summary>'+categories.filter(c=>c.split(' / ')[0]===group).map(c=>'<button data-category="'+escape(c)+'">'+escape(c)+'</button>').join('')+'</details>').join('');
+ }
+ renderCategories();
  function render(){
  const visible=refs.filter(r=>(!category||r.category===category)&&(!favOnly||favorites.includes(r.id))&&(r.name+' '+r.idea).toLowerCase().includes(query.toLowerCase()));
  if($('#count'))$('#count').textContent=visible.length+' références';
@@ -61,12 +63,13 @@ export function mountUX(config){
  $('#density')?.addEventListener('input',e=>$('#items').style.setProperty('--tile',e.target.value+'px'));
  $('#note')?.addEventListener('input',e=>{notes[selected]=e.target.value;persist();});
  $('#command-search')?.addEventListener('input',e=>all('[data-command]').forEach(b=>b.hidden=!b.textContent.toLowerCase().includes(e.target.value.toLowerCase())));
- document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'&&$('#commands')){e.preventDefault();$('#commands').showModal();$('#command-search').focus();}});
+ document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'&&config.blocks.includes('commands')&&$('#commands')){e.preventDefault();$('#commands').showModal();$('#command-search').focus();}});
  function renderClips(){if(!$('#clips'))return;$('#clips').innerHTML=clips.map((c,i)=>'<li><b>'+escape(c.name)+'</b> · '+c.duration+' s <button data-move="'+i+'" '+(i===0?'disabled':'')+' aria-label="Avancer '+escape(c.name)+'">←</button><button data-remove="'+i+'" aria-label="Retirer '+escape(c.name)+'">×</button></li>').join('');const total=clips.reduce((sum,c)=>sum+c.duration,0);$('#scrub').max=total;$('#scrub').value=Math.min(Number($('#scrub').value),total);$('#duration').textContent=total+' secondes';showFrame();}
  function showFrame(){const pos=Number($('#scrub').value);let end=0;const clip=clips.find(c=>{end+=c.duration;return pos<end;});$('#frame').textContent=clip?clip.name+' · '+pos+' s':clips.length?'Fin de la séquence':'Ajoutez une étape';}
  $('#add-clip')?.addEventListener('click',()=>{if(clips.length>=100){say('100 étapes maximum.');return;}const name=$('#clip-name').value.trim();if(!name){say('Donnez un nom à l’étape.');return;}clips.push({name:name.slice(0,80),duration:Number($('#clip-duration').value)});renderClips();});
  $('#clips')?.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.remove!==undefined)clips.splice(Number(b.dataset.remove),1);if(b.dataset.move!==undefined){const i=Number(b.dataset.move);if(i>0)[clips[i-1],clips[i]]=[clips[i],clips[i-1]];}renderClips();});
  $('#scrub')?.addEventListener('input',showFrame);
+ window.__NYX_UPDATE_BLOCKS=next=>{if(JSON.stringify([refs,config.blocks])===JSON.stringify([next.references,next.blocks]))return;refs=next.references;config.blocks=next.blocks;renderCategories();if($('#categories'))$('#categories').value=category;say('Prêt · '+refs.length+' références');compare=compare.filter(id=>refs.some(r=>r.id===id));if(!refs.some(r=>r.id===selected))selected=refs[0]?.id;render();};
  if($('#search'))$('#search').value=query;if($('#categories'))$('#categories').value=category;if($('#favorites'))$('#favorites').setAttribute('aria-pressed',String(favOnly));if(initial?.list)$('#items')?.classList.add('list');
  render();renderClips();if(initial&&$('#scrub')){$('#scrub').value=initial.position;showFrame();}
  for(const event of ['click','input','change'])document.addEventListener(event,()=>queueMicrotask(notify));

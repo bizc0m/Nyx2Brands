@@ -69,25 +69,22 @@ Le CSS exporté utilise data-nf-panel, data-nf-card, data-nf-button et data-nf-i
 L’adaptateur applique les variables visuelles à la racine et permet leur restauration.
 Les effets web ne sont pas traduits automatiquement dans le contrat natif NoteMistress.
 
-## Blocs UX appliqués
+## Base active : Nyx intégré
 
-Blocs & références réunit 8 blocs interactifs et les 27 références fournies.
-Sélectionner les blocs puis **Appliquer à mon aperçu** enregistre les choix et
-affiche la composition dans l’aperçu principal. Changer de skin la met à jour.
-**Design** permet de revoir le design de référence, **Ma composition** les blocs.
-Le ZIP inclut la composition exécutable dans preview.html et blocs-ux.html,
-ainsi que references.json et le manifeste. Les références sont documentaires :
-aucun service tiers n’est connecté. La séquence organise des étapes sans rendu vidéo.
+L’atelier utilise maintenant la source existante **Nyx intégré** comme application
+active : Dashboard, Documents et Registry sont conservés. Les huit blocs locaux
+et les 27 références se trouvent dans la Blade Bibliothèque de cette même base.
+Les palettes, le nom, le logo et l’icône viennent du projet partagé ; changer de
+palette ne recharge pas Documents. L’espace Documents, Registry et les onglets
+sont sauvegardés localement et inclus dans le pack avec l’état des blocs.
 
-## Thèmes complets sur le moteur commun
+Le générateur inclut la même base dans `preview.html` et `nyx-integre.html`.
+`npm run build` régénère cette base depuis le catalogue original préservé ; le
+script refuse les changements de structure qu’il ne reconnaît pas. Les anciens
+exports de composition restent compatibles, mais leur galerie n’est plus le
+parcours principal.
 
-Six compositions (cockpit, bibliothèque, bureau rétro, studio, terminal, lecture)
-réorganisent les mêmes huit blocs. Elles se sélectionnent dans Design & skin.
-Les 45 palettes restent indépendantes, et les 13 anciens documents restent des
-références consultables : leur logique métier n’est pas fusionnée avec ces blocs.
-L’aperçu principal et le ZIP utilisent le même rendu uxHTML. Le pack conserve la
-composition, les favoris, les notes, la comparaison, les filtres et la séquence.
-Les messages de session sont acceptés uniquement depuis l’iframe de composition
-et après validation du contrat. Ils ne rechargent pas l’aperçu.
-Enregistrer conserve le thème ; les actions de session actualisent le projet local
-déjà enregistré. Les services externes restent à raccorder.
+Limites : les références restent documentaires et les services externes ne sont
+pas connectés. Les autres applications historiques restent des sources ; leur
+logique métier n’est pas automatiquement fusionnée. Les palettes adaptent les
+couleurs de la base, elles ne remplacent pas son architecture d’interface.
