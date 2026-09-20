@@ -34,8 +34,9 @@ import {
 
 const STORAGE = 'neuroforge-skin-studio-v2';
 const clone = (value) => JSON.parse(JSON.stringify(value));
-const skinIds = ['nyx-core', 'neon-grid', 'obsidian-luxe', 'signal-light'];
+const skinIds = ['moteur-ux', 'nyx-core', 'neon-grid', 'obsidian-luxe', 'signal-light'];
 const skins = {
+  'moteur-ux': { name: 'Moteur UX', note: 'Sauge, crème et atelier éditorial', background: '#F3F4EF', surface: '#FAFBF7', text: '#24302C', muted: '#697268', accent: '#244D3A', signal: '#8AAD75', appearance: 'light', radius: 6 },
   'nyx-core': { name: 'NYX Core', note: 'Workbench sombre et précis', background: '#07070B', surface: '#16161E', text: '#F2F2F5', muted: '#8E8E93', accent: '#0A84FF', signal: '#64D2FF', appearance: 'dark', radius: 6 },
   'neon-grid': { name: 'Neon Grid', note: 'Signal nocturne et électrique', background: '#080B09', surface: '#141A17', text: '#F4FFE8', muted: '#90A08D', accent: '#B8FF32', signal: '#B65CFF', appearance: 'dark', radius: 2 },
   'obsidian-luxe': { name: 'Obsidian Luxe', note: 'Métal, contraste et calme', background: '#0B0A08', surface: '#191713', text: '#FFF9ED', muted: '#A69B87', accent: '#D8B46B', signal: '#FFF1C9', appearance: 'dark', radius: 12 },
@@ -57,13 +58,13 @@ function seedProject() {
   project.project.version = '0.1.0';
   project.packVersion = '0.1.0';
   project.theme = {
-    name: skins['nyx-core'].name,
-    appearance: skins['nyx-core'].appearance,
-    background: skins['nyx-core'].background,
-    surface: skins['nyx-core'].surface,
-    text: skins['nyx-core'].text,
-    muted: skins['nyx-core'].muted,
-    accent: skins['nyx-core'].accent,
+    name: skins['moteur-ux'].name,
+    appearance: skins['moteur-ux'].appearance,
+    background: skins['moteur-ux'].background,
+    surface: skins['moteur-ux'].surface,
+    text: skins['moteur-ux'].text,
+    muted: skins['moteur-ux'].muted,
+    accent: skins['moteur-ux'].accent,
     typography: { family: 'system', size: 13 },
     density: 'comfortable',
   };
@@ -83,7 +84,7 @@ function seedProject() {
 }
 
 function loadStored() {
-  const fallback = { project: seedProject(), target: 'notemistress', skinId: 'nyx-core', signal: skins['nyx-core'].signal, radius: skins['nyx-core'].radius };
+  const fallback = { project: seedProject(), target: 'notemistress', skinId: 'moteur-ux', signal: skins['moteur-ux'].signal, radius: skins['moteur-ux'].radius };
   if (typeof window === 'undefined') return fallback;
   try {
     const raw = window.localStorage.getItem(STORAGE);
@@ -118,9 +119,9 @@ export default function Home() {
   const [preview, setPreview] = useState('app');
   const [output, setOutput] = useState('pack');
   const [locale, setLocale] = useState('fr');
-  const [skinId, setSkinId] = useState('nyx-core');
-  const [signal, setSignal] = useState(skins['nyx-core'].signal);
-  const [radius, setRadius] = useState(skins['nyx-core'].radius);
+  const [skinId, setSkinId] = useState('moteur-ux');
+  const [signal, setSignal] = useState(skins['moteur-ux'].signal);
+  const [radius, setRadius] = useState(skins['moteur-ux'].radius);
   const [message, setMessage] = useState('');
   const [saved, setSaved] = useState(false);
   const importRef = useRef(null);
@@ -264,9 +265,9 @@ export default function Home() {
     const next = seedProject();
     setProject(next);
     setTarget('notemistress');
-    setSkinId('nyx-core');
-    setSignal(skins['nyx-core'].signal);
-    setRadius(skins['nyx-core'].radius);
+    setSkinId('moteur-ux');
+    setSignal(skins['moteur-ux'].signal);
+    setRadius(skins['moteur-ux'].radius);
     setLocale('fr');
     window.localStorage.removeItem(STORAGE);
     setMessage('Pack de départ restauré.');

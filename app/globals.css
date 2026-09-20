@@ -33,3 +33,45 @@
 .ux-workspace{padding:16px 18px 20px}.ux-workspace>header{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;max-width:1540px;margin:0 auto 12px}.ux-workspace>header>div:first-child{display:grid;gap:3px}.ux-workspace>header span{color:var(--cyan);font:650 9px var(--font-geist-mono);letter-spacing:.12em}.ux-workspace>header h1{margin:0;font-size:20px}.ux-workspace>header p{margin:0;color:var(--muted);font-size:10px}.ux-workspace>header>div:last-child{display:grid;grid-template-columns:auto auto;align-items:baseline;gap:2px 6px}.ux-workspace>header b{color:var(--cyan);font:650 15px var(--font-geist-mono)}.ux-workspace>header small{color:var(--muted);font-size:8px}.ux-workspace>iframe{display:block;width:100%;max-width:1540px;height:calc(100vh - 202px);min-height:680px;margin:auto;border:1px solid var(--border-2);border-radius:10px;background:#f3f4ef}
 @media(max-width:1220px){.studio-layout{grid-template-columns:340px 1fr}.studio-output{grid-column:1/-1;border-top:1px solid var(--border);border-left:0}.pack-map{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}.prompt-output{min-height:300px}}
 @media(max-width:760px){.studio-topbar{position:static;grid-template-columns:1fr auto;gap:10px;padding:10px 12px}.target-switcher{grid-column:1/-1;grid-row:2;justify-self:stretch;grid-template-columns:auto 1fr}.target-switcher label,.target-switcher select{width:100%}.top-actions .contract-state{display:none}.ghost-button{padding:8px;font-size:0}.workflow-nav{overflow:auto;padding:7px 10px}.workflow-nav button{flex:0 0 auto}.workflow-nav p{display:none}.studio-layout{display:block}.studio-controls{border-right:0;border-bottom:1px solid var(--border)}.studio-preview{padding:18px 12px}.preview-heading{align-items:flex-end}.preview-heading nav button{padding:7px;font-size:0}.app-shell{grid-template-columns:88px 1fr}.app-shell>nav{padding:12px 5px}.app-shell>nav>span{padding:7px 5px;font-size:7px}.app-content{padding:13px 9px}.app-content>header{align-items:flex-start}.app-content>header h3{font-size:14px}.metrics{grid-template-columns:1fr}.metrics article{grid-template-columns:1fr auto}.metrics article span{grid-column:1/-1}.engine-strip small{display:none}.studio-output{padding:18px 14px}.pack-map{display:block}.ux-workspace{padding:12px 8px}.ux-workspace>header{align-items:flex-start}.ux-workspace>header p,.ux-workspace>header>div:last-child{display:none}.ux-workspace>iframe{height:calc(100vh - 210px);min-height:620px}}
+
+/* Shell visuel repris du Moteur UX audité. Les skins exportés gardent leurs propres tokens. */
+:root{--bg:#f3f4ef;--panel:#fafbf7;--raised:#fff;--border:#d5dad1;--border-2:#c4d0bb;--text:#24302c;--muted:#697268;--blue:#244d3a;--cyan:#62705e;--good:#315d45;--bad:#a23f36}
+html{color-scheme:light;background:var(--bg)}
+body{background:var(--bg);color:var(--text)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #8aad75;outline-offset:2px}
+.studio-app{background:var(--bg)}
+.studio-topbar{min-height:78px;padding:0 28px;border-color:var(--border);background:rgba(250,251,247,.96);backdrop-filter:blur(16px)}
+.studio-mark{border-color:#244d3a;border-radius:6px;background:#244d3a;color:#fff;box-shadow:none}
+.studio-brand strong{color:var(--text)}
+.target-switcher>span,.panel-intro>span,.preview-heading>div>span,.output-heading>div>span,.ux-workspace>header span{color:#62705e}
+.target-switcher select,.ghost-button{border-color:#ccd3c6;border-radius:6px;background:#fff;color:var(--text)}
+.ghost-button:hover{border-color:#8aad75;background:#edf1e9}
+.contract-state{color:#566451}.contract-state i{background:#315d45;box-shadow:none}
+.workflow-nav{min-height:58px;padding:8px 24px;border-color:#cdd5c9;background:#fafbf7}
+.workflow-nav button{border-radius:6px;color:#647061}
+.workflow-nav button:hover{background:#edf1e9;color:#24302c}
+.workflow-nav button.active{border-color:#244d3a;background:#244d3a;color:#fff}
+.workflow-nav button>svg{color:currentColor}.workflow-nav button.active small{color:#dce7de}.workflow-nav p{color:#697268}
+.studio-controls,.studio-output{background:#fafbf7}.studio-preview{background:#f3f4ef}
+.panel-intro h1,.preview-heading h2,.output-heading h2,.ux-workspace>header h1{font-weight:600;letter-spacing:-.025em}
+.editor-tabs,.language-toggle,.output-tabs,.preview-heading nav{border-color:#cbd3c4;border-radius:6px;background:#f1f4ed}
+.editor-tabs button,.language-toggle button,.output-tabs button,.preview-heading nav button{color:#647061}
+.editor-tabs button:hover,.preview-heading nav button:hover{color:#24302c}
+.editor-tabs button.active,.language-toggle button.active,.output-tabs button.active,.preview-heading nav button.active{background:#e2e9dc;color:#244d3a;box-shadow:inset 0 0 0 1px #c4d0bb}
+.section-label span{border-color:#bbc9b5;border-radius:5px;color:#315d45;background:#f1f4ed}
+.skin-list button{border-color:#d5dad1;border-radius:7px;background:#fff;color:#24302c}
+.skin-list button:hover{border-color:#a9b7a3;background:#f6f8f2}.skin-list button.active{border-color:#8aad75;background:#e2e9dc}.skin-list svg{color:#244d3a}
+.token-grid input,.compact-fields select,.form-grid input,.full-field input,.full-field select,.full-field textarea{border-color:#ccd3c6;border-radius:5px;background:#fff;color:#24302c}
+.asset-preset{border-color:#244d3a;border-radius:6px;background:#244d3a;color:#fff}
+.asset-preset:hover,.primary-export:hover{background:#32654c;filter:none}
+.asset-card{border-color:#bbc9b5;border-radius:7px;background:#fff}.asset-card:hover{border-color:#8aad75;background:#f6f8f2}.asset-card>svg{color:#315d45}
+.icon-preview,.about-preview{border-color:#c7cec1;border-radius:8px;background:#fafbf7}
+.engine-strip{border-color:#cbd3c4;border-radius:7px;background:#fafbf7}.engine-strip>span>i{border-color:#bbc9b5;color:#315d45}.engine-strip>em{color:#98a194}
+.pack-card{border-color:#bbc9b5;border-radius:8px;background:#f1f4ed}.pack-icon{background:#e2e9dc;color:#244d3a}.pack-card>span{border-color:#8aad75;color:#315d45}
+.pack-map>span{border-color:#d8ddd3}.pack-map i{color:#24302c}
+.primary-export{border-color:#244d3a;border-radius:6px;background:#244d3a;box-shadow:none}
+.export-grid button,.import-row button{border-color:#ccd3c6;border-radius:5px;background:#fff;color:#24302c}.export-grid button:hover,.import-row button:hover{border-color:#8aad75;background:#edf1e9}
+.validation-card{border-left-color:#315d45;background:#edf3e9}.validation-card strong{color:#315d45}
+.prompt-output{border-color:#cbd3c4;border-radius:6px;background:#f1f4ed;color:#3d4943}.studio-status{color:#315d45}
+.ux-workspace>header b{color:#244d3a}.ux-workspace>iframe{border-color:#c7cec1;border-radius:8px;box-shadow:0 12px 32px rgba(36,77,58,.08)}
+@media(max-width:760px){.studio-topbar{padding:10px 14px}.workflow-nav{padding:7px 10px}}
