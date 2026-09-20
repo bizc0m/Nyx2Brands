@@ -31,8 +31,9 @@ import {codepenSkins,codepenReferences} from '../packages/neuroforge-core/codepe
 
 const STORAGE = 'neuroforge-skin-studio-v2';
 const clone = (value) => JSON.parse(JSON.stringify(value));
-const skinIds = ['moteur-ux', 'nyx-core', 'neon-grid', 'obsidian-luxe', 'signal-light', ...Object.keys(recoveredSkins),...Object.keys(codepenSkins)];
+const skinIds = ['nyx-blanc', 'moteur-ux', 'nyx-core', 'neon-grid', 'obsidian-luxe', 'signal-light', ...Object.keys(recoveredSkins),...Object.keys(codepenSkins)];
 const skins = {
+  'nyx-blanc': {name:'Nyx Blanc',note:'Interface blanche',background:'#FFFFFF',surface:'#FFFFFF',text:'#202124',muted:'#60646C',accent:'#245CDD',signal:'#245CDD',appearance:'light',radius:4},
   ...recoveredSkins,
   ...codepenSkins,
   'moteur-ux': { name: 'Moteur UX', note: 'Sauge, crème et atelier éditorial', background: '#F3F4EF', surface: '#FAFBF7', text: '#24302C', muted: '#697268', accent: '#244D3A', signal: '#8AAD75', appearance: 'light', radius: 6 },
@@ -57,13 +58,13 @@ function seedProject() {
   project.project.version = '0.1.0';
   project.packVersion = '0.1.0';
   project.theme = {
-    name: skins['nyx-core'].name,
-    appearance: skins['nyx-core'].appearance,
-    background: skins['nyx-core'].background,
-    surface: skins['nyx-core'].surface,
-    text: skins['nyx-core'].text,
-    muted: skins['nyx-core'].muted,
-    accent: skins['nyx-core'].accent,
+    name: skins['nyx-blanc'].name,
+    appearance: skins['nyx-blanc'].appearance,
+    background: skins['nyx-blanc'].background,
+    surface: skins['nyx-blanc'].surface,
+    text: skins['nyx-blanc'].text,
+    muted: skins['nyx-blanc'].muted,
+    accent: skins['nyx-blanc'].accent,
     typography: { family: 'system', size: 13 },
     density: 'comfortable',
   };
@@ -86,7 +87,7 @@ const defaultInterface = { family: INTERFACE_FAMILIES[0].id, variant: INTERFACE_
 const interfaceFor = (project) => project.ui || defaultInterface;
 
 function loadStored() {
-  const fallback = { project: seedProject(), target: 'future', skinId: 'nyx-core', signal: skins['nyx-core'].signal, radius: skins['nyx-core'].radius };
+  const fallback = { project: seedProject(), target: 'future', skinId: 'nyx-blanc', signal: skins['nyx-blanc'].signal, radius: skins['nyx-blanc'].radius };
   if (typeof window === 'undefined') return fallback;
   try {
     const raw = window.localStorage.getItem(STORAGE);
@@ -139,9 +140,9 @@ export default function Home() {
 
   const [output, setOutput] = useState('pack');
   const [locale, setLocale] = useState('fr');
-  const [skinId, setSkinId] = useState('nyx-core');
-  const [signal, setSignal] = useState(skins['nyx-core'].signal);
-  const [radius, setRadius] = useState(skins['nyx-core'].radius);
+  const [skinId, setSkinId] = useState('nyx-blanc');
+  const [signal, setSignal] = useState(skins['nyx-blanc'].signal);
+  const [radius, setRadius] = useState(skins['nyx-blanc'].radius);
   const [message, setMessage] = useState('');
   const [saved, setSaved] = useState(false);
   const importRef = useRef(null);
@@ -378,8 +379,8 @@ export default function Home() {
     setProject(next);
     setTarget('future');
     setSkinId('nyx-core');
-    setSignal(skins['nyx-core'].signal);
-    setRadius(skins['nyx-core'].radius);
+    setSignal(skins['nyx-blanc'].signal);
+    setRadius(skins['nyx-blanc'].radius);
     setLocale('fr');
     window.localStorage.removeItem(STORAGE);
     setMessage('Pack de départ restauré.');
