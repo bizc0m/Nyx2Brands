@@ -25,6 +25,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - name: Flatten GitHub Pages assets
+        run: cp -R dist/client/Nyx2Brands/_next dist/client/_next
+      - name: Disable Jekyll filtering
+        run: touch dist/client/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
