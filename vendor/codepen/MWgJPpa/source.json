@@ -1,0 +1,24 @@
+{
+  "id": "MWgJPpa",
+  "url": "https://codepen.io/themesberg/pen/MWgJPpa",
+  "author": "themesberg",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [
+      "//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+    ],
+    "scripts": [
+      "//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js",
+      "//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
+    ]
+  },
+  "sha256": {
+    "original.html": "86df6f426e94ba1b26fce34a259bf1bd9a1e13d03af0ef3ac543f50a024b379e",
+    "original.css": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "original.js": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}

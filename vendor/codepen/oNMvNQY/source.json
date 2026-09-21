@@ -1,0 +1,21 @@
+{
+  "id": "oNMvNQY",
+  "url": "https://codepen.io/koljal/pen/oNMvNQY",
+  "author": "koljal",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [],
+    "scripts": [
+      "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js"
+    ]
+  },
+  "sha256": {
+    "original.html": "4670e925f5d8113b856ae2b8a5609465543c926ed4053bb8dad1d9e71963b0c5",
+    "original.css": "eb28d79b6c2b6dcdd9df3753421eafa54b8bf3ed4285196a296981e8ed81db5f",
+    "original.js": "1053835dfb1b2a9503386c524b7738532aae0cf8f17a6168e7a7753c27853e71"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}

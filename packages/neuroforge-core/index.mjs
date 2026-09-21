@@ -49,12 +49,14 @@ export function validate(p) {
   if(!keys(p,['schema','packVersion','project','modules','defaultLocale','locales','translations','theme','ui','identity','integration'])) return {errors:['Configuration absente ou champs inconnus.'],warnings};
   if(p.integration!==undefined){
     const i=p.integration,ids=new Set(catalogue.flatMap(s=>s.features.map(f=>f.id)));
+    if(i?.dressing!==undefined&&!['nyx','glass-dashboard','noteplan-style-v2'].includes(i.dressing))errors.push('Habillage inconnu.');
+    if(i?.dressingSettings!==undefined&&(!keys(i.dressingSettings,['blur','palette'])||!Number.isFinite(i.dressingSettings.blur)||i.dressingSettings.blur<0||i.dressingSettings.blur>24||(i.dressingSettings.palette!==undefined&&typeof i.dressingSettings.palette!=='boolean')))errors.push('Réglages de verre invalides.');
     if(i?.nativeState!==undefined&&(!object(i.nativeState)||Object.keys(i.nativeState).length>30||Object.entries(i.nativeState).some(([k,v])=>k.length>160||typeof v!=='string'||v.length>3000000)||JSON.stringify(i.nativeState).length>5000000))errors.push('Espace Nyx invalide.');
     if(i?.composition!==undefined&&!COMPOSITIONS.some(c=>c.id===i.composition))errors.push('Composition inconnue.');
     if(i?.session!==undefined&&!validSession(i.session))errors.push('Session UX invalide.');
     if(i?.blocks!==undefined&&!validUXSelection(i.blocks,UX_BLOCKS))errors.push('Blocs UX invalides.');
     if(i?.references!==undefined&&!validUXSelection(i.references,REFERENCES))errors.push('Références invalides.');
-    if(!keys(i,['features','path','technology','notes','blocks','references','composition','session','nativeState'])||!Array.isArray(i.features)||i.features.length>200||i.features.some(id=>!ids.has(id))||new Set(i.features).size!==i.features.length||!text(i.path,1000)||!text(i.notes,8000)||!TECHNOLOGIES.includes(i.technology))errors.push('Intégration invalide : fonctions, chemin ou technologie.');
+    if(!keys(i,['features','path','technology','notes','blocks','references','composition','session','nativeState','dressing','dressingSettings'])||!Array.isArray(i.features)||i.features.length>200||i.features.some(id=>!ids.has(id))||new Set(i.features).size!==i.features.length||!text(i.path,1000)||!text(i.notes,8000)||!TECHNOLOGIES.includes(i.technology))errors.push('Intégration invalide : fonctions, chemin ou technologie.');
   }
   if(p.schema!==SCHEMA) errors.push('Version de contrat inconnue.');
   if(!semver(p.packVersion)) errors.push('Version de pack attendue : 1.0.0.');

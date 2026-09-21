@@ -1,0 +1,24 @@
+{
+  "id": "abGppOb",
+  "url": "https://codepen.io/lrrp/pen/abGppOb",
+  "author": "lrrp",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [
+      "css/style.css",
+      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    ],
+    "scripts": [
+      "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+    ]
+  },
+  "sha256": {
+    "original.html": "fcf44037b87e1658bc7e66c3ef4a008e7b62d420ff8dab3f0ca8fd7b59d156b3",
+    "original.css": "a320c5d96478bd0008273599e89be5560123e85702487f3b7f2c0815d5af2ebb",
+    "original.js": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}

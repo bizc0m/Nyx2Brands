@@ -1,0 +1,724 @@
+html {
+  color: #222;
+  font-size: 1em;
+  line-height: 1.4;
+  font-family: "Lato", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/*
+ * Remove text-shadow in selection highlight:
+ * https://twitter.com/miketaylr/status/12228805301
+ *
+ * Vendor-prefixed and regular ::selection selectors cannot be combined:
+ * https://stackoverflow.com/a/16982510/7133471
+ *
+ * Customize the background color to match your design.
+ */
+
+::-moz-selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}
+
+::selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}
+
+/*
+ * A better looking default horizontal rule
+ */
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+
+/*
+ * Remove the gap between audio, canvas, iframes,
+ * images, videos and the bottom of their containers:
+ * https://github.com/h5bp/html5-boilerplate/issues/440
+ */
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
+  vertical-align: middle;
+}
+
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea {
+  resize: vertical;
+}
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+/*
+ * Hide visually and from screen readers
+ */
+
+.hidden,
+[hidden] {
+  display: none !important;
+}
+
+/*
+ * Hide only visually, but have it available for screen readers:
+ * https://snook.ca/archives/html_and_css/hiding-content-for-accessibility
+ *
+ * 1. For long content, line feeds are not interpreted as spaces and small width
+ *    causes content to wrap 1 word per line:
+ *    https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
+ */
+
+.sr-only {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+  /* 1 */
+}
+
+/*
+ * Extends the .sr-only class to allow the element
+ * to be focusable when navigated to via the keyboard:
+ * https://www.drupal.org/node/897638
+ */
+
+.sr-only.focusable:active,
+.sr-only.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  white-space: inherit;
+  width: auto;
+}
+
+/*
+ * Hide visually and from screen readers, but maintain layout
+ */
+
+.invisible {
+  visibility: hidden;
+}
+
+/*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    `contenteditable` attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *    `:before` to contain the top-margins of child elements.
+ */
+
+.clearfix::before,
+.clearfix::after {
+  content: " ";
+  display: table;
+}
+
+.clearfix::after {
+  clear: both;
+}
+
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+  /* Style adjustments for viewports that meet the condition */
+}
+
+@media print,
+  (-webkit-min-device-pixel-ratio: 1.25),
+  (min-resolution: 1.25dppx),
+  (min-resolution: 120dpi) {
+  /* Style adjustments for high resolution devices */
+}
+
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid the additional HTTP request:
+   https://www.phpied.com/delay-loading-your-print-css/
+   ========================================================================== */
+
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: #fff !important;
+    color: #000 !important;
+    /* Black prints faster */
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]::after {
+    content: " (" attr(title) ")";
+  }
+
+  /*
+   * Don't show links that are fragment identifiers,
+   * or use the `javascript:` pseudo protocol
+   */
+  a[href^="#"]::after,
+  a[href^="javascript:"]::after {
+    content: "";
+  }
+
+  pre {
+    white-space: pre-wrap !important;
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  /*
+   * Printing Tables:
+   * https://web.archive.org/web/20180815150934/http://css-discuss.incutio.com/wiki/Printing_Tables
+   */
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}
+
+:root {
+  --border-color: rgba(113 119 144 / 25%);
+  --body-font: "Poppins", sans-serif;
+
+  --theme-color: #fff;
+  --theme-bg-color: rgba(16 18 27 / 40%);
+  --hover-menu-bg: rgba(12 15 25 / 30%);
+  --content-title-color: #999ba5;
+  --content-bg: rgb(146 151 179 / 13%);
+}
+
+.light-mode {
+  --theme-bg-color: rgb(255 255 255 / 31%);
+  --theme-color: #3c3a3a;
+  --border-color: rgb(255 255 255 / 35%);
+  --hover-menu-bg: rgba(255 255 255 / 35%);
+  --content-title-color: var(--theme-color);
+}
+
+$base-padding: 30px;
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 1rem;
+  width: 100%;
+  height: 100vh;
+  font-family: var(--body-font);
+
+  background-image: url("https://raw.githubusercontent.com/riccardoperra/glassmorphism-finance-ui/main/src/img/img2.jpg");
+  background-size: cover;
+  background-position: center;
+
+  &.light-mode {
+    &:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.72) 0%,
+        rgba(255, 255, 255, 0.45) 100%
+      );
+      backdrop-filter: saturate(3);
+    }
+  }
+}
+
+@mixin hoverable($bg-color) {
+  background-color: $bg-color;
+  &:hover {
+    background-color: var(--theme-bg-color);
+  }
+}
+
+.app {
+  $header-height: 54px;
+  $header-padding: $base-padding;
+  $app-max-width: 1250px;
+  $app-max-height: 860px;
+  margin: auto;
+  max-width: $app-max-width;
+  max-height: $app-max-height;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 500;
+  backdrop-filter: blur(50px);
+  color: var(--theme-color);
+  background-color: var(--theme-bg-color);
+  transition: all 350ms ease-in-out;
+
+  &-header {
+    display: flex;
+    align-items: center;
+    height: $header-height;
+    width: 100%;
+    padding: $header-padding;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-color);
+
+    .header-actions {
+      display: flex;
+    }
+  }
+
+  &-wrapper {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+  }
+
+  &-sidebar {
+    $sidebar-width: 240px;
+    $sidebar-menu-padding: 26px;
+
+    flex-basis: 240px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border-color);
+    overflow: auto;
+    flex-direction: column;
+    overflow: auto;
+
+    .side-menu-wrapper {
+      width: 100%;
+      padding: $sidebar-menu-padding;
+
+      .side-menu {
+        display: flex;
+        flex-direction: column;
+        white-space: nowrap;
+        font-size: 16px;
+        row-gap: 8px;
+        transition: all 300ms ease-in-out;
+
+        > a {
+          $link-padding: 10px;
+          $link-radius: 6px;
+
+          &.active {
+            background-color: var(--hover-menu-bg);
+          }
+
+          text-decoration: none;
+          color: var(--theme-color);
+          display: flex;
+          align-items: center;
+          font-weight: 400;
+          padding: $link-padding;
+          border-radius: $link-radius;
+          transition: all 300ms ease-in-out;
+
+          > i {
+            margin-right: 1rem;
+          }
+
+          &:hover {
+            background-color: var(--hover-menu-bg);
+          }
+        }
+      }
+    }
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    .main-header {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      height: $header-height;
+      flex-shrink: 0;
+
+      &-title {
+        text-decoration: none;
+        color: var(--theme-color);
+        padding: 0 $base-padding;
+      }
+    }
+
+    .content-wrapper {
+      $content-padding: 20px 40px;
+      display: flex;
+      flex-direction: column;
+      color: var(--theme-color);
+      padding: $content-padding;
+      overflow: auto;
+      height: 100%;
+      background-color: var(--theme-bg-color);
+
+      .profile-content {
+        // flex: 1;
+        display: flex;
+        align-items: center;
+        font-size: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+
+        .profile-message {
+          margin-left: 1rem;
+        }
+
+        .img-badge {
+          border-radius: 50rem;
+          height: 44px;
+          width: 44px;
+          overflow: hidden;
+
+          > img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+
+      .overview {
+        flex-direction: row;
+        column-gap: $base-padding;
+        row-gap: $base-padding;
+
+        .overview-card {
+          $overview-card-height: 140px;
+          display: flex;
+          flex-direction: column;
+          border-radius: 16px;
+          padding: $content-padding;
+          height: $overview-card-height;
+          flex: 0 1 33%;
+          justify-content: center;
+
+          h3 {
+            margin: 0;
+          }
+
+          .text-sm {
+            font-size: 1.5rem;
+          }
+
+          .text-lg {
+            font-size: 2rem;
+          }
+
+          .text-lg + .text-sm {
+            margin-left: 0.5rem;
+          }
+
+          .text-lg + .text-sm + .text-lg {
+            margin-left: 0.5rem;
+          }
+
+          background-image: url("../img/gplay.png"),
+            linear-gradient(
+              to right top,
+              #cf4af3,
+              #e73bd7,
+              #f631bc,
+              #fd31a2,
+              #ff3a8b,
+              #ff4b78,
+              #ff5e68,
+              #ff705c,
+              #ff8c51,
+              #ffaa49,
+              #ffc848,
+              #ffe652
+            );
+
+          &.insert-widget-card {
+            background-image: unset;
+            border: 1px solid var(--theme-bg-color);
+            align-items: center;
+            row-gap: 8px;
+            justify-content: center;
+            color: var(--content-title-color);
+            transition: all 350ms ease-in-out;
+            cursor: pointer;
+            @include hoverable(var(--content-bg));
+          }
+        }
+      }
+
+      .new-payment {
+        .badge-list {
+          --badge-size: 72px;
+          --font-size: 18px;
+
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          overflow: auto;
+          column-gap: 32px;
+
+          .badge {
+            font-size: var(--font-size);
+            width: var(--badge-size);
+            height: var(--badge-size);
+            line-height: var(--badge-size);
+            border-radius: 50em;
+            display: inline-block;
+            text-align: center;
+            transition: 0.3s;
+            cursor: pointer;
+
+            @include hoverable(var(--content-bg));
+          }
+        }
+      }
+
+      .recent-transactions {
+        ul.recent-transaction-list {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          height: 100%;
+          justify-content: space-around;
+          background-color: var(--content-bg);
+          padding-left: 0;
+          margin: 0;
+          border-radius: 16px;
+          border: 1px solid var(--theme-bg-color);
+          cursor: pointer;
+          overflow: hidden;
+
+          li {
+            list-style: none;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            width: 100%;
+            height: 100%;
+            transition: 0.3s;
+
+            &:hover {
+              background-color: var(--theme-bg-color);
+            }
+
+            + li {
+              border-top: 1px solid var(--border-color);
+            }
+          }
+
+          .payment-card {
+            flex: 1;
+            display: flex;
+            align-items: center;
+
+            .payment-badge {
+              border-radius: 50em;
+              width: 44px;
+              height: 44px;
+              line-height: 44px;
+              text-align: center;
+              background-color: var(--content-bg);
+            }
+
+            .payment-info {
+              display: flex;
+              flex-direction: column;
+              margin-left: 2rem;
+              flex: 20%;
+
+              .payment-type {
+                font-size: 0.75rem;
+                font-weight: normal;
+
+                .refunded {
+                  background-color: #1a9d5b;
+                  color: white;
+                  padding-left: 0.5rem;
+                  padding-right: 0.5rem;
+                  border-radius: 16px;
+                }
+              }
+            }
+
+            .payment-date {
+              flex: 25%;
+              display: flex;
+              flex-direction: column;
+              .payment-date-title {
+                font-size: 0.75rem;
+                font-weight: normal;
+              }
+            }
+
+            .payment-price {
+              flex: 10%;
+
+              .fa-angle-up {
+                color: #1a9d5b;
+              }
+              .fa-angle-down {
+                color: #ec232e;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.content-section {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+
+  .content-section-title {
+    color: var(--content-title-color);
+    margin-bottom: 14px;
+  }
+}
+
+.square-icon {
+  $icon-size: 32px;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $icon-size;
+  height: $icon-size;
+  font-style: normal;
+
+  &::before {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    border: 1px solid var(--border-color);
+    width: $icon-size;
+    height: $icon-size;
+    border-radius: 8px;
+  }
+}
+
+.theme-switcher {
+  display: flex;
+  font-weight: bold;
+  height: 24px;
+  align-items: center;
+  cursor: pointer;
+
+  .slider-content {
+    margin: 0 0.5rem;
+    border-radius: 32px;
+    width: 48px;
+    height: 100%;
+    border: 1px solid var(--theme-color);
+    display: flex;
+    padding: 2px;
+    align-items: center;
+    animation: all 250ms ease-in-out;
+
+    .slider-toggle-wrapper {
+      width: 46px;
+      height: 100%;
+      position: relative;
+      color: var(--theme-color);
+
+      .slider-toggle {
+        border-radius: 50em;
+        width: 18px;
+        height: 18px;
+        background-color: var(--theme-color);
+        position: absolute;
+        left: 0;
+        transition: all 150ms ease-out;
+
+        &.is-selected {
+          left: 100%;
+          transform: translateX(-100%);
+        }
+      }
+    }
+  }
+}

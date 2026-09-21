@@ -1,0 +1,32 @@
+body {
+  font-family: 'IBM Plex Mono', monospace;
+  background-color: #fafafa;
+  color: #0a0a0a;
+  line-height: 1.6;
+}
+.brutal-border {
+  border: 3px solid #0a0a0a;
+  box-shadow: 6px 6px 0 #0a0a0a;
+  transition: all 0.2s ease;
+}
+.brutal-border:hover {
+  box-shadow: 4px 4px 0 #0a0a0a;
+  transform: translate(2px, 2px);
+}
+.brutal-border:active {
+  box-shadow: 2px 2px 0 #0a0a0a;
+  transform: translate(4px, 4px);
+}
+h1, h2, h3, h4 {
+  font-family: 'Archivo Black', sans-serif;
+  letter-spacing: 1px;
+  font-weight: normal;
+}
+.component-section {
+  scroll-margin-top: 2rem;
+}
+/* Focus styles for accessibility */
+[tabindex]:focus, button:focus, input:focus {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+}

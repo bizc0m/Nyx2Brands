@@ -1,0 +1,21 @@
+{
+  "id": "emJgpOV",
+  "url": "https://codepen.io/N3tanyahPDX/pen/emJgpOV",
+  "author": "N3tanyahPDX",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [],
+    "scripts": [
+      "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js"
+    ]
+  },
+  "sha256": {
+    "original.html": "16bae76b88016de39e3c8317c0158d2a4430602edef3a3510c71da181bf059bc",
+    "original.css": "2644bae35d95bb9c269c06cbe1c7ef2707b165f0172f5adeac528f057bff7d0a",
+    "original.js": "1c0c2380509a5e633b4dd6d0e574e5378d961fa377592edd63d2da85081d16f6"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}

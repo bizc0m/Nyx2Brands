@@ -1,0 +1,24 @@
+{
+  "id": "OPPYgKy",
+  "url": "https://codepen.io/rustcode/pen/OPPYgKy",
+  "author": "rustcode",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [
+      "https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;700&display=swap"
+    ],
+    "scripts": [
+      "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js",
+      "https://cdn.tailwindcss.com"
+    ]
+  },
+  "sha256": {
+    "original.html": "64910ffeb50c70a0227f08625150469b3cbdbbf6788ddb51d20e1c3500998902",
+    "original.css": "bab885c503de01d3b1e56433390d717baafb56e3225459753ffdbd5899f9828d",
+    "original.js": "7af7080c7e8febf3422990f19587fd6da8eefa7ab950326ade915704e56fb994"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}

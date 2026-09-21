@@ -6,7 +6,7 @@ import {UX_BLOCKS,REFERENCES} from '../packages/neuroforge-core/ux-blocks.mjs';
 import {COMPOSITIONS} from '../packages/neuroforge-core/compositions.mjs';
 import NyxPreview from './nyx-preview.jsx';
 import NextImage from 'next/image';
-import { Check, Clipboard, Download, FileJson, RotateCcw, Sparkles, Upload, FileCode2 } from 'lucide-react';
+import { Check, Clipboard, Download, FileJson, RotateCcw, Upload, FileCode2 } from 'lucide-react';
 import {
   FUNCTION_CATALOGUE,
   TECHNOLOGIES,
@@ -33,7 +33,7 @@ const STORAGE = 'neuroforge-skin-studio-v2';
 const clone = (value) => JSON.parse(JSON.stringify(value));
 const skinIds = ['nyx-blanc', 'moteur-ux', 'nyx-core', 'neon-grid', 'obsidian-luxe', 'signal-light', ...Object.keys(recoveredSkins),...Object.keys(codepenSkins)];
 const skins = {
-  'nyx-blanc': {name:'Nyx Blanc',note:'Interface blanche',background:'#FFFFFF',surface:'#FFFFFF',text:'#202124',muted:'#60646C',accent:'#245CDD',signal:'#245CDD',appearance:'light',radius:4},
+  'nyx-blanc': {name:'Nyx Blanc',note:'Interface blanche compacte',background:'#FFFFFF',surface:'#FFFFFF',text:'#202124',muted:'#60646C',accent:'#245CDD',signal:'#245CDD',appearance:'light',radius:4,typography:{family:'system',size:12},density:'compact'},
   ...recoveredSkins,
   ...codepenSkins,
   'moteur-ux': { name: 'Moteur UX', note: 'Sauge, crème et atelier éditorial', background: '#F3F4EF', surface: '#FAFBF7', text: '#24302C', muted: '#697268', accent: '#244D3A', signal: '#8AAD75', appearance: 'light', radius: 6 },
@@ -51,6 +51,8 @@ const labels = {
   fr: { description: 'Description', purpose: 'À quoi sert cette application ?', audience: 'Pour qui ?', limits: 'Limites connues' },
   en: { description: 'Description', purpose: 'What is this application for?', audience: 'Who is it for?', limits: 'Known limitations' },
 };
+const FUNCTION_SOURCES = FUNCTION_CATALOGUE.filter(source => source.id !== 'noteplan-style-v2');
+const DRESSING_NAMES = {nyx:'Nyx intégré','glass-dashboard':'Glass Dashboard','noteplan-style-v2':'NotePlan Style Simulator'};
 
 function seedProject() {
   const project = newProject('my-app');
@@ -65,8 +67,8 @@ function seedProject() {
     text: skins['nyx-blanc'].text,
     muted: skins['nyx-blanc'].muted,
     accent: skins['nyx-blanc'].accent,
-    typography: { family: 'system', size: 13 },
-    density: 'comfortable',
+    typography: { family: 'system', size: 12 },
+    density: 'compact',
   };
   project.translations.fr = {
     description: 'Un espace de notes concentré, personnel et portable.',
@@ -130,6 +132,8 @@ export default function Home() {
   const [workspace, setWorkspace] = useState('studio');
   const [step, setStep] = useState('design');
   const [settingsOpen,setSettingsOpen]=useState(false);
+  const [previousDressing,setPreviousDressing]=useState(null);
+  function chooseDressing(value){setPreviousDressing(project.integration?.dressing||'nyx');updateIntegration('dressing',value);setPreview('app');}
   const [catalogue, setCatalogue] = useState({sources: [], thumbnails: {}});
   const [, setCatalogueError] = useState('');
   const [, setPreviewMode] = useState('original');
@@ -139,6 +143,7 @@ export default function Home() {
   useEffect(()=>{if(!settingsOpen)return;const close=e=>{if(e.key==='Escape'){setSettingsOpen(false);setPreview('app');}};window.addEventListener('keydown',close);return()=>window.removeEventListener('keydown',close);},[settingsOpen]);
 
   const [output, setOutput] = useState('pack');
+  const [packText,setPackText]=useState('');
   const [locale, setLocale] = useState('fr');
   const [skinId, setSkinId] = useState('nyx-blanc');
   const [signal, setSignal] = useState(skins['nyx-blanc'].signal);
@@ -213,6 +218,7 @@ export default function Home() {
   function syncCatalogue() {
     catalogueRef.current?.contentWindow?.postMessage({type: 'nyx-functions-set', features: integration.features}, window.location.origin);
   }
+  function toggleNavigation(){document.querySelector('iframe[title="Nyx intégré — application unifiée"]')?.contentWindow?.postMessage({type:'nyx-layout',action:'sidebar'},window.location.origin);}
   function updateIntegration(key, value) {
     update(draft => { draft.integration = {...(draft.integration || emptyIntegration()), [key]: value}; });
   }
@@ -259,6 +265,7 @@ export default function Home() {
     setSignal(skin.signal);
     setRadius(skin.radius);
     update((draft) => {
+      draft.integration={...(draft.integration||emptyIntegration()),dressingSettings:{blur:16,...draft.integration?.dressingSettings,palette:true}};
       const baseTheme={...draft.theme};delete baseTheme.visual;delete baseTheme.source;
       draft.theme = {
         ...baseTheme,
@@ -289,6 +296,7 @@ export default function Home() {
     setProject(current=>{if(JSON.stringify(current.integration?.nativeState)===JSON.stringify(nativeState))return current;try{const saved=JSON.parse(localStorage.getItem(STORAGE)||'null');if(saved?.project?.project?.id===current.project.id){saved.project.integration={...(saved.project.integration||emptyIntegration()),nativeState};localStorage.setItem(STORAGE,JSON.stringify(saved));}}catch{}return {...current,integration:{...(current.integration||emptyIntegration()),nativeState}};});
   }
   const activeSource = catalogue.sources.find(source => source.id === selectedVariant[0]);
+  const themePreviewSource = integration.dressing === 'noteplan-style-v2' ? catalogue.sources.find(source => source.id === 'noteplan-style-v2') : null;
   useEffect(() => {
     const controller = new AbortController();
     fetch('./moteur-ux.html', {signal: controller.signal}).then(response => {
@@ -322,42 +330,26 @@ export default function Home() {
     event.target.value = '';
   }
 
-  async function useNeuroForgeAssets() {
-    try {
-      const values = await Promise.all(['logo', 'icon'].map(async (name) => {
-        const response = await fetch(`./neuroforge/${name}.png`);
-        if (!response.ok) throw Error('Ressource NeuroForge introuvable.');
-        const blob = await response.blob();
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(blob);
-        });
-      }));
-      const next = clone(project);
-      next.identity.logo = values[0];
-      next.identity.icon = values[1];
-      await decodeImages(parseProject(JSON.stringify(next)));
-      setProject(next);
-      setMessage('Logo et icône NeuroForge chargés.');
-    } catch (error) {
-      setMessage(error.message);
-    }
+  function clearIdentityAssets() {
+    update((draft) => {
+      draft.identity.logo = '';
+      draft.identity.icon = '';
+    });
+    setMessage('Logo et icône retirés du pack.');
   }
 
+  async function importPackText(text) {
+    if(text.length>12000000)throw Error('12 Mo maximum.');
+    const incoming=await decodeImages(parseProject(text));
+    setProject({...incoming,ui:{family:'integrated-family',variant:'integrated'}});
+    setNativeRevision(v=>v+1);setPreview('app');setSaved(false);setLocale(incoming.defaultLocale);setMessage('Pack importé et validé.');
+  }
   async function importPack(event) {
     const file = event.target.files?.[0];
     if (!file) return;
     try {
       if (file.size > 12000000) throw Error('12 Mo maximum.');
-      const incoming = await decodeImages(parseProject(await file.text()));
-      setProject({...incoming,ui:{family:'integrated-family',variant:'integrated'}});
-      setNativeRevision(v=>v+1);
-      setPreview('app');
-      setSaved(false);
-      setLocale(incoming.defaultLocale);
-      setMessage('Pack importé et validé.');
+      await importPackText(await file.text());
     } catch (error) {
       setMessage(`Import refusé : ${error.message}`);
     }
@@ -403,14 +395,14 @@ export default function Home() {
   }
 
   const steps = [['design','Design & skin'],['blocks','Blocs & références'],['functions','Fonctions'],['identity','Identité'],['export','Intégration']];
-  return <main className={'atelier nyx-app '+(settingsOpen?'settings-open':'')} style={{'--bg':project.theme.background,'--panel':project.theme.surface,'--text':project.theme.text,'--muted':project.theme.muted,'--accent':project.theme.accent,'--line':'color-mix(in srgb, '+project.theme.text+' 18%, '+project.theme.surface+')','--soft':'color-mix(in srgb, '+project.theme.accent+' 10%, '+project.theme.surface+')'}}>
+  return <main className={'atelier nyx-app '+(settingsOpen?'settings-open':'')}>
     <header className="nyx-appbar">
-      <div className="nyx-app-title"><span className="nyx-wordmark">{project.identity.icon?<NextImage src={project.identity.icon} width={26} height={26} unoptimized alt="Icône"/>:"Nyx"}</span><span className="app-divider"/><strong>{project.project.name}</strong><small>Intégré</small></div>
+      <div className="nyx-app-title"><strong>{project.project.name}</strong></div>
       <div className="nyx-app-actions">
-        <select className="quick-theme" aria-label="Thème de l’interface" value={Object.keys(availableSkins).find(id=>availableSkins[id].name===project.theme.name)||''} onChange={e=>chooseSkin(e.target.value)}><option value="" disabled>Personnalisé</option>{Object.entries(availableSkins).map(([id,skin])=><option key={id} value={id}>{skin.name}</option>)}</select>
-        <button onClick={()=>{setPreview('codepen');setSettingsOpen(false);setWorkspace('studio');}}>Design original</button>
+        <label className="quick-control"><span>Themes</span><select className="quick-theme" aria-label="Themes" value={integration.dressing||'nyx'} onChange={e=>chooseDressing(e.target.value)}><option value="nyx">Nyx intégré</option><option value="glass-dashboard">Glass Dashboard</option><option value="noteplan-style-v2">NotePlan Style Simulator</option></select></label>
+        <div className="quick-control"><span>Skin</span><details className="skin-popover"><summary aria-label="Visualiser et sélectionner un skin"><i className="quick-skin-preview" aria-hidden="true">{['background','surface','text','accent'].map(key=><b key={key} style={{background:project.theme[key]}}/>)}</i><strong>{project.theme.name}</strong></summary><div className="skin-popover-grid">{Object.entries(availableSkins).map(([id,skin])=><button key={id} aria-label={`${skin.name} · ${skin.density==='compact'?'compact':'standard'}`} aria-pressed={project.theme.name===skin.name} onClick={event=>{chooseSkin(id);event.currentTarget.closest('details')?.removeAttribute('open');}}><span className="color-samples">{['background','surface','text','accent'].map(key=><i key={key} style={{background:skin[key]}}/>)}</span><strong>{skin.name}</strong><small>{skin.density==='compact'?'Compact':'Standard'}</small></button>)}</div></details></div>
         <button className="edit-app" aria-expanded={settingsOpen&&step==='identity'} onClick={()=>{setStep('identity');setSettingsOpen(true);setWorkspace('studio');setPreview('app');}}>Éditer l’app</button>
-        <button aria-expanded={settingsOpen} aria-controls="theme-choices" onClick={()=>{setSettingsOpen(v=>!v);setWorkspace('studio');}}>Personnaliser</button>
+        <button aria-expanded={settingsOpen&&step==='design'} aria-controls="theme-choices" onClick={()=>{const closing=settingsOpen&&step==='design';setStep('design');setPreview('app');setWorkspace('studio');setSettingsOpen(!closing);}}>Personnaliser</button>
         <button onClick={()=>{setStep('export');setSettingsOpen(true);setWorkspace('studio');}}>Exporter</button>
         <button className="save-project" onClick={save} aria-label="Enregistrer le projet"><Check size={15}/><span>{saved?'Enregistré':'Enregistrer'}</span></button>
         <input ref={importRef} hidden type="file" accept="application/json,.json" onChange={importPack}/>
@@ -420,16 +412,16 @@ export default function Home() {
     {workspace === 'catalogue' ? <section className="legacy-composer"><iframe ref={catalogueRef} onLoad={syncCatalogue} src="./moteur-ux.html" title="Composeur avancé Moteur UX" /></section> : <div className={'atelier-workbench '+(step === 'design' ? 'design-layout' : step === 'export' ? 'export-layout' : '')}>
       <section id="theme-choices" className="selection-panel" aria-label="Réglages du projet" hidden={!settingsOpen}>
         <div className="settings-heading"><div><small>Modifications visibles en direct</small><h2>{step==='identity'?'Éditer l’application':'Personnaliser Nyx'}</h2></div><button aria-label="Fermer les réglages" onClick={()=>{setSettingsOpen(false);setPreview('app');}}>×</button></div>
-        <nav className="settings-tabs" aria-label="Réglages">{steps.map(([id,label])=><button key={id} aria-pressed={step===id} onClick={()=>setStep(id)}>{label}</button>)}</nav>
+        <nav className="settings-tabs" aria-label="Réglages">{steps.map(([id,label])=><button key={id} aria-pressed={step===id} onClick={()=>{setStep(id);setPreview('app');setWorkspace('studio');}}>{label}</button>)}</nav>
         {step==='identity' && <div className="identity-views"><button onClick={()=>setPreview('app')}>Application</button><button onClick={()=>setPreview('icon')}>Logo & icône</button><button onClick={()=>setPreview('about')}>About</button></div>}<div className="settings-utilities"><button onClick={()=>importRef.current?.click()}>Importer un pack</button><button onClick={()=>setWorkspace('catalogue')}>Sources & composeur ↗</button></div>
       {step === 'blocks' && <UXWorkshop embedded project={project} onSession={receiveSession} onApply={()=>{setStep('design');setMessage('Blocs appliqués dans la Blade Bibliothèque de Nyx intégré.');}} onChange={next=>update(draft=>{draft.integration=next;})}/>}
       {step === 'design' && <>
 
-        <section className="original-design-card"><span>01 · CodePen original</span><h2>Glass Dashboard</h2><p>Le design de gestok : mise en page, verre translucide, vidéo, typographie et interactions d’origine. Contenu de démonstration du Pen.</p><button onClick={()=>{setPreview('codepen');setSettingsOpen(false);}}>Prévisualiser le design original</button><a href="https://codepen.io/gestok/pen/YzLBVOp" target="_blank" rel="noreferrer">Source · gestok ↗</a></section>
+        <section className="original-design-card"><span>Theme de l’application</span><h2>{DRESSING_NAMES[integration.dressing||'nyx']}</h2><label>Structure et surfaces<select aria-label="Habillage dans les réglages" value={integration.dressing||'nyx'} onChange={e=>chooseDressing(e.target.value)}><option value="nyx">Nyx intégré · base</option><option value="glass-dashboard">Glass Dashboard · gestok</option><option value="noteplan-style-v2">NotePlan Style Simulator</option></select></label><p>Vos documents, onglets et fonctions restent ouverts. Le theme change la présentation de l’application sans remplacer son moteur.</p>{integration.dressing==='glass-dashboard'&&<label>Flou du verre · {integration.dressingSettings?.blur??16} px<input aria-label="Flou du verre" type="range" min="0" max="24" value={integration.dressingSettings?.blur??16} onChange={e=>updateIntegration('dressingSettings',{...integration.dressingSettings,blur:Number(e.target.value)})}/></label>}{integration.dressing==='glass-dashboard'&&<button onClick={()=>updateIntegration('dressingSettings',{blur:16,palette:false})}>Couleurs originales de Glass</button>}<h3>Disposition</h3><button onClick={toggleNavigation}>Afficher / masquer la navigation</button><p>Les commandes de la barre Nyx replient la navigation. Les commandes ↔ et ↕ de chaque panneau Documents divisent l’espace ; ses séparateurs se redimensionnent directement.</p><button disabled={previousDressing===null} onClick={()=>{updateIntegration('dressing',previousDressing);setPreviousDressing(null);}}>Annuler le changement de theme</button>{integration.dressing==='glass-dashboard'&&<details><summary>Comparer avec la référence originale</summary><p>Référence de gestok, avec données de démonstration.</p><button onClick={()=>{setPreview('codepen');setSettingsOpen(false);}}>Voir la référence</button><a href="https://codepen.io/gestok/pen/YzLBVOp" target="_blank" rel="noreferrer">Source et attribution ↗</a></details>}</section>
         <div className="palette-heading"><h2>Skins · palettes de couleurs</h2><small>Indépendante du design</small></div>
         <label className="search-field"><span>Rechercher un skin</span><input type="search" value={skinSearch} onChange={event=>setSkinSearch(event.target.value)} placeholder="Graphite, Crimson, mes skins…"/></label>
         <div className="skin-library">{['NYX Studio','Nyx-Ux','Dashboard original','NeuroForge','CodePen · adaptations','Mes skins'].map(group=>{const entries=Object.entries(availableSkins).filter(([,skin])=>(skin.group||'NYX Studio')===group && `${skin.name} ${group}`.toLowerCase().includes(skinSearch.toLowerCase()));return entries.length ? <section key={group}><h3>{group} <small>{entries.length}</small></h3><div className="palette-gallery">{entries.map(([id,skin])=><button key={id} aria-pressed={project.theme.name===skin.name} onClick={()=>{chooseSkin(id);setPreviewMode('skin');}} className={project.theme.name===skin.name?'selected':''}><span className="color-samples">{['background','surface','text','accent'].map(key=><i key={key} style={{background:skin[key]}}/>)}</span><strong>{skin.name}</strong><small>{skin.appearance==='dark'?'Sombre':'Clair'}</small></button>)}</div></section>:null;})}</div>
-        <div className="skin-source-info"><p>CodePen : 20 adaptations locales avec leurs sources. Les styles sont adaptés au moteur ; les applications originales ne sont pas importées.</p>{project.theme.source && <a href={project.theme.source.url} target="_blank" rel="noreferrer">Référence : {project.theme.source.author} ↗</a>}<details><summary>Les 20 références et leur statut</summary>{codepenReferences.map(r=><p key={r.id}><a href={r.url} target="_blank" rel="noreferrer">{r.name} · {r.author} ↗</a> — {r.status==='adapted'?'Adaptation disponible':'Source inaccessible · non intégré'}</p>)}</details></div>
+        <div className="skin-source-info"><p>CodePen : 20 références conservées. Les palettes ci-dessus ne sont pas leurs designs complets. Glass Dashboard et NotePlan Style Simulator sont disponibles dans Themes.</p>{project.theme.source && <a href={project.theme.source.url} target="_blank" rel="noreferrer">Référence : {project.theme.source.author} ↗</a>}<details><summary>Les 20 références et leur statut</summary>{codepenReferences.map(r=><p key={r.id}><a href={r.url} target="_blank" rel="noreferrer">{r.name} · {r.author} ↗</a> — {r.status==='adapted'?'Palette inspirée de la référence':'Source inaccessible · non intégré'}</p>)}</details></div>
         {libraryError && <p role="alert">{libraryError}</p>}
         <section className="skin-generator" aria-label="Créer un skin"><h3>Créer mon skin</h3><p>Générez une palette ou enregistrez vos réglages actuels.</p><label className="full-field">Nom du skin<input value={skinName} maxLength={64} onChange={event=>setSkinName(event.target.value)}/></label><div className="form-grid"><label>Teinte · {skinHue}°<input aria-label="Teinte du skin" type="range" min="0" max="360" value={skinHue} onChange={event=>setSkinHue(Number(event.target.value))}/></label><label>Mode<select value={skinMode} onChange={event=>setSkinMode(event.target.value)}><option value="dark">Sombre</option><option value="light">Clair</option></select></label></div><div className="skin-actions"><button onClick={createSkin}>Générer et prévisualiser</button><button onClick={savePersonalSkin}>Enregistrer dans Mes skins</button><button onClick={()=>exportFile('pack')}>Exporter le pack du skin</button></div><p>Les couleurs secondaires sont ajustées si nécessaire pour rester lisibles. Importer un pack, puis l’enregistrer ici, ajoute aussi son skin à votre bibliothèque.</p></section>
         <details className="advanced-settings"><summary>Personnaliser couleurs, police et densité</summary><div className="token-grid">{[['background','Fond'],['surface','Surface'],['text','Texte'],['muted','Secondaire'],['accent','Accent']].map(([key,label]) => <label key={key}>{label}<div><input aria-label={label+' couleur'} type="color" value={project.theme[key]} onChange={event => update(draft=>{draft.theme[key]=event.target.value;})}/><input aria-label={label+' code'} value={project.theme[key]} onChange={event => update(draft=>{draft.theme[key]=event.target.value;})}/></div></label>)}</div><div className="form-grid"><label>Police<select value={project.theme.typography.family} onChange={event=>update(draft=>{draft.theme.typography.family=event.target.value;})}><option value="system">Système</option><option value="monospace">Monospace</option></select></label><label>Densité<select value={project.theme.density} onChange={event=>update(draft=>{draft.theme.density=event.target.value;})}><option value="comfortable">Confortable</option><option value="compact">Compacte</option></select></label></div></details>
@@ -437,15 +429,15 @@ export default function Home() {
       {step === 'functions' && <>
         <div className="panel-title"><h2>Bibliothèque de fonctions</h2><span>{integration.features.length} sélectionnées</span></div>
         <label className="search-field"><span>Rechercher une fonction</span><input type="search" value={featureSearch} onChange={event=>setFeatureSearch(event.target.value)} placeholder="Importer, onglets, recherche…" /></label>
-        <div className="function-library">{FUNCTION_CATALOGUE.map(source => {const visible = source.features.filter(f=>`${source.title} ${f.name}`.toLowerCase().includes(featureSearch.toLowerCase()));const count=source.features.filter(f=>integration.features.includes(f.id)).length;return visible.length ? <details key={source.id + (featureSearch ? '-search' : '')} open={featureSearch ? true : undefined} className={count ? 'has-selection' : ''}><summary><span>{source.title}</span><b>{count ? count+' / ' : ''}{source.features.length}</b></summary><div>{visible.map(f=><label className="function-choice" key={f.id}><input type="checkbox" checked={integration.features.includes(f.id)} onChange={event=>toggleFunction(f.id,event.target.checked)}/><span>{f.name}</span></label>)}<button className="source-link" onClick={()=>{setWorkspace('catalogue');}}>Voir ce design ↗</button>{source.limitations && <p className="source-limit">{source.limitations}</p>}</div></details> : null;})}</div>
-        {!FUNCTION_CATALOGUE.some(source => source.features.some(f=>`${source.title} ${f.name}`.toLowerCase().includes(featureSearch.toLowerCase()))) && <p className="empty-message">Aucune fonction trouvée.</p>}
+        <div className="function-library">{FUNCTION_SOURCES.map(source => {const visible = source.features.filter(f=>`${source.title} ${f.name}`.toLowerCase().includes(featureSearch.toLowerCase()));const count=source.features.filter(f=>integration.features.includes(f.id)).length;return visible.length ? <details key={source.id + (featureSearch ? '-search' : '')} open={featureSearch ? true : undefined} className={count ? 'has-selection' : ''}><summary><span>{source.title}</span><b>{count ? count+' / ' : ''}{source.features.length}</b></summary><div>{visible.map(f=><label className="function-choice" key={f.id}><input type="checkbox" checked={integration.features.includes(f.id)} onChange={event=>toggleFunction(f.id,event.target.checked)}/><span>{f.name}</span></label>)}<button className="source-link" onClick={()=>{setWorkspace('catalogue');}}>Voir ce design ↗</button>{source.limitations && <p className="source-limit">{source.limitations}</p>}</div></details> : null;})}</div>
+        {!FUNCTION_SOURCES.some(source => source.features.some(f=>`${source.title} ${f.name}`.toLowerCase().includes(featureSearch.toLowerCase()))) && <p className="empty-message">Aucune fonction trouvée.</p>}
       </>}
         {step === 'identity' && <section className="editor-section"><label className="full-field">Application cible<select value={target} onChange={event => chooseTarget(event.target.value)}>{Object.entries(targets).map(([id,item])=><option key={id} value={id}>{item.label}</option>)}</select></label>
           <div className="section-label"><span>01</span><b>Application</b></div>
           <div className="form-grid"><label>Nom<input value={project.project.name} onChange={(event) => update((draft) => { draft.project.name = event.target.value; })} /></label><label>Identifiant<input value={project.project.id} onChange={(event) => update((draft) => { draft.project.id = event.target.value; })} /></label><label>Version<input value={project.project.version} onChange={(event) => update((draft) => { draft.project.version = event.target.value; })} /></label><label>Version pack<input value={project.packVersion} onChange={(event) => update((draft) => { draft.packVersion = event.target.value; })} /></label></div>
           <div className="section-label"><span>02</span><b>Ressources du pack</b></div>
-          <button className="asset-preset" onClick={useNeuroForgeAssets}><Sparkles />Utiliser l’identité NeuroForge</button>
           <div className="asset-grid">{['logo', 'icon'].map((kind) => <label className="asset-card" key={kind}>{project.identity[kind] ? <NextImage src={project.identity[kind]} width={52} height={52} unoptimized alt={kind === 'logo' ? 'Logo' : 'Icône'} /> : <Upload />}<strong>{kind === 'logo' ? 'Logo' : 'Icône app'}</strong><small>PNG · 4 Mio max.</small><input type="file" accept="image/png" onChange={(event) => image(event, kind)} /></label>)}</div>
+          {(project.identity.logo || project.identity.icon) && <button className="asset-preset" onClick={clearIdentityAssets}>Retirer le logo et l’icône</button>}
           <label className="full-field">Signature<input value={project.identity.signature} onChange={(event) => update((draft) => { draft.identity.signature = event.target.value; })} /></label>
           <div className="form-grid"><label>Dépôt GitHub<input placeholder="https://github.com/..." value={project.project.repository} onChange={(event) => update((draft) => { draft.project.repository = event.target.value; })} /></label><label>Licence<input placeholder="MIT" value={project.project.license} onChange={(event) => update((draft) => { draft.project.license = event.target.value; })} /></label></div>
         </section>}
@@ -471,7 +463,7 @@ export default function Home() {
           <div className="pack-card"><div className="pack-icon"><FileJson /></div><div><strong>{project.project.id}.neuroforge.json</strong><span>Contrat {project.schema} · v{project.packVersion}</span></div><span className={validation.errors.length ? 'bad' : ''}>{validation.errors.length ? 'À corriger' : 'Prêt'}</span></div>
           <div className="pack-map"><span><b>THÈME</b><i>{project.theme.name}</i></span><span><b>INTERFACE</b><i>{selectedFamily.name} · {selectedVariant[1]}</i></span><span><b>IDENTITÉ</b><i>{project.identity.logo || project.identity.icon ? 'ressources jointes' : 'à compléter'}</i></span><span><b>LANGUES</b><i>FR + EN · repli {project.defaultLocale.toUpperCase()}</i></span><span><b>ABOUT</b><i>généré depuis le pack</i></span><span><b>CIBLE</b><i>{targets[target].label}</i></span></div>
           <button className="primary-export" disabled={validation.errors.length > 0} onClick={() => exportFile('pack')}><Download />Exporter le pack commun</button>
-          <div className="export-grid"><button onClick={() => exportFile('css')}><FileCode2 />CSS</button><button onClick={() => exportFile('about')}><FileCode2 />About</button><button onClick={() => exportFile('readme')}><FileCode2 />README</button><button onClick={() => exportFile('native')}><Download />NoteMistress</button></div>
+          <details className="pack-transfer"><summary>Transférer le pack par texte JSON</summary><p>Alternative au téléchargement : préparez le pack, copiez son texte et importez-le dans un autre espace.</p><button onClick={()=>setPackText(JSON.stringify(project,null,2))}>Préparer le JSON du pack</button><label>Pack JSON<textarea aria-label="Pack JSON" value={packText} onChange={e=>setPackText(e.target.value)} spellCheck={false}/></label><button disabled={!packText} onClick={async()=>{try{await importPackText(packText);}catch(error){setMessage('Import refusé : '+error.message);}}}>Importer ce JSON</button></details><div className="export-grid"><button onClick={() => exportFile('css')}><FileCode2 />CSS</button><button onClick={() => exportFile('about')}><FileCode2 />About</button><button onClick={() => exportFile('readme')}><FileCode2 />README</button><button onClick={() => exportFile('native')}><Download />NoteMistress</button></div>
           <div className="import-row"><button onClick={() => importRef.current?.click()}><Upload />Importer un pack</button><button onClick={reset}><RotateCcw />Réinitialiser</button></div>
         </> : <>
           <textarea aria-label="Instructions finales d’intégration" className="prompt-output" readOnly value={prompt} />
@@ -483,8 +475,8 @@ export default function Home() {
 </div>}
       </section>
       <aside id="live-preview" className="result-panel" aria-label="Aperçu et sélection">
-        <div className="preview-toolbar"><div><span>APPLICATION ACTIVE</span><h2>Nyx intégré</h2></div><nav aria-label="Aperçu"><button aria-pressed={preview==='app'} onClick={()=>setPreview('app')}>Application</button><button aria-pressed={preview==='icon'} onClick={()=>setPreview('icon')}>Identité</button><button aria-pressed={preview==='about'} onClick={()=>setPreview('about')}>About</button></nav></div>
-        <div hidden={preview!=='app'}>{projectLoaded && <NyxPreview key={nativeRevision} project={project} skins={availableSkins} onTheme={chooseSkin} onSession={receiveSession} onNativeState={receiveNativeState}/>}<p className="preview-caption">Base existante Nyx intégré. Les thèmes s’appliquent au shell, à Documents et à Registry. Les nouveaux blocs sont dans la Blade Bibliothèque.</p></div>
+        <div className="preview-toolbar"><div><span>THEME ACTIF</span><h2>{DRESSING_NAMES[integration.dressing||'nyx']}</h2></div><nav aria-label="Aperçu"><button aria-pressed={preview==='app'} onClick={()=>setPreview('app')}>Application</button><button aria-pressed={preview==='icon'} onClick={()=>setPreview('icon')}>Identité</button><button aria-pressed={preview==='about'} onClick={()=>setPreview('about')}>About</button></nav></div>
+        <div hidden={preview!=='app'}>{projectLoaded && (integration.dressing==='noteplan-style-v2' ? (themePreviewSource ? <iframe className="design-preview nyx-unified-preview" title="NotePlan Style Simulator — aperçu du theme" srcDoc={themePreviewSource.html} sandbox="allow-scripts allow-forms allow-modals"/> : <p>{catalogueError||'Chargement de NotePlan Style Simulator…'}</p>) : <NyxPreview key={nativeRevision} project={project} skins={availableSkins} onTheme={chooseSkin} onSession={receiveSession} onNativeState={receiveNativeState}/>)}<p className="preview-caption">{integration.dressing==='noteplan-style-v2'?'Simulateur NotePlan complet dans la preview du Theme. L’interface globale Nyx UX reste inchangée.':'Base existante Nyx intégré. Les thèmes s’appliquent au shell, à Documents et à Registry. Les nouveaux blocs sont dans la Blade Bibliothèque.'}</p></div>
         {preview==='codepen' && <section className="original-design-view"><header><div><strong>Glass Dashboard</strong><small>Original de gestok · contenu démo</small></div><button onClick={()=>setPreview('app')}>Retour à mon application</button><a href="/codepen/YzLBVOp/index.html" target="_blank" rel="noreferrer">Plein écran ↗</a></header><iframe title="Glass Dashboard — design original CodePen" src="/codepen/YzLBVOp/index.html" sandbox="allow-scripts" allow="autoplay"/><footer>HTML, CSS et interactions d’origine. Les documents Nyx restent conservés dans votre application.</footer></section>}
         {preview === 'icon' && <div className="identity-preview" style={{background:project.theme.background,color:project.theme.text}}><div>{['logo','icon'].map(kind=><figure key={kind}>{project.identity[kind] ? <NextImage src={project.identity[kind]} width={112} height={112} unoptimized alt={kind === 'logo' ? 'Logo' : 'Icône'}/> : <span>{project.project.name.slice(0,1)}</span>}<figcaption>{kind==='logo'?'Logo':'Icône app'}</figcaption></figure>)}</div><h2>{project.project.name}</h2><p>{project.identity.signature}</p></div>}
         {preview === 'about' && (html ? <iframe className="design-preview" title="Aperçu About" sandbox="" srcDoc={html}/> : <p className="empty-message">Complétez les réglages du pack pour afficher le About.</p>)}

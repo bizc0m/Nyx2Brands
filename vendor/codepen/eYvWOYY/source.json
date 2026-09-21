@@ -1,0 +1,24 @@
+{
+  "id": "eYvWOYY",
+  "url": "https://codepen.io/Conrad-C/pen/eYvWOYY",
+  "author": "Conrad-C",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [
+      "https://fonts.googleapis.com/icon?family=Material+Icons"
+    ],
+    "scripts": [
+      "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js",
+      "https://cdn.jsdelivr.net/npm/chart.js"
+    ]
+  },
+  "sha256": {
+    "original.html": "d3e059d312f1c64271bd3c387471c3f61a60bd855c8e7f85e2e215fa4262ba0c",
+    "original.css": "9ca7eb5a2c191ace591dff82d292322d600ba5a70fe1930b13c4a36a0ad96d24",
+    "original.js": "27e314f970f92ca3ebfa103590ae4f12653a402e5324d81feb16e94e105b7e73"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}

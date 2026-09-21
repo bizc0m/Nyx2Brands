@@ -1,0 +1,24 @@
+{
+  "id": "dPPLddZ",
+  "url": "https://codepen.io/whosajid/pen/dPPLddZ",
+  "author": "whosajid",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [
+      "https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
+    ],
+    "scripts": [
+      "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js",
+      "https://cdn.jsdelivr.net/npm/chart.js"
+    ]
+  },
+  "sha256": {
+    "original.html": "107e49944e0128c54034860f0469f53ef58b636a6591a0aa3ac79047875aaf56",
+    "original.css": "ae80f953f3ff35b70eb32fc2152d5b2acb74a627b10d8190d4c30de524d7f53e",
+    "original.js": "018a25668508fc82f9ca0d32bdb316e519182f7b7349cb7c297881ac49f9e70b"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}

@@ -1,0 +1,480 @@
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+<header>
+      <div class="header-left">
+        <button class="hamburger">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="4" x2="20" y1="12" y2="12" />
+            <line x1="4" x2="20" y1="6" y2="6" />
+            <line x1="4" x2="20" y1="18" y2="18" />
+          </svg>
+        </button>
+        <h2>Dashboard</h2>
+      </div>
+      <div class="header-middle">
+        <input type="text" placeholder="Search..." class="search-bar" />
+        <svg
+          class="search-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+      </div>
+      <div class="header-right">
+        <button class="btn magic-btn" aria-label="Magic Button">
+          <svg
+            class="magic-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"
+            />
+          </svg>
+          <span class="magic-text">Magic</span>
+        </button>
+        <img
+          src="https://assets.codepen.io/10662311/internal/avatars/users/default.png"
+          alt="profile-picture"
+          class="profile-pic"
+        />
+      </div>
+    </header>
+    <div class="container">
+      <aside class="show-sidebar">
+        <a href="#" class="sidebar-links">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+            <path
+              d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+            />
+          </svg>
+          Home
+        </a>
+        <a href="#" class="sidebar-links">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 7v14" />
+            <path
+              d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
+            />
+          </svg>
+          Reports
+        </a>
+        <a href="#" class="sidebar-links active-link">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M3 3v16a2 2 0 0 0 2 2h16" />
+            <path d="M7 16c.5-2 1.5-7 4-7 2 0 2 3 4 3 2.5 0 4.5-5 5-7" />
+          </svg>
+          Analytics
+        </a>
+        <a href="#" class="sidebar-links">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M18 21a8 8 0 0 0-16 0" />
+            <circle cx="10" cy="8" r="5" />
+            <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3" />
+          </svg>
+          Community
+        </a>
+        <a href="#" class="sidebar-links">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect width="20" height="14" x="2" y="5" rx="2" />
+            <line x1="2" x2="22" y1="10" y2="10" />
+          </svg>
+          Billing
+        </a>
+        <a href="#" class="sidebar-links">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+            />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          Settings
+        </a>
+      </aside>
+      <div class="main-layout">
+        <main>
+          <div class="main-top">
+            <div class="analytics">
+              <h3>Analytics</h3>
+              <div class="analytics-duration shine">
+                <p>Last 28 days</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </div>
+            </div>
+            <div class="price-chart shine">
+              <canvas id="priceChart"></canvas>
+            </div>
+          </div>
+          <div class="main-bottom">
+            <div class="main-bottom-left">
+              <h3>Overview</h3>
+              <table class="shine">
+                <tr>
+                  <th>Quarter</th>
+                  <th>Revenue</th>
+                  <th>Growth</th>
+                </tr>
+                <tr>
+                  <td>Q1 - Last</td>
+                  <td>$3680</td>
+                  <td class="growth">
+                    <svg
+                      class="arrow-up-icon"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M9 18v-6H5l7-7 7 7h-4v6H9z" />
+                    </svg>
+                    <span>$69</span>
+                  </td>
+                </tr>
+                <tr class="active-quarter">
+                  <td>Q2 - Current</td>
+                  <td>$4680</td>
+                  <td class="growth">
+                    <svg
+                      class="arrow-up-icon"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M9 18v-6H5l7-7 7 7h-4v6H9z" />
+                    </svg>
+                    <span>$420</span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+            <div class="main-bottom-right">
+              <h3>Predictions</h3>
+              <table class="shine">
+                <tr>
+                  <th>Quarter</th>
+                  <th>Revenue</th>
+                  <th>Growth</th>
+                </tr>
+                <tr>
+                  <td>Q3 - Next</td>
+                  <td>$5600</td>
+                  <td class="growth">
+                    <svg
+                      class="arrow-up-icon"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M9 18v-6H5l7-7 7 7h-4v6H9z" />
+                    </svg>
+                    <span>$389</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Q4 - Upcoming</td>
+                  <td>$2600</td>
+                  <td class="growth">
+                    <svg
+                      class="arrow-down-icon"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M15 6v6h4l-7 7-7-7h4V6h6z" />
+                    </svg>
+                    <span>$1769</span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </main>
+        <section class="stats">
+          <div class="analytics">
+            <h3>Stats</h3>
+            <div class="analytics-duration shine">
+              <p>Last 28 days</p>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </div>
+          </div>
+          <div class="stats-top shine">
+            <div>
+              <div class="stats-top-duration">
+                <span>TT1</span><span>384/1000</span>
+              </div>
+              <meter class="stats-tt" value="0.384"></meter>
+            </div>
+            <div>
+              <div class="stats-top-duration">
+                <span>TT2</span><span>649/1000</span>
+              </div>
+              <meter class="stats-tt" value="0.649"></meter>
+            </div>
+          </div>
+          <div class="stats-bottom">
+            <div class="recent-transactions">
+              <p class="links">Recent Transactions</p>
+              <a href="#">See all</a>
+            </div>
+            <table class="shine">
+              <tr class="stats-bottom-table">
+                <th>Source</th>
+                <th>Amount</th>
+              </tr>
+              <tr>
+                <td>PayPal</td>
+                <td>$4000</td>
+              </tr>
+              <tr>
+                <td>Stripe</td>
+                <td>$2500</td>
+              </tr>
+              <tr>
+                <td>Chase Bank</td>
+                <td>$7800</td>
+              </tr>
+              <tr>
+                <td>Wells Fargo</td>
+                <td>$3200</td>
+              </tr>
+              <tr>
+                <td>Venmo</td>
+                <td>$1500</td>
+              </tr>
+              <tr>
+                <td>Zelle</td>
+                <td>$6700</td>
+              </tr>
+              <tr>
+                <td>Square</td>
+                <td>$5400</td>
+              </tr>
+              <tr>
+                <td>Bank of America</td>
+                <td>$8900</td>
+              </tr>
+              <tr>
+                <td>Google Pay</td>
+                <td>$2300</td>
+              </tr>
+              <tr>
+                <td>Apple Pay</td>
+                <td>$4100</td>
+              </tr>
+              <!-- <tr>
+                <td>Citibank</td>
+                <td>$7600</td>
+              </tr> -->
+              <!-- <tr>
+                <td>Amazon Pay</td>
+                <td>$3400</td>
+              </tr>
+              <tr>
+                <td>HSBC</td>
+                <td>$6200</td>
+              </tr> -->
+              <!-- <tr>
+                <td>Ally Bank</td>
+                <td>$2900</td>
+              </tr>
+              <tr>
+                <td>Capital One</td>
+                <td>$4800</td>
+              </tr>
+              <tr>
+                <td>Cash App</td>
+                <td>$3700</td>
+              </tr>
+              <tr>
+                <td>PNC Bank</td>
+                <td>$5200</td>
+              </tr> -->
+            </table>
+          </div>
+        </section>
+        <div class="cards">
+          <div class="analytics">
+            <h3>Cards</h3>
+            <div class="analytics-duration shine">
+              <p>All</p>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </div>
+          </div>
+          <div class="cards-grid">
+            <div class="card shine">
+              <p class="bank-name">Bank of Valentine</p>
+              <p class="card-number">4320 6942 4820 9669</p>
+              <p class="small">VALIDITY <span>12/25</span></p>
+              <p class="card-balance">$ 1,063.40</p>
+              <p class="card-holder">ARTHUR MORGAN</p>
+            </div>
+            <div class="card shine">
+              <p class="bank-name">Bank of Saint Denis</p>
+              <p class="card-number">5214 7896 1234 5678</p>
+              <p class="small">VALIDITY <span>11/26</span></p>
+              <p class="card-balance">$ 23,849.00</p>
+              <p class="card-holder">DUTCH VAN DER LINDE</p>
+            </div>
+            <div class="card shine">
+              <p class="bank-name">Bank of Rhodes</p>
+              <p class="card-number">6789 4321 8765 4321</p>
+              <p class="small">VALIDITY <span>08/27</span></p>
+              <p class="card-balance">$ 420.00</p>
+              <p class="card-holder">MICAH BELL</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

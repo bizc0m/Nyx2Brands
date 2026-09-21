@@ -1,0 +1,25 @@
+{
+  "id": "PJbzPQ",
+  "url": "https://codepen.io/adamcjoiner/pen/PJbzPQ",
+  "author": "adamcjoiner",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [
+      "https://public.codepenassets.com/css/reset-2.0.min.css"
+    ],
+    "scripts": [
+      "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js",
+      "https://public.codepenassets.com/js/prefixfree-1.0.7.min.js",
+      "//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"
+    ]
+  },
+  "sha256": {
+    "original.html": "7806e86a690beb53525cb7d9d86e1b78241427f7ef222bf7a4202f063a7e7a92",
+    "original.less": "59a07d0aa0daf658feb820b8359e6327a334dc235d29790644c3505d194f56bd",
+    "original.js": "8261325eebba8b9bede80eb4b7c823aa476d508fa4ff308818578a3464ea4af6"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}

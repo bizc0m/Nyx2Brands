@@ -1,0 +1,21 @@
+{
+  "id": "azbEryd",
+  "url": "https://codepen.io/preetha-vaishnavi-the-reactor/pen/azbEryd",
+  "author": "preetha-vaishnavi-the-reactor",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [],
+    "scripts": [
+      "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js"
+    ]
+  },
+  "sha256": {
+    "original.html": "f750cc39d50dba4922d167ca1c655567d8dfd72b8d9e76e891996907dce833aa",
+    "original.css": "a29f2f7c87be6f0ad2e04ed50dbf591d42d93b9df7377952841c9986be0b9c93",
+    "original.js": "9f8bc7890455f5f24b648763753cc716a679b7777144b2b760b37793545dd6c3"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}

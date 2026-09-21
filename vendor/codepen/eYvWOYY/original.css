@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;700&family=Roboto:wght@300;400;700&display=swap');
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://example.com/MaterialIcons-Regular.eot); /* For IE6-8 */
+  src: local('Material Icons'),
+    local('MaterialIcons-Regular'),
+    url(https://example.com/MaterialIcons-Regular.woff2) format('woff2'),
+    url(https://example.com/MaterialIcons-Regular.woff) format('woff'),
+    url(https://example.com/MaterialIcons-Regular.ttf) format('truetype');
+}
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+:root{
+  --color:#1d1d1d;
+}
+body{
+  background:--color;
+  height:100vh;
+  width:100vw;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  display:grid;
+  overflow:hidden;
+  place-items:center;
+}
+.blue {
+  top:-4em;
+  left:-4em;
+  background:linear-gradient(#43BCCD, #49E1CD);
+}
+.purple{
+  bottom:-10em;
+  width:35em !important;
+  height:35em !important;
+  right:-4em;
+  background:linear-gradient(#662E9B, #C849E1);
+}
+.ball{
+  position:absolute;
+  border-radius:50%;
+  width:25em;
+  height:25em;
+}
+.glass-content{
+  width:100%;
+  height:100%;
+/*   border: 1px solid rgba( 255, 255, 255, 0.18 ); */
+  background:#00000010;
+/*   border-radius:10px; */
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+}
+.top-navigator{
+  width:calc(100% - 1em);
+  height:70px;
+/*   border-radius: 10px 10px 0px 0px; */
+  background:#FFFFFF70;
+  display:flex;
+  gap:1em;
+  justify-content:flex-end;
+  padding-right:1em;
+  align-items:center;
+}
+
+.content-body{
+  width:calc(100% - 4em);
+  border-top: 2px solid #662E9B15;
+  display:flex;
+  padding:2em;
+  gap:1em;
+  padding-top:1em;
+  flex-direction:column;
+  height:calc(100% - 70px);
+}
+.nav-tab{
+  padding:10px;
+  cursor:pointer;
+  width:15%;
+  text-align:center;
+  color:#662E9B;
+  border-radius:10px;
+  font-family:'Poppins',sans-serif;
+  transition:0.2s;
+}
+.nav-tab:hover{
+  background:#662E9B;
+  color:#f1fdfd;
+}
+.active{
+  background-color:#662E9B;
+  color:#f1fdfd;
+}
+.logo{
+  width:40px;
+  height:40px;
+  cursor:pointer;
+}
+.logo-aligner{
+  margin-left:2em;
+  padding:5px;
+  margin-right:auto;
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
+  background:#FFFFFF30;
+  border-radius:10px;
+}
+.welcome-text{
+  font-family:'Poppins',sans-serif;
+  font-weight:400;
+  color:#1d1d1d;
+}
+.even-columns{
+  display:flex;
+  gap:2em;
+}
+.even-columns > *{
+  width:100%;
+}
+.info-card{
+  height:210px;
+  display:flex;
+  flex-direction:column;
+  padding:2em;
+  border-radius:10px;
+  background:linear-gradient(45deg, #662E9B, #C849E1);
+  box-shadow: 0 0px 12px 0 rgba( 31, 38, 135, 0.10 );
+}
+.glass-card{
+  background:#ffffff50;
+  border:1px solid rgba( 255, 255, 255, 0.18 ); 
+}
+.card-title{
+  color:#fdfdfd;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  font-family:"Poppins",sans-serif´;
+  font-weight:500;
+}
+.total-value{
+  font-family:'Roboto',sans-serif;
+  color:#fdfdfd;
+  font-size:3em;
+  letter-spacing:.2em;
+}
+.positive-numbers, .negative-numbers, .medium-numbers{
+  margin-top:auto;
+}
+.positive-numbers .material-icons{
+  color:#36DA79;
+  font-size:26px;
+}
+.negative-numbers .material-icons{
+  color:#FF2A2A;
+  font-size:26px;
+}
+.value-text{
+  color:#fdfdfd;
+  font-family:'Roboto',sans-serif;
+  font-weight:500;
+  font-size:25px;
+}
+.values-aligner{
+  display:flex;
+  justify-content:space-between;
+  margin-top:auto;
+}
+.glass-card > *{
+  color:#1d1d1d;
+}
+.glass-card .value-text{
+  color:#1d1d1d;
+}
+.glass-card .star{
+  color:#E6E270;
+  text-shadow:0 0 0 .1em #00000060;
+}
+.review-text{
+  font-family:'Poppins',sans-serif;
+  color:#fdfdfd;
+  font-weight:300;
+}
+.positive-text{
+  color:#36DA79;
+  font-family:'Poppins',sans-serif;
+}
+.medium-text{
+  color:#E6E270;
+  font-family:'Poppins',sans-serif;
+}
+.negative-text{
+  color:#FF2A2A;
+  font-family:'Poppins',sans-serif;
+}

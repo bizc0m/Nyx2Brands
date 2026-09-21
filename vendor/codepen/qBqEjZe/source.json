@@ -1,0 +1,26 @@
+{
+  "id": "qBqEjZe",
+  "url": "https://codepen.io/tcsn/pen/qBqEjZe",
+  "author": "tcsn",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [
+      "https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css",
+      "https://fonts.googleapis.com/icon?family=Material+Icons",
+      "https://fonts.googleapis.com/css2?family=Lato:wght@300;700&family=Montserrat&family=Noto+Sans&display=swap"
+    ],
+    "scripts": [
+      "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js",
+      "https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"
+    ]
+  },
+  "sha256": {
+    "original.html": "e1e45b41a2fdd231dd42a8faf64cb925d0de7e5d75b025b65556237b80304682",
+    "original.scss": "e25da6ceb46ab8a6ed6433490c56ea7df66fa9dd72b2026bf89a73409419c88d",
+    "original.js": "8259b1f7f66d71c12f8c6ddf028cc8c41d4a63d7db196a1671f627662209a137"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}

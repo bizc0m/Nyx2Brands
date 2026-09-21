@@ -1,0 +1,21 @@
+{
+  "id": "jOPMxBN",
+  "url": "https://codepen.io/erjs/pen/jOPMxBN",
+  "author": "erjs",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [
+      "https://public.codepenassets.com/css/normalize-5.0.0.min.css"
+    ],
+    "scripts": []
+  },
+  "sha256": {
+    "original.html": "949fd3a66a9f766893ebde909c304670d5b7e257a8cc60a47556fb898795a010",
+    "original.css": "247893b11a21c7695ec4b6f613c7b59f71ed46d8ccb2e45eb37136d40c46fd82",
+    "original.js": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}

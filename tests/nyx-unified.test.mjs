@@ -30,3 +30,34 @@ test('workspace snapshot rejects oversized and non-string storage before importi
  assert.deepEqual(parseProject(JSON.stringify(p)).integration.nativeState,{docs:'[]'});
  for(const state of [{docs:{}},{docs:'x'.repeat(3000001)},Array(2).fill('x')]){p.integration.nativeState=state;assert.throws(()=>parseProject(JSON.stringify(p)));}
 });
+test('Glass pack roundtrip retains document content, selection, panels and Registry',()=>{
+ const p=newProject();
+ p.ui={family:'integrated-family',variant:'integrated'};
+ p.integration={...emptyIntegration(),path:'/test/nyx',blocks:['library'],dressing:'glass-dashboard',dressingSettings:{blur:9},nativeState:{shell:JSON.stringify({activeTab:1,tabs:[{label:'Documents',kind:'documents'},{label:'Registry',kind:'registry'}],sidebarCollapsed:true}), 'nyx-documents-v1':JSON.stringify({documents:[{name:'preuve.md',content:'# Texte conservé'}],panels:[{id:'left',selected:'preuve.md'},{id:'right'}]}), registry:JSON.stringify({modules:['documents','web']})}};
+ const snapshot=structuredClone(p.integration.nativeState);
+ const files=integrationFiles(p,sources,source),restored=parseProject(files['pack.neuroforge.json']);
+ assert.deepEqual(restored,p);assert.equal(JSON.parse(files['manifest.json']).dressing,'glass-dashboard');
+ assert.match(files['GLASS-LICENSE.txt'],/gestok/);assert.equal(JSON.parse(files['GLASS-RESOURCES.json']).offline,false);
+ for(const dressing of ['nyx','glass-dashboard']){restored.integration.dressing=dressing;assert.deepEqual(parseProject(JSON.stringify(restored)).integration.nativeState,snapshot);}
+ p.integration.dressing='unknown';assert.throws(()=>parseProject(JSON.stringify(p)),/Habillage/);
+ p.integration.dressing='glass-dashboard';p.integration.dressingSettings.blur=99;assert.throws(()=>parseProject(JSON.stringify(p)),/verre/);
+});
+test('Glass applies a chosen palette and keeps an explicit original-colors option',async()=>{
+ const {dressingCSS}=await import('../packages/neuroforge-core/dressings.mjs');
+ const light={name:'Light',surface:'#FFFFFF',background:'#F4F4F4',text:'#222222',muted:'#666666'};
+ const dark={name:'Dark',surface:'#111111',background:'#000000',text:'#EEEEEE',muted:'#AAAAAA'};
+ const a=dressingCSS('glass-dashboard',{blur:8,palette:true},light);
+ const b=dressingCSS('glass-dashboard',{blur:8,palette:true},dark);
+ assert.match(a,/background:#FFFFFFe8!important/);assert.match(a,/color:#222222!important/);assert.match(b,/background:#111111e8!important/);assert.notEqual(a,b);
+ assert.match(dressingCSS('glass-dashboard',{palette:false},light),/#406882/);
+ const p=newProject();p.integration={...emptyIntegration(),dressing:'glass-dashboard',dressingSettings:{blur:8,palette:true}};assert.deepEqual(parseProject(JSON.stringify(p)),p);
+});
+test('NotePlan Style is a valid theme dressing with its own live Nyx presentation',async()=>{
+ const {DRESSINGS,dressingCSS}=await import('../packages/neuroforge-core/dressings.mjs');
+ assert.ok(DRESSINGS.includes('noteplan-style-v2'));
+ const css=dressingCSS('noteplan-style-v2',{},{});
+ assert.match(css,/SF Pro Text/);
+ assert.match(css,/\.nyx-shell/);
+ const p=newProject();p.integration={...emptyIntegration(),dressing:'noteplan-style-v2'};
+ assert.deepEqual(parseProject(JSON.stringify(p)),p);
+});

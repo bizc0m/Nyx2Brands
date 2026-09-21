@@ -1,3 +1,4 @@
+import {GLASS_LICENSE,GLASS_VIDEO} from './dressings.mjs';
 import {unifiedHTML} from './nyx-unified.mjs';
 import {compositionFor} from './compositions.mjs';
 import {UX_BLOCKS,REFERENCES,uxHTML} from './ux-blocks.mjs';
@@ -71,7 +72,7 @@ export function integrationFiles(project, sources, unifiedSource) {
     files['references.json']=JSON.stringify(REFERENCES.filter(r=>i.references?.includes(r.id)),null,2);
     files['INTEGRATION.md']+='\n## Blocs UX exécutables\n\nOuvrir blocs-ux.html : composition autonome avec le skin et l’identité du pack. Le script mountUX et les styles sont inclus dans le HTML et réutilisables.\nBlocs : '+UX_BLOCKS.filter(b=>i.blocks.includes(b.id)).map(b=>b.name).join(', ')+'.\nCes composants sont des implémentations locales ; aucun code des applications citées n’est importé. Les références ne sont pas des services connectés. Les données de démonstration sont les références du catalogue. La séquence organise des étapes, sans rendu vidéo. Pour React ou SwiftUI/AppKit, adapter les composants à la cible.\n';
   }
-  if(unifiedSource){files['preview.html']=unifiedHTML(unifiedSource,project);files['nyx-integre.html']=files['preview.html'];files['INTEGRATION.md']+='\n## Base unique\nOuvrir nyx-integre.html : shell Nyx intégré existant, Documents, Registry et Blade Bibliothèque. Les références de services ne sont pas des connexions actives.\n';const manifest=JSON.parse(files['manifest.json']);manifest.base='nyx-integre';files['manifest.json']=JSON.stringify(manifest,null,2);}
+  if(unifiedSource){files['preview.html']=unifiedHTML(unifiedSource,project);files['nyx-integre.html']=files['preview.html'];files['INTEGRATION.md']+='\n## Base unique\nOuvrir nyx-integre.html : shell Nyx intégré existant, Documents, Registry et Blade Bibliothèque. Les références de services ne sont pas des connexions actives.\n';const manifest=JSON.parse(files['manifest.json']);manifest.base='nyx-integre';manifest.dressing=i.dressing||'nyx';if(i.dressing==='glass-dashboard'){files['GLASS-LICENSE.txt']=GLASS_LICENSE;files['GLASS-RESOURCES.json']=JSON.stringify({video:GLASS_VIDEO,font:'Montserrat via Google Fonts',offline:false},null,2);files['INTEGRATION.md']+='\nHabillage Glass Dashboard appliqué aux composants Nyx. Vidéo et police externes : connexion nécessaire. Licence jointe.\n';}files['manifest.json']=JSON.stringify(manifest,null,2);}
   return files;
 }
 export function integrationZip(files) {

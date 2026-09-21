@@ -1,0 +1,19 @@
+{
+  "id": "NWNmxyJ",
+  "url": "https://codepen.io/smugller/pen/NWNmxyJ",
+  "author": "smugller",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [],
+    "scripts": []
+  },
+  "sha256": {
+    "original.html": "072694236dd5da6e60ce64e6d82d66f5422b0919a2066e02edff615f70469bfa",
+    "original.css": "87f42ae2956b278d772dd6ac8b48eff3e94a9aee29130d69942c04fb06726098",
+    "original.js": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}

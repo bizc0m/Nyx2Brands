@@ -1,0 +1,19 @@
+{
+  "id": "MWLvJjW",
+  "url": "https://codepen.io/varsvisualizes/pen/MWLvJjW",
+  "author": "varsvisualizes",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [],
+    "scripts": []
+  },
+  "sha256": {
+    "original.html": "524df01a53476169db7cf8e41372a1bb5a91dbae547808db6fe8d91196959835",
+    "original.css": "dcac98417fb1b5004fea58607f05b186d34327d8ce059731bf8bbfbff199639b",
+    "original.js": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}

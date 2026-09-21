@@ -1,0 +1,27 @@
+{
+  "id": "YzGopOQ",
+  "url": "https://codepen.io/deseanwu/pen/YzGopOQ",
+  "author": "deseanwu",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [
+      "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap-grid.min.css",
+      "https://unpkg.com/soft-components/dist/soft-components/soft-components.css"
+    ],
+    "scripts": [
+      "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js",
+      "https://unpkg.com/soft-components@latest/dist/soft-components/soft-components.js",
+      "https://unpkg.com/boxicons@latest/dist/boxicons.js",
+      "https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+    ]
+  },
+  "sha256": {
+    "original.html": "0defd742e4f162e5c4a16be0db3b55c0ba1d2c51ed1fca814f94c8843ffdaf2f",
+    "original.css": "b5da5b73249c4da0fe8985ef58c98be7418b0ce2ba1214b78222d672f0102a0a",
+    "original.js": "9d70b4f16415006f202be3e6125bfc85c469d4ae470f67d09fd01ac2be7f3e66"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}

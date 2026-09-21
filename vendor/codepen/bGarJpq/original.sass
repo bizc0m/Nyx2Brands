@@ -1,0 +1,347 @@
+@font-face
+  font-family: 'Windows'
+  src: url('https://raw.githubusercontent.com/themesberg/windows-95-ui-kit/master/fonts/w-95-sans-serif.woff2') format('woff2'), url('https://raw.githubusercontent.com/themesberg/windows-95-ui-kit/master/fonts/w-95-sans-serif.woff') format('woff')
+  font-weight: normal
+  font-style: normal
+
+$win-border: inset -1px -1px 0 Black, inset 1px 1px 0 Gainsboro, inset -2px -2px 0 Gray, inset 2px 2px 0 white
+$win-border-input: inset -1px -1px 0 White, inset 1px 1px 0 Gray, inset -2px -2px 0 Gainsboro, inset 2px 2px 0 Black
+$win-border-window: inset -1px -1px 0 Black, inset 1px 1px 0 Gainsboro, inset -2px -2px 0 Gray, inset 2px 2px 0 White
+
+*
+  font-smooth: never
+  -webkit-font-smoothing : none
+  border: 0
+  margin: 0
+  padding: 0
+  cursor: default
+  outline: none
+  box-sizing: border-box
+  -webkit-appearance: none
+  appearance: none
+  -webkit-touch-callout: none
+  -webkit-user-select: none
+  user-select: none
+  image-rendering: pixelated
+
+::selection
+  color: white
+  background: Navy
+
+#app
+  transform: scale(2)
+  
+  &, *
+    font-size: 8px
+    line-height: 13px
+    font-family: "Windows"
+
+b, strong, .font-bold, .win-window__title p
+  letter-spacing: 1px
+  text-shadow: 1px 0 0 Black, 1.25px 0 0 Black
+  font-weight: 400 !important
+  
+.center-the-window
+  min-height: 100%
+  min-height: 100vh
+  display: flex
+  background: Teal
+  align-items: center
+  justify-content: center
+
+.win-button
+  min-width: 64px
+  min-height: 24px
+  padding: 4px 6px
+  position: relative
+  background: Silver
+  box-shadow: $win-border
+  
+  &:focus,
+  &.fake-focus,
+  &--highlight
+    box-shadow: $win-border, 1px 1px 0 Black, -1px 1px 0 Black, 1px -1px 0 Black, -1px -1px 0 Black
+    
+  
+  &:focus,
+  &.fake-focus
+
+    &::before
+      top: 4px
+      left: 4px
+      right: 4px
+      bottom: 4px
+      content: ''
+      display: block
+      position: absolute
+      border: 1px dotted Black
+  
+  &:active,
+  &.fake-active
+    box-shadow: $win-border-input
+  
+.win-window
+  padding: 3px
+  min-width: 64px
+  background: Silver
+  box-shadow: $win-border
+  position: absolute
+  
+  &__title
+    height: 18px
+    position: relative
+    background-color: Navy
+    
+    .windows-98 &
+      background: linear-gradient(90deg, Navy 0%, DodgerBlue 100%)
+    
+    .windows-98 &--background
+      background: linear-gradient(90deg, DimGray 0%, DarkGray 100%)
+      
+      p
+        color: Silver
+        text-shadow: 1px 0 0 Silver, 1.25px 0 0 Silver
+  
+    p
+      margin: 0
+      color: White
+      height: 18px
+      font-weight: bold
+      letter-spacing: 1px
+      padding: 2px 64px 2px 6px
+      display: flex
+      align-items: center
+      text-shadow: 1px 0 0 White, 1.25px 0 0 White
+
+    &__icon
+      top: 1px
+      left: 1px
+      position: absolute
+      width: 16px
+      height: 16px
+      
+      + p
+        padding-left: 20px
+  
+    &__controlls
+      top: 2px
+      right: 2px
+      display: flex
+      position: absolute
+      
+      > *
+        width: 16px
+        height: 14px
+        font-size: 0
+        display: block
+        color: transparent
+        position: relative
+        box-shadow: $win-border
+        background-color: Silver
+    
+        &::before
+          content: ''
+          display: block
+          background: Black
+          position: absolute
+        
+        &:active
+          box-shadow: $win-border-input
+      
+      &__close
+        margin-left: 2px
+        
+        &::before
+          width: 2px
+          height: 1.25px
+          top: calc(50% - 1px)
+          left: calc(50% - 1px)
+          box-shadow: -1px -1px 0 Black, -2px -2px 0 Black, -3px -3px 0 Black, 1px 1px 0 Black, 2px 2px 0 Black, 3px 3px 0 Black, -1px 1px 0 Black, -2px 2px 0 Black, -3px 3px 0 Black, 1px -1px 0 Black, 2px -2px 0 Black, 3px -3px 0 Black
+
+      &__maximize
+        &::before
+          left: 3px
+          width: 9px
+          height: 9px
+          bottom: 3px
+        &::after
+          left: 4px
+          width: 7px
+          height: 6px
+          bottom: 4px
+          content: ''
+          display: block
+          position: absolute
+          background: Silver
+        
+      &__minimize
+        &::before
+          left: 4px
+          width: 6px
+          height: 2px
+          bottom: 3px
+        
+      &__info
+        margin-right: 2px
+
+        &::before
+          width: 2px
+          height: 1.125px
+          top: calc(50% - 1px)
+          left: calc(50% - 1px)
+          box-shadow: 0px 1px 0 Black, 0px 3px 0 Black, 0px 4px 0 Black, 1px -1px 0 Black, 2px -2px 0 Black, 2px -3px 0 Black, 1px -4px 0 Black, -1px -4px 0 Black, -2px -3px 0 Black, -2px -2px 0 Black
+        
+        &:last-child
+          margin-right: 0
+
+  &__content
+    padding: 10px
+    
+    &--white
+      background: White
+      
+    &--silver
+      background: Silver
+
+.win-text
+  cursor: default
+  // -webkit-appearance: text
+  // appearance: text
+  // -webkit-touch-callout: text
+  // -webkit-user-select: text
+  // user-select: text
+  
+  &--disabled
+    color: Gray
+    text-shadow: 1px 1px 0 White
+      
+.win-control-strip
+  padding: 10px
+  position: relative
+  background-color: Silver
+  margin: 10px -10px -10px
+  display: flex
+  justify-content: flex-end
+  
+  &--border
+    padding: 12px 10px 10px
+
+    &::before
+      top: 0
+      left: 0
+      right: 1px
+      content: ''
+      display: block
+      position: absolute
+      height: 1px
+      background-color: White
+      box-shadow: 1px 1px 0 Gray, 0 1px 0 Gray, 1px 0 0 Gray
+  
+.win-icon
+  width: 16px
+  height: 16px
+
+  &--size-48
+    width: 48px
+    height: 48px
+    
+.win-group
+  gap: 4px
+  width: 100%
+  margin: 2px
+  padding: 8px
+  display: flex
+  flex-flow: column
+  position: relative
+  box-shadow: 1px 1px 0 Gray, -1px -1px 0 White, 0px -1px 0 White, -1px 0px 0 White, -2px 1px 0 Gray, 1px -2px 0 Gray, -2px -2px 0 Gray, -2px 2px 0 White,  2px 2px 0 White, 2px -2px 0 White
+  
+  &__title
+    top: -8px
+    left: 4px
+    position: absolute
+    background-color: Silver
+    padding: 0 4px
+    
+    
+input
+  height: 24px
+  padding: 4px
+  box-shadow: $win-border-input
+    
+    
+    
+
+$win-scrollbar-up-arrow: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAGklEQVR4AWMYxuA/SYphmETFhDX9x4mHGQAAcL4P8dQiMq8AAAAASUVORK5CYII='
+$win-scrollbar-down-arrow: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAQAAAD8fJRsAAAAF0lEQVQY02NgoBf4jwJxSOHQhcNAOgMAWWAP8Rv2U3UAAAAASUVORK5CYII='
+$win-scrollbar-left-arrow: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAQAAAD8fJRsAAAAHklEQVQY02NgoBT8xyX8H5fwf1zCpOjAYwceV1EEAAO2D/HsQ4vsAAAAAElFTkSuQmCC'
+$win-scrollbar-right-arrow: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAQAAAD8fJRsAAAAHUlEQVQY02NgIB/8xy3xH7fEf9wS/0nUQZqrKAYAK44P8ZRmzLQAAAAASUVORK5CYII='
+$win-scrollbar-bg: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAFElEQVQIW2M4fPz0////GYAYyAIASnoKpV3w4kgAAAAASUVORK5CYII='
+$win-scrollbar-bg-active: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAEElEQVQIW2No6+pjgAAgCwAWogM9VKrgGQAAAABJRU5ErkJggg=='
+$win-scrollbar-resizer: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAN0lEQVR4Ae3MgQUAMBRDwU5fFF05lb/CARTBw2Ulof0DxPtcwp3hNuEYnjbcEW4TjuFpwx3h9gMWGgZ2Y/PT2gAAAABJRU5ErkJggg=='
+
+::-webkit-scrollbar
+  width: 16px
+  height: 16px
+
+::-webkit-scrollbar-track
+  background-image: url($win-scrollbar-bg)
+
+  &:active
+    background-image: url($win-scrollbar-bg-active)
+
+::-webkit-scrollbar-thumb
+  width: 16px
+  height: 16px
+  background-color: Silver
+  z-index: 1
+  box-shadow: $win-border
+
+::-webkit-scrollbar-corner
+  background-color: Silver
+
+::-webkit-resizer
+  width: 16px
+  height: 16px
+  background-color: Silver
+  background-image: url($win-scrollbar-resizer)
+  background-position: bottom right
+  background-repeat: no-repeat
+
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-button
+  display: block
+  width: 16px
+  height: 16px
+  background-color: Silver
+  image-rendering: pixelated
+  background-repeat: no-repeat
+  background-position: center center
+  box-shadow: $win-border
+
+  &:active
+    background-position: 2px 2px
+
+  &:horizontal:decrement
+    background-image: url($win-scrollbar-left-arrow)
+
+  &:horizontal:increment
+    background-image: url($win-scrollbar-right-arrow)
+
+  &:vertical:decrement
+    background-image: url($win-scrollbar-up-arrow)
+
+  &:vertical:increment
+    background-image: url($win-scrollbar-down-arrow)
+
+  &:horizontal:increment:start,
+  &:horizontal:decrement:end,
+  &:vertical:increment:start,
+  &:vertical:decrement:end
+    display: none
+
+  &:active
+    border-top: 1px solid Gray
+    border-left: 1px solid Gray
+    border-bottom: 1px solid Gray
+    border-right: 1px solid Gray
+    box-shadow: none

@@ -1,0 +1,22 @@
+{
+  "id": "oNQPyvL",
+  "url": "https://codepen.io/eylemsayin/pen/oNQPyvL",
+  "author": "eylemsayin",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [
+      "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200",
+      "./style.css"
+    ],
+    "scripts": []
+  },
+  "sha256": {
+    "original.html": "9f57e647b504f2cb41b054b3305bd89848914d441ac99ee966cdbaf0b6bfb631",
+    "original.css": "944f6b1bdf381aa5110c394f8684517f2deaa7e28d12a644174d0a47445559a3",
+    "original.js": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}

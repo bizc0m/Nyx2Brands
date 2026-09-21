@@ -1,0 +1,22 @@
+{
+  "id": "WMGgWZ",
+  "url": "https://codepen.io/nitronova/pen/WMGgWZ",
+  "author": "nitronova",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [],
+    "scripts": [
+      "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js",
+      "https://code.jquery.com/jquery-2.2.0.js"
+    ]
+  },
+  "sha256": {
+    "original.html": "059a1e245a09ae10f6ba13940abd092824a211dffbe88263b388211fef3c1ca6",
+    "original.css": "674a28a2ab7802e019bcce96689ee862f53c4c2b5f3c81e05428d30ce25f3bad",
+    "original.js": "bd7b16fbbd62812d66c3ce68e93d79d7921661b75b52ffdc4e0db96eb08fc1ee"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}

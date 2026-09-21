@@ -1,0 +1,456 @@
+[
+  {
+    "id": "MWLvJjW",
+    "url": "https://codepen.io/varsvisualizes/pen/MWLvJjW",
+    "author": "varsvisualizes",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [],
+      "scripts": []
+    },
+    "sha256": {
+      "original.html": "524df01a53476169db7cf8e41372a1bb5a91dbae547808db6fe8d91196959835",
+      "original.css": "dcac98417fb1b5004fea58607f05b186d34327d8ce059731bf8bbfbff199639b",
+      "original.js": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "MWgJPpa",
+    "url": "https://codepen.io/themesberg/pen/MWgJPpa",
+    "author": "themesberg",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [
+        "//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+      ],
+      "scripts": [
+        "//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js",
+        "//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
+      ]
+    },
+    "sha256": {
+      "original.html": "86df6f426e94ba1b26fce34a259bf1bd9a1e13d03af0ef3ac543f50a024b379e",
+      "original.css": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original.js": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "NWNmxyJ",
+    "url": "https://codepen.io/smugller/pen/NWNmxyJ",
+    "author": "smugller",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [],
+      "scripts": []
+    },
+    "sha256": {
+      "original.html": "072694236dd5da6e60ce64e6d82d66f5422b0919a2066e02edff615f70469bfa",
+      "original.css": "87f42ae2956b278d772dd6ac8b48eff3e94a9aee29130d69942c04fb06726098",
+      "original.js": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "OPPYgKy",
+    "url": "https://codepen.io/rustcode/pen/OPPYgKy",
+    "author": "rustcode",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [
+        "https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;700&display=swap"
+      ],
+      "scripts": [
+        "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js",
+        "https://cdn.tailwindcss.com"
+      ]
+    },
+    "sha256": {
+      "original.html": "64910ffeb50c70a0227f08625150469b3cbdbbf6788ddb51d20e1c3500998902",
+      "original.css": "bab885c503de01d3b1e56433390d717baafb56e3225459753ffdbd5899f9828d",
+      "original.js": "7af7080c7e8febf3422990f19587fd6da8eefa7ab950326ade915704e56fb994"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "PJbzPQ",
+    "url": "https://codepen.io/adamcjoiner/pen/PJbzPQ",
+    "author": "adamcjoiner",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [
+        "https://public.codepenassets.com/css/reset-2.0.min.css"
+      ],
+      "scripts": [
+        "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js",
+        "https://public.codepenassets.com/js/prefixfree-1.0.7.min.js",
+        "//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"
+      ]
+    },
+    "sha256": {
+      "original.html": "7806e86a690beb53525cb7d9d86e1b78241427f7ef222bf7a4202f063a7e7a92",
+      "original.less": "59a07d0aa0daf658feb820b8359e6327a334dc235d29790644c3505d194f56bd",
+      "original.js": "8261325eebba8b9bede80eb4b7c823aa476d508fa4ff308818578a3464ea4af6"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "PoGvyZJ",
+    "url": "https://codepen.io/SihamBenDaia/pen/PoGvyZJ",
+    "author": "SihamBenDaia",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css",
+        "https://static.fontawesome.com/css/fontawesome-app.css"
+      ],
+      "scripts": []
+    },
+    "sha256": {
+      "original.html": "fd333b328f982b173b062bb58b7376f2d9c9c0039a24d0c86c6ad64bd67441a2",
+      "original.css": "67637c311807d187f0720026fe1bf0e93fdcdf9b30eaa5c4fba37e37f751db21",
+      "original.js": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "WMGgWZ",
+    "url": "https://codepen.io/nitronova/pen/WMGgWZ",
+    "author": "nitronova",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [],
+      "scripts": [
+        "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js",
+        "https://code.jquery.com/jquery-2.2.0.js"
+      ]
+    },
+    "sha256": {
+      "original.html": "059a1e245a09ae10f6ba13940abd092824a211dffbe88263b388211fef3c1ca6",
+      "original.css": "674a28a2ab7802e019bcce96689ee862f53c4c2b5f3c81e05428d30ce25f3bad",
+      "original.js": "bd7b16fbbd62812d66c3ce68e93d79d7921661b75b52ffdc4e0db96eb08fc1ee"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "YzGopOQ",
+    "url": "https://codepen.io/deseanwu/pen/YzGopOQ",
+    "author": "deseanwu",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap-grid.min.css",
+        "https://unpkg.com/soft-components/dist/soft-components/soft-components.css"
+      ],
+      "scripts": [
+        "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js",
+        "https://unpkg.com/soft-components@latest/dist/soft-components/soft-components.js",
+        "https://unpkg.com/boxicons@latest/dist/boxicons.js",
+        "https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+      ]
+    },
+    "sha256": {
+      "original.html": "0defd742e4f162e5c4a16be0db3b55c0ba1d2c51ed1fca814f94c8843ffdaf2f",
+      "original.css": "b5da5b73249c4da0fe8985ef58c98be7418b0ce2ba1214b78222d672f0102a0a",
+      "original.js": "9d70b4f16415006f202be3e6125bfc85c469d4ae470f67d09fd01ac2be7f3e66"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "YzLBVOp",
+    "url": "https://codepen.io/gestok/pen/YzLBVOp",
+    "author": "gestok",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [
+        "styles.css",
+        "https://cdn.jsdelivr.net/gh/lucaburgio/iconoir@main/css/iconoir.css",
+        "https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+      ],
+      "scripts": [
+        "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js"
+      ]
+    },
+    "sha256": {
+      "original.html": "ed778fa2a69b84ecf83a2103f73b1a773844f61a069c58bb7aba8ce0dd6be1ae",
+      "original.css": "31e731203db50324fc2521984eb9087ceb37a60f9e199276676ba846d02b5063",
+      "original.js": "41c6aa0d73f6956dc1735469db4af969f9cbeeef6301ab8f14be78b63e6784e4"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "abGppOb",
+    "url": "https://codepen.io/lrrp/pen/abGppOb",
+    "author": "lrrp",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [
+        "css/style.css",
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+      ],
+      "scripts": [
+        "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+      ]
+    },
+    "sha256": {
+      "original.html": "fcf44037b87e1658bc7e66c3ef4a008e7b62d420ff8dab3f0ca8fd7b59d156b3",
+      "original.css": "a320c5d96478bd0008273599e89be5560123e85702487f3b7f2c0815d5af2ebb",
+      "original.js": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "azbEryd",
+    "url": "https://codepen.io/preetha-vaishnavi-the-reactor/pen/azbEryd",
+    "author": "preetha-vaishnavi-the-reactor",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [],
+      "scripts": [
+        "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js"
+      ]
+    },
+    "sha256": {
+      "original.html": "f750cc39d50dba4922d167ca1c655567d8dfd72b8d9e76e891996907dce833aa",
+      "original.css": "a29f2f7c87be6f0ad2e04ed50dbf591d42d93b9df7377952841c9986be0b9c93",
+      "original.js": "9f8bc7890455f5f24b648763753cc716a679b7777144b2b760b37793545dd6c3"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "bGarJpq",
+    "url": "https://codepen.io/danielneubert/pen/bGarJpq",
+    "author": "danielneubert",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [
+        "https://public.codepenassets.com/css/normalize-5.0.0.min.css"
+      ],
+      "scripts": [
+        "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js",
+        "https://unpkg.com/vue@next"
+      ]
+    },
+    "sha256": {
+      "original.html": "0d76c8e012b9f762b621187d4bdb0418722d63abce3a7825a1cbf17d97e52066",
+      "original.sass": "40360b88d0dfb3d8ae68ae327a279d575d65d5bec22dabf57919ed6fccdc58b0",
+      "original.js": "1452e10a9b1dd11d7d52e131d4e6c9a8aa1a3d994a7655d6656700b2dce202b1"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "dPPLddZ",
+    "url": "https://codepen.io/whosajid/pen/dPPLddZ",
+    "author": "whosajid",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [
+        "https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
+      ],
+      "scripts": [
+        "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js",
+        "https://cdn.jsdelivr.net/npm/chart.js"
+      ]
+    },
+    "sha256": {
+      "original.html": "107e49944e0128c54034860f0469f53ef58b636a6591a0aa3ac79047875aaf56",
+      "original.css": "ae80f953f3ff35b70eb32fc2152d5b2acb74a627b10d8190d4c30de524d7f53e",
+      "original.js": "018a25668508fc82f9ca0d32bdb316e519182f7b7349cb7c297881ac49f9e70b"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "eYvWOYY",
+    "url": "https://codepen.io/Conrad-C/pen/eYvWOYY",
+    "author": "Conrad-C",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [
+        "https://fonts.googleapis.com/icon?family=Material+Icons"
+      ],
+      "scripts": [
+        "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js",
+        "https://cdn.jsdelivr.net/npm/chart.js"
+      ]
+    },
+    "sha256": {
+      "original.html": "d3e059d312f1c64271bd3c387471c3f61a60bd855c8e7f85e2e215fa4262ba0c",
+      "original.css": "9ca7eb5a2c191ace591dff82d292322d600ba5a70fe1930b13c4a36a0ad96d24",
+      "original.js": "27e314f970f92ca3ebfa103590ae4f12653a402e5324d81feb16e94e105b7e73"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "emJgpOV",
+    "url": "https://codepen.io/N3tanyahPDX/pen/emJgpOV",
+    "author": "N3tanyahPDX",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [],
+      "scripts": [
+        "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js"
+      ]
+    },
+    "sha256": {
+      "original.html": "16bae76b88016de39e3c8317c0158d2a4430602edef3a3510c71da181bf059bc",
+      "original.css": "2644bae35d95bb9c269c06cbe1c7ef2707b165f0172f5adeac528f057bff7d0a",
+      "original.js": "1c0c2380509a5e633b4dd6d0e574e5378d961fa377592edd63d2da85081d16f6"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "jOPMxBN",
+    "url": "https://codepen.io/erjs/pen/jOPMxBN",
+    "author": "erjs",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [
+        "https://public.codepenassets.com/css/normalize-5.0.0.min.css"
+      ],
+      "scripts": []
+    },
+    "sha256": {
+      "original.html": "949fd3a66a9f766893ebde909c304670d5b7e257a8cc60a47556fb898795a010",
+      "original.css": "247893b11a21c7695ec4b6f613c7b59f71ed46d8ccb2e45eb37136d40c46fd82",
+      "original.js": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "oNMvNQY",
+    "url": "https://codepen.io/koljal/pen/oNMvNQY",
+    "author": "koljal",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [],
+      "scripts": [
+        "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js"
+      ]
+    },
+    "sha256": {
+      "original.html": "4670e925f5d8113b856ae2b8a5609465543c926ed4053bb8dad1d9e71963b0c5",
+      "original.css": "eb28d79b6c2b6dcdd9df3753421eafa54b8bf3ed4285196a296981e8ed81db5f",
+      "original.js": "1053835dfb1b2a9503386c524b7738532aae0cf8f17a6168e7a7753c27853e71"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "oNQPyvL",
+    "url": "https://codepen.io/eylemsayin/pen/oNQPyvL",
+    "author": "eylemsayin",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [
+        "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200",
+        "./style.css"
+      ],
+      "scripts": []
+    },
+    "sha256": {
+      "original.html": "9f57e647b504f2cb41b054b3305bd89848914d441ac99ee966cdbaf0b6bfb631",
+      "original.css": "944f6b1bdf381aa5110c394f8684517f2deaa7e28d12a644174d0a47445559a3",
+      "original.js": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "oNXxGoj",
+    "url": "https://codepen.io/Ahmed-Shaiea/pen/oNXxGoj",
+    "author": "Ahmed-Shaiea",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [],
+      "scripts": []
+    },
+    "sha256": {
+      "original.html": "dfc09888a0d54db670bea9069d29fc5c0bfb61cc704cdf9c44d0c394ced61f51",
+      "original.css": "f66a749d2f0210b098f6be9f0d41100388cd50286465edfd7bcfa0f927930485",
+      "original.js": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  },
+  {
+    "id": "qBqEjZe",
+    "url": "https://codepen.io/tcsn/pen/qBqEjZe",
+    "author": "tcsn",
+    "retrieved": "2026-09-20",
+    "method": "CodePen visible editors copied through browser UI",
+    "license": "MIT",
+    "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+    "dependencies": {
+      "links": [
+        "https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css",
+        "https://fonts.googleapis.com/icon?family=Material+Icons",
+        "https://fonts.googleapis.com/css2?family=Lato:wght@300;700&family=Montserrat&family=Noto+Sans&display=swap"
+      ],
+      "scripts": [
+        "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js",
+        "https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"
+      ]
+    },
+    "sha256": {
+      "original.html": "e1e45b41a2fdd231dd42a8faf64cb925d0de7e5d75b025b65556237b80304682",
+      "original.scss": "e25da6ceb46ab8a6ed6433490c56ea7df66fa9dd72b2026bf89a73409419c88d",
+      "original.js": "8259b1f7f66d71c12f8c6ddf028cc8c41d4a63d7db196a1671f627662209a137"
+    },
+    "status": "original-source-collected; not-integrated-or-visually-certified"
+  }
+]

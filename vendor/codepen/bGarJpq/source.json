@@ -1,0 +1,24 @@
+{
+  "id": "bGarJpq",
+  "url": "https://codepen.io/danielneubert/pen/bGarJpq",
+  "author": "danielneubert",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [
+      "https://public.codepenassets.com/css/normalize-5.0.0.min.css"
+    ],
+    "scripts": [
+      "https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-f07739098a39bd4e74ddd974652dac904146f33fdc1ecab356e8c809a05faccb.js",
+      "https://unpkg.com/vue@next"
+    ]
+  },
+  "sha256": {
+    "original.html": "0d76c8e012b9f762b621187d4bdb0418722d63abce3a7825a1cbf17d97e52066",
+    "original.sass": "40360b88d0dfb3d8ae68ae327a279d575d65d5bec22dabf57919ed6fccdc58b0",
+    "original.js": "1452e10a9b1dd11d7d52e131d4e6c9a8aa1a3d994a7655d6656700b2dce202b1"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}

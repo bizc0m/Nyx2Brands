@@ -1,0 +1,146 @@
+<div id="app" class="windows-98">
+  <div class="center-the-window">
+    <win-window title="Hello World" supports="q" icon="msie1-4" @info="infoModal = true" :active="!uiModal && !loginModal && !infoModal && !creditsModal">
+      <win-text>This Project is not yet done ß€ <3</win-text>
+      <div style="display:flex;flex-flow:column;gap:4px;margin:10px 0">
+        <win-button @click="uiModal = true">Show UI Elements</win-button>
+        <win-button @click="loginModal = true">Login Form</win-button>
+        <win-button>FAQ / About the Project</win-button>
+        <win-button @click="infoModal = true">About the Author</win-button>
+        <win-button @click="creditsModal = true">Credits</win-button>
+      </div>
+      <win-text :disabled="true">© 2022 by Daniel Neubert</win-text>
+    </win-window>
+    <win-window v-if="uiModal" title="UI Elements" supports="c" icon="appwizard-0" @close="uiModal = false">
+      <div style="display:flex;gap:4px;width:400px">
+        <win-group title="Button">
+          <win-button style="width:100%">Button</win-button>
+          <win-button class="fake-focus" style="width:100%">Button:focus</win-button>
+          <win-button class="fake-active" style="width:100%">Button:active</win-button>
+        </win-group>
+        <win-group title="Eallo Welt">
+          <win-text>Hallo Welt</win-text>
+        </win-group>
+        <win-group title="Eallo Welt">
+          <win-text>Hallo Welt</win-text>
+        </win-group>
+      </div>
+    </win-window>
+    <win-window v-if="infoModal" title="About the Project" supports="c" icon="help_book_small-5" bg="white" @close="infoModal = false">
+      <win-text>Project build by Daniel Neubert.</win-text>
+      
+      <win-control-strip>
+        <win-button @click="infoModal = false">OK</win-button>
+      </win-control-strip>
+    </win-window>
+    <win-window v-if="creditsModal" title="Credits" supports="c" icon="help_book_small-5" bg="white" @close="creditsModal = false">
+      <win-text style="height:180px;width:400px;overflow:scroll;margin:-10px;padding:10px">
+        <strong>Scrollbar</strong><br>
+        The scrollbars are 1:1 implemented from the following pen:<br>
+        <a href="https://codepen.io/louh/pen/oZJQvm">CodePen Home
+Windows 95-era scrollbars (Chrome and Safari only)</a><br><br>
+        
+        <strong>Font</strong><br>
+        Sadly this Win95 UI Kit only provides a nice font. Everything else is not a s consistent and close to the original as I wanted it to.<br>
+        <a href="https://github.com/themesberg/windows-95-ui-kit">Windows 95 UI Kit</a><br><br>
+        
+        <strong>Font (Update 10. April 2022)</strong><br>
+        Updated the font to Levi Windows, since it supports more characters besides the basic char set for e.g. €, ß , ä, ...
+        <a href="https://www.dafont.com/leviwindows.font">Levi Windows</a>
+  
+        
+        
+        <br><br><br><br><br>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</win-text>
+      
+      <win-control-strip :border="false">
+        <win-button @click="creditsModal = false">OK</win-button>
+      </win-control-strip>
+    </win-window>
+    <win-window v-if="loginModal" title="User Authentication" supports="c" icon="keys-1" @close="loginModal = false">
+      <div style="display:flex;gap:20px">
+        <win-icon name="keys-5" size="48"></win-icon>
+        <div style="max-width: 240px">
+          <win-text>
+            At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren.
+          </win-text>
+          <div style="display:grid;grid-template-columns:auto 1fr;grid-gap:4px 10px;margin-top:10px;align-items:center">
+            <p><u>U</u>ser name</p>
+            <input type="text" />
+            <p><u>P</u>assword</p>
+            <input type="password" />
+          </div>
+        </div>
+        <div style="display:flex;gap:4px;flex-flow:column">
+          <win-button @click="loginModal = false" :highlight="true" style="width:80px">OK</win-button>
+          <win-button @click="loginModal = false" style="width:80px">Cancel</win-button>
+        </div>
+      </div>
+    </win-window>
+  </div>
+</div>
+
+<!-- Vue Component Templates -->
+<script id="win-button" type="text/template">
+  <button class="win-button" :class="{'win-button--highlight': highlight}">
+    <slot></slot>
+  </button>
+</script>
+  
+<script id="win-text" type="text/template">
+  <p class="win-text" :class="{'win-text--disabled': disabled}">
+    <slot></slot>
+  </p>
+</script>
+  
+<script id="win-control-strip" type="text/template">
+  <p class="win-control-strip" :class="{'win-control-strip--border': border}">
+    <slot></slot>
+  </p>
+</script>
+  
+<script id="win-group" type="text/template">
+  <div class="win-group">
+    <p v-if="title != null" class="win-group__title">{{ title }}</p>
+    <slot></slot>
+  </div>
+</script>
+  
+<script id="win-icon" type="text/template">
+  <p class="win-icon" :class="'win-icon--size-' + size" :style="'background-image: url(https://win98icons.alexmeub.com/icons/png/' + name + '.png)'">
+    <slot></slot>
+  </p>
+</script>
+
+<script id="win-window" type="text/template">
+  <div class="win-window">
+    <div class="win-window__title" :class="{'win-window__title--background': !active}">
+      <div v-if="icon != ''" class="win-window__title__icon" :style="'background-image: url(https://win98icons.alexmeub.com/icons/png/' + icon + '.png)'">
+      </div>
+      
+      <p>{{ title }}</p>
+  
+      <div v-if="supports != ''" class="win-window__title__controlls">
+        <button @click="$emit('info')" v-if="supports.includes('q')"
+          class="win-window__title__controlls__info">
+            Info
+          </button>
+        <button @click="$emit('minimize')" v-if="supports.includes('m')"
+          class="win-window__title__controlls__minimize">
+            Minimize
+          </button>
+        <button @click="$emit('maximize')" v-if="supports.includes('M')"
+          class="win-window__title__controlls__maximize">
+            Maximize
+          </button>
+        <button @click="$emit('close')" v-if="supports.includes('c')"
+          class="win-window__title__controlls__close">
+            Close
+          </button>
+      </div>
+    </div>
+  
+    <div class="win-window__content" :class="`win-window__content--${bg}`">
+      <slot></slot>
+    </div>
+  </div>
+</script>

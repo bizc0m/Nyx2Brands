@@ -1,0 +1,22 @@
+{
+  "id": "PoGvyZJ",
+  "url": "https://codepen.io/SihamBenDaia/pen/PoGvyZJ",
+  "author": "SihamBenDaia",
+  "retrieved": "2026-09-20",
+  "method": "CodePen visible editors copied through browser UI",
+  "license": "MIT",
+  "licenseSource": "https://blog.codepen.io/documentation/licensing/",
+  "dependencies": {
+    "links": [
+      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css",
+      "https://static.fontawesome.com/css/fontawesome-app.css"
+    ],
+    "scripts": []
+  },
+  "sha256": {
+    "original.html": "fd333b328f982b173b062bb58b7376f2d9c9c0039a24d0c86c6ad64bd67441a2",
+    "original.css": "67637c311807d187f0720026fe1bf0e93fdcdf9b30eaa5c4fba37e37f751db21",
+    "original.js": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "status": "original-source-collected; not-integrated-or-visually-certified"
+}
