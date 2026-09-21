@@ -42,5 +42,7 @@ test('gallery includes existing thumbnails and rejects remote image URLs',()=>{
 test('design preview isolates storage and preserves semantic colors',()=>{
  const p=project();const preview=designPreview('<html><head></head><body><script>localStorage.setItem("x","y");</script><style>:root{--danger:red}</style></body></html>',p);
  assert.match(preview,/connect-src 'none'/);assert.match(preview,/script-src 'unsafe-inline' 'unsafe-eval' blob:/);assert.match(preview,/window.__nyxPreviewStorage.setItem/);assert.match(preview,/--danger:red/);assert.match(preview,/--accent:#64D2FF!important/);
+ const noteplan=sources.find(source=>source.id==='noteplan-style-v2').html;const themedNoteplan=designPreview(noteplan,p);
+ assert.match(themedNoteplan,new RegExp(`--window:${p.theme.surface}!important`));assert.match(themedNoteplan,new RegExp(`\\.editorpane,.rightbar\\{background:${p.theme.surface}!important`));assert.match(themedNoteplan,new RegExp(`--orange:${p.theme.accent}!important`));
  assert.doesNotMatch(designPreview('<h1>original</h1>'),/--accent:/);
 });

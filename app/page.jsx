@@ -22,7 +22,7 @@ import {
   validate,
 } from '../packages/neuroforge-core/index.mjs';
 
-import { catalogueThumbnails } from '../packages/neuroforge-core/design-preview.mjs';
+import { catalogueThumbnails, designPreview } from '../packages/neuroforge-core/design-preview.mjs';
 import { emptyIntegration, integrationPrompt, integrationFiles, integrationZip, catalogueSources, selectedFunctions } from '../packages/neuroforge-core/integration.mjs';
 
 import {recoveredSkins, generateSkin, validatePersonalSkins, SKIN_LIBRARY_STORAGE} from '../packages/neuroforge-core/skins.mjs';
@@ -297,6 +297,7 @@ export default function Home() {
   }
   const activeSource = catalogue.sources.find(source => source.id === selectedVariant[0]);
   const themePreviewSource = integration.dressing === 'noteplan-style-v2' ? catalogue.sources.find(source => source.id === 'noteplan-style-v2') : null;
+  const themedNotePlanHTML = useMemo(() => themePreviewSource ? designPreview(themePreviewSource.html, project) : '', [themePreviewSource, project.theme, project.modules]);
   useEffect(() => {
     const controller = new AbortController();
     fetch('./moteur-ux.html', {signal: controller.signal}).then(response => {
@@ -476,7 +477,7 @@ export default function Home() {
       </section>
       <aside id="live-preview" className="result-panel" aria-label="Aperçu et sélection">
         <div className="preview-toolbar"><div><span>THEME ACTIF</span><h2>{DRESSING_NAMES[integration.dressing||'nyx']}</h2></div><nav aria-label="Aperçu"><button aria-pressed={preview==='app'} onClick={()=>setPreview('app')}>Application</button><button aria-pressed={preview==='icon'} onClick={()=>setPreview('icon')}>Identité</button><button aria-pressed={preview==='about'} onClick={()=>setPreview('about')}>About</button></nav></div>
-        <div hidden={preview!=='app'}>{projectLoaded && (integration.dressing==='noteplan-style-v2' ? (themePreviewSource ? <iframe className="design-preview nyx-unified-preview" title="NotePlan Style Simulator — aperçu du theme" srcDoc={themePreviewSource.html} sandbox="allow-scripts allow-forms allow-modals"/> : <p>{catalogueError||'Chargement de NotePlan Style Simulator…'}</p>) : <NyxPreview key={nativeRevision} project={project} skins={availableSkins} onTheme={chooseSkin} onSession={receiveSession} onNativeState={receiveNativeState}/>)}<p className="preview-caption">{integration.dressing==='noteplan-style-v2'?'Simulateur NotePlan complet dans la preview du Theme. L’interface globale Nyx UX reste inchangée.':'Base existante Nyx intégré. Les thèmes s’appliquent au shell, à Documents et à Registry. Les nouveaux blocs sont dans la Blade Bibliothèque.'}</p></div>
+        <div hidden={preview!=='app'}>{projectLoaded && (integration.dressing==='noteplan-style-v2' ? (themedNotePlanHTML ? <iframe className="design-preview nyx-unified-preview" title="NotePlan Style Simulator — aperçu du theme" srcDoc={themedNotePlanHTML} sandbox="allow-scripts allow-forms allow-modals"/> : <p>{catalogueError||'Chargement de NotePlan Style Simulator…'}</p>) : <NyxPreview key={nativeRevision} project={project} skins={availableSkins} onTheme={chooseSkin} onSession={receiveSession} onNativeState={receiveNativeState}/>)}<p className="preview-caption">{integration.dressing==='noteplan-style-v2'?'Simulateur NotePlan complet avec le Skin actif. La disposition et le Markdown restent ceux de NotePlan.':'Base existante Nyx intégré. Les thèmes s’appliquent au shell, à Documents et à Registry. Les nouveaux blocs sont dans la Blade Bibliothèque.'}</p></div>
         {preview==='codepen' && <section className="original-design-view"><header><div><strong>Glass Dashboard</strong><small>Original de gestok · contenu démo</small></div><button onClick={()=>setPreview('app')}>Retour à mon application</button><a href="./codepen/YzLBVOp/index.html" target="_blank" rel="noreferrer">Plein écran ↗</a></header><iframe title="Glass Dashboard — design original CodePen" src="./codepen/YzLBVOp/index.html" sandbox="allow-scripts" allow="autoplay"/><footer>HTML, CSS et interactions d’origine. Les documents Nyx restent conservés dans votre application.</footer></section>}
         {preview === 'icon' && <div className="identity-preview" style={{background:project.theme.background,color:project.theme.text}}><div>{['logo','icon'].map(kind=><figure key={kind}>{project.identity[kind] ? <NextImage src={project.identity[kind]} width={112} height={112} unoptimized alt={kind === 'logo' ? 'Logo' : 'Icône'}/> : <span>{project.project.name.slice(0,1)}</span>}<figcaption>{kind==='logo'?'Logo':'Icône app'}</figcaption></figure>)}</div><h2>{project.project.name}</h2><p>{project.identity.signature}</p></div>}
         {preview === 'about' && (html ? <iframe className="design-preview" title="Aperçu About" sandbox="" srcDoc={html}/> : <p className="empty-message">Complétez les réglages du pack pour afficher le About.</p>)}
