@@ -135,7 +135,7 @@ export default function Home() {
   const [previousDressing,setPreviousDressing]=useState(null);
   function chooseDressing(value){setPreviousDressing(project.integration?.dressing||'nyx');updateIntegration('dressing',value);setPreview('app');}
   const [catalogue, setCatalogue] = useState({sources: [], thumbnails: {}});
-  const [, setCatalogueError] = useState('');
+  const [catalogueError, setCatalogueError] = useState('');
   const [, setPreviewMode] = useState('original');
   const [nativeRevision,setNativeRevision]=useState(0);
   const [projectLoaded,setProjectLoaded]=useState(false);
