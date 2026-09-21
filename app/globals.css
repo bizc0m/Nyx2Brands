@@ -54,7 +54,8 @@
 
 /* Give editor and workspace separate tracks: neither can cover the other. */
 .nyx-app.settings-open .atelier-workbench{display:grid;grid-template-columns:minmax(0,1fr) 360px;grid-template-rows:minmax(0,1fr)}
-.nyx-app.settings-open .selection-panel{position:static;grid-column:2;grid-row:1;width:auto;max-width:none;min-height:0;box-shadow:none}
+.nyx-app.settings-open .selection-panel{position:static;grid-column:2;grid-row:1;width:auto;max-width:none;height:100%;max-height:100%;min-height:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;box-shadow:none}
+.nyx-app.settings-open .skin-library{max-height:none;overflow:visible;padding-right:0}
 .nyx-app.settings-open .result-panel{grid-column:1;grid-row:1;width:100%;height:100%;min-width:0;min-height:0}
 .nyx-app .nyx-appbar{gap:10px;padding:8px 12px}.nyx-app .nyx-app-actions{gap:6px}.nyx-app .nyx-app-title{flex-shrink:0}.nyx-app .nyx-app-title strong{max-width:140px}.nyx-app .quick-theme{width:132px}
 @media(max-width:1100px){.nyx-app-title small{display:none}.nyx-app .nyx-app-actions button{font-size:11px;padding:6px}.nyx-app .quick-theme{width:120px}.nyx-app .nyx-app-title strong{max-width:80px}}
